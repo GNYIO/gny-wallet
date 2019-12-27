@@ -3,7 +3,7 @@
     <el-col :span="24">
       <el-menu
         default-active="1"
-        class="el-menu-vertical-demo"
+        class="el-menu-vertical"
         @open="handleOpen"
         @close="handleClose"
         background-color="#545c64"
