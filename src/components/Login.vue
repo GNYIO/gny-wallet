@@ -1,14 +1,20 @@
 <template>
-  <el-main class="login">
-    <el-input v-model="newAccount"></el-input>
+  <el-main>
+    <img alt="GNY logo" src="../assets/logo.png" />
+    <br />
+
+    <el-input v-model="newAccount" readonly="" v-if="!!newAccount"></el-input>
+    <br />
+    <br />
     <el-input
       placeholder="Enter your passphrase"
       v-model="passphrase"
       show-password
     ></el-input>
+    <br />
+    <br />
 
-    <el-button type="info" class="mt-2">Login</el-button>
-
+    <el-button type="info">Login</el-button>
     <el-button type="info" @click="register">New Account</el-button>
   </el-main>
 </template>
@@ -40,7 +46,15 @@ export default {
 </script>
 
 <style scoped>
-.login {
-  margin: auto;
+.el-main {
+  text-align: center;
+}
+
+img {
+  width: 300px;
+}
+
+.el-input {
+  width: 500px;
 }
 </style>
