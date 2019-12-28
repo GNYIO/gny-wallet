@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-// import store from '../store/index'
+import store from '../store/store'
 
 import Home from '../components/Home.vue';
 import Transaction from '../components/Transaction.vue';
@@ -42,5 +42,24 @@ const Router = new VueRouter({
     }
   ]
 });
+
+Router.beforeEach((to, from, next) => {
+  let user = store.state.isLoggedIn
+  if (to.path.indexOf('login') > 0 || user) {
+    next({
+      params: {
+        ...to.params,
+        user: user
+      }
+    })
+    return null
+  } else {
+    next({
+      path: '/login',
+      replace: true
+    })
+    return null
+  }
+})
 
 export default Router
