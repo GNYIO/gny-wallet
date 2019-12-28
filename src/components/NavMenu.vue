@@ -16,7 +16,7 @@
           <span slot="title"> Home</span>
         </el-menu-item>
         <el-menu-item index="2" route="/transaction">
-          <icon name="money-bill"></icon>
+          <icon name="arrows-alt-h"></icon>
           <span slot="title"> Transaction</span>
         </el-menu-item>
         <el-menu-item index="3" route="/delegates">
