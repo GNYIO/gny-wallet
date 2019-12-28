@@ -29,7 +29,6 @@
 
 <script>
 import { Connection } from '@gny/client';
-// import axios from 'axios';
 
 const connection = new Connection('192.168.1.252', 4096, 'testnet');
 
@@ -52,12 +51,9 @@ export default {
     },
     async login() {
       try {
-        const response = await connection.api.Account.openAccount(
-          this.passphrase
-        );
-        console.log(response);
-        this.$store.dispatch('setToken', response.account.address);
-        this.$store.dispatch('setUser', response.account);
+        this.$store.dispatch('setPassphrase', this.passphrase);
+        this.$store.dispatch('setToken', this.passphrase);
+        await this.$store.dispatch('refreshAccounts');
         this.$router.push('/home');
       } catch (error) {
         console.log(error);
