@@ -4,7 +4,15 @@
     <br />
 
     <el-input v-model="newAccount" readonly="" v-if="!!newAccount"></el-input>
-    <br />
+    <div align="center" v-if="!!newAccount">
+      <el-alert
+        title="Please save your passphrase to a safe place!"
+        type="error"
+        :closable="false"
+        center
+      >
+      </el-alert>
+    </div>
     <br />
     <el-input
       placeholder="Enter your passphrase"
@@ -55,6 +63,10 @@ img {
 }
 
 .el-input {
+  width: 500px;
+}
+
+.el-alert {
   width: 500px;
 }
 </style>
