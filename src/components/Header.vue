@@ -13,10 +13,7 @@
 </template>
 
 <script>
-// import { Connection } from '@gny/client';
 import { mapState } from 'vuex';
-
-// const connection = new Connection('192.168.1.252', 4096, 'testnet');
 
 export default {
   data() {
@@ -41,7 +38,7 @@ export default {
       setInterval(async () => {
         await this.$store.dispatch('refreshAccounts');
         this.blockHeight = this.latestBlock.height;
-        console.log(this.$store.state);
+        // console.log(this.$store.state);
       }, 10000);
       // this.blockHeight = (await connection.api.Block.getHeight()).height;
     } catch (error) {
