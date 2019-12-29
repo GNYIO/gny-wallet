@@ -1,16 +1,32 @@
 <template>
-  <el-table :data="delegates" stripe style="width: 100%">
-    <el-table-column prop="rate" label="Rate" width="100"> </el-table-column>
-    <el-table-column prop="username" label="Username" width="120">
-    </el-table-column>
-    <el-table-column prop="address" label="Address"> </el-table-column>
-    <el-table-column prop="producedBlocks" label="Produced Blocks" width="180">
-    </el-table-column>
-    <el-table-column prop="rewards" label="Rewards" width="180">
-    </el-table-column>
-    <el-table-column prop="productivity" label="Productivity">
-    </el-table-column>
-  </el-table>
+  <el-main>
+    <el-table :data="currentDelegates" stripe style="width: 100%">
+      <el-table-column prop="rate" label="Rate" width="100"> </el-table-column>
+      <el-table-column prop="username" label="Username" width="120">
+      </el-table-column>
+      <el-table-column prop="address" label="Address"> </el-table-column>
+      <el-table-column
+        prop="producedBlocks"
+        label="Produced Blocks"
+        width="180"
+      >
+      </el-table-column>
+      <el-table-column prop="rewards" label="Rewards" width="180">
+      </el-table-column>
+      <el-table-column prop="productivity" label="Productivity">
+      </el-table-column>
+    </el-table>
+    <div class="block">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-size="20"
+        layout="prev, pager, next"
+        :total="total"
+      >
+      </el-pagination>
+    </div>
+  </el-main>
 </template>
 
 <script>
@@ -19,8 +35,29 @@ const connection = new Connection('192.168.1.252', 4096, 'testnet');
 export default {
   data() {
     return {
-      delegates: []
+      delegates: [],
+      currentPage: 1,
+      pageSize: 20,
+      total: 101,
+      currentDelegates: []
     };
+  },
+  methods: {
+    handleCurrentChange(currentPage) {
+      this.currentPage = currentPage;
+      this.changePage(this.delegates, currentPage);
+    },
+    changePage(list, currentPage) {
+      let from = (currentPage - 1) * this.pageSize;
+      let to = currentPage * this.pageSize;
+      this.currentDelegates = [];
+      for (; from < to; from++) {
+        if (list[from]) {
+          this.currentDelegates.push(list[from]);
+        }
+      }
+      console.log(this.tempList);
+    }
   },
   async mounted() {
     try {
@@ -34,7 +71,7 @@ export default {
         rewards: Number(delegate.rewards) / 1e8,
         productivity: delegate.productivity + '%'
       }));
-      console.log('delegates', this.delegates);
+      this.handleCurrentChange(1);
     } catch (error) {
       console.log(error);
     }
