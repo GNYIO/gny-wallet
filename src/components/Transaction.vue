@@ -2,7 +2,7 @@
   <div>
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="From">
-        <el-input v-model="form.from"></el-input>
+        <el-input v-model="form.from" readonly></el-input>
       </el-form-item>
 
       <el-form-item label="To">
@@ -10,11 +10,7 @@
       </el-form-item>
 
       <el-form-item label="Amount">
-        <el-input
-          type="text"
-          v-model="form.amount"
-          :placeholder="amountPlaceholder"
-        ></el-input>
+        <el-input type="text" v-model="form.amount" :placeholder="amountPlaceholder"></el-input>
       </el-form-item>
 
       <el-form-item label="Memo">
@@ -22,7 +18,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">Send</el-button>
+        <el-button type="primary" @click="sendTransaction">Send</el-button>
         <el-button>Cancel</el-button>
       </el-form-item>
     </el-form>
@@ -30,32 +26,42 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-// import { Connection } from '@gny/client';
-// const connection = new Connection('192.168.1.252', 4096, 'testnet');
+import { mapState } from "vuex";
+import * as gnyClient from "@gny/client";
+const connection = new gnyClient.Connection("192.168.1.252", 4096, "testnet");
 
 export default {
   data() {
     return {
       balance: 0,
-      amountPlaceholder: '',
+      amountPlaceholder: "",
       form: {
-        from: '',
-        to: '',
-        amount: '',
-        memo: ''
+        from: "",
+        to: "",
+        amount: "",
+        memo: ""
       }
     };
   },
   computed: {
-    ...mapState(['user', 'passphrase'])
+    ...mapState(["user", "passphrase"])
   },
   methods: {
-    async onSubmit() {
-      // const response = await connection.api.Transfer.post
-
-      console.log('submit!');
-      console.log(this.user);
+    async sendTransaction() {
+      try {
+        const trs = gnyClient.basic.transfer(
+          this.form.to,
+          this.form.amount * 1e8,
+          this.form.memo,
+          this.passphrase
+        );
+        console.log(trs);
+        const response = await connection.api.Transport.sendTransaction(trs);
+        console.log(response);
+        this.$message(`Transaction id: ${response.transactionId}`);
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
   mounted() {
