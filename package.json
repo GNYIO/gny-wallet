@@ -8,8 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@gny/client": "^1.0.2",
-    "@gny/web-base": "^1.0.1",
+    "@gny/client": "^1.0.5",
+    "@gny/web-base": "^1.0.5",
     "axios": "^0.19.0",
     "core-js": "^3.4.3",
     "element-ui": "^2.13.0",
