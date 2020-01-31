@@ -69,7 +69,7 @@ export default new Vuex.Store({
       state
     }) {
       try {
-        const response = await connection.api.Account.openAccount(
+        const response = await connection.api.Exchange.openAccount(
           state.passphrase
         );
         commit('setUser', response.account);

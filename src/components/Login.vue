@@ -28,9 +28,7 @@
 </template>
 
 <script>
-import { Connection } from '@gny/client';
-
-const connection = new Connection('192.168.1.252', 4096, 'testnet');
+import { generateSecret } from '@gny/utils';
 
 export default {
   data() {
@@ -42,9 +40,7 @@ export default {
   methods: {
     async register() {
       try {
-        this.newAccount = (
-          await connection.api.Account.generateAccount()
-        ).secret;
+        this.newAccount = generateSecret();
       } catch (error) {
         console.log(error);
       }
