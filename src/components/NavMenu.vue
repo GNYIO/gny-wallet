@@ -23,10 +23,10 @@
           <icon name="user-friends"></icon>
           <span slot="title"> Delegates</span>
         </el-menu-item>
-        <el-menu-item index="4" route="/machinelearning">
+        <!--<el-menu-item index="4" route="/machinelearning">
           <icon name="desktop"></icon>
           <span slot="title"> Machine Learning</span>
-        </el-menu-item>
+        </el-menu-item>-->
       </el-menu>
     </el-col>
   </el-row>
@@ -40,8 +40,8 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
-    }
-  }
+    },
+  },
 };
 </script>
 

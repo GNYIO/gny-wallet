@@ -10,7 +10,11 @@
       </el-form-item>
 
       <el-form-item label="Amount">
-        <el-input type="text" v-model="form.amount" :placeholder="amountPlaceholder"></el-input>
+        <el-input
+          type="text"
+          v-model="form.amount"
+          :placeholder="amountPlaceholder"
+        ></el-input>
       </el-form-item>
 
       <el-form-item label="Memo">
@@ -26,25 +30,25 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import * as gnyClient from "@gny/client";
-const connection = new gnyClient.Connection("192.168.1.252", 4096, "testnet");
+import { mapState } from 'vuex';
+import * as gnyClient from '@gny/client';
+const connection = new gnyClient.Connection('45.76.215.117', 4096, 'testnet');
 
 export default {
   data() {
     return {
       balance: 0,
-      amountPlaceholder: "",
+      amountPlaceholder: '',
       form: {
-        from: "",
-        to: "",
-        amount: "",
-        memo: ""
-      }
+        from: '',
+        to: '',
+        amount: '',
+        memo: '',
+      },
     };
   },
   computed: {
-    ...mapState(["user", "passphrase"])
+    ...mapState(['user', 'passphrase']),
   },
   methods: {
     async sendTransaction() {
@@ -53,7 +57,7 @@ export default {
           this.form.to,
           this.form.amount * 1e8,
           this.form.memo,
-          this.passphrase
+          this.passphrase,
         );
         console.log(trs);
         const response = await connection.api.Transport.sendTransaction(trs);
@@ -62,13 +66,13 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    }
+    },
   },
   mounted() {
     this.form.from = this.$store.state.user.address;
     this.balance = this.$store.state.user.balance;
     this.amountPlaceholder = `You have ${this.balance} GNY in your account`;
-  }
+  },
 };
 </script>
 

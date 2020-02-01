@@ -5,7 +5,7 @@ import createPersistedState from 'vuex-persistedstate';
 import {
   Connection
 } from '@gny/client';
-const connection = new Connection('192.168.1.252', 4096, 'testnet');
+const connection = new Connection('45.76.215.117', 4096, 'testnet');
 
 Vue.use(Vuex);
 
@@ -72,11 +72,12 @@ export default new Vuex.Store({
         const response = await connection.api.Exchange.openAccount(
           state.passphrase
         );
+        console.log(response)
         commit('setUser', response.account);
         // commit('setToken', response.account.address)
         commit('setLatestBlock', response.latestBlock)
       } catch (error) {
-        console.log(error)
+        console.log('in store', error)
       }
     },
   }

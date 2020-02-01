@@ -17,7 +17,11 @@
         <el-table-column prop="id" label="ID" width="180"></el-table-column>
         <el-table-column prop="type" label="Type" width="80"></el-table-column>
         <el-table-column prop="args" label="Args"></el-table-column>
-        <el-table-column prop="height" label="height" width="80"></el-table-column>
+        <el-table-column
+          prop="height"
+          label="height"
+          width="80"
+        ></el-table-column>
         <el-table-column prop="message" label="Message"></el-table-column>
       </el-table>
     </el-card>
@@ -25,23 +29,25 @@
 </template>
 
 <script scoped>
-import * as gnyClient from "@gny/client";
-const connection = new gnyClient.Connection("192.168.1.252", 4096, "testnet");
+import * as gnyClient from '@gny/client';
+const connection = new gnyClient.Connection('45.76.215.117', 4096, 'testnet');
 
 export default {
   data() {
     return {
       user: {},
-      transactions: []
+      transactions: [],
     };
   },
   async mounted() {
     this.user = this.$store.state.user;
-    this.transactions = (await connection.api.Transaction.getTransactions({
-      senderId: this.user.address
-    })).transactions;
+    this.transactions = (
+      await connection.api.Transaction.getTransactions({
+        senderId: this.user.address,
+      })
+    ).transactions;
     console.log(this.transactions);
-  }
+  },
 };
 </script>
 

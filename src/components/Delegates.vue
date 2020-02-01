@@ -31,7 +31,7 @@
 
 <script>
 import { Connection } from '@gny/client';
-const connection = new Connection('192.168.1.252', 4096, 'testnet');
+const connection = new Connection('45.76.215.117', 4096, 'testnet');
 export default {
   data() {
     return {
@@ -39,7 +39,7 @@ export default {
       currentPage: 1,
       pageSize: 20,
       total: 101,
-      currentDelegates: []
+      currentDelegates: [],
     };
   },
   methods: {
@@ -57,7 +57,7 @@ export default {
         }
       }
       console.log(this.tempList);
-    }
+    },
   },
   async mounted() {
     try {
@@ -69,13 +69,13 @@ export default {
         producedBlocks: delegate.producedBlocks,
         rate: delegate.rate,
         rewards: Number(delegate.rewards) / 1e8,
-        productivity: delegate.productivity + '%'
+        productivity: delegate.productivity + '%',
       }));
       this.handleCurrentChange(1);
     } catch (error) {
       console.log(error);
     }
-  }
+  },
 };
 </script>
 

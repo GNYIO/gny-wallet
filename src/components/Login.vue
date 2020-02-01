@@ -28,13 +28,17 @@
 </template>
 
 <script>
-import { generateSecret } from '@gny/utils';
+import * as Mnemonic from 'bitcore-mnemonic';
+
+export function generateSecret() {
+  return new Mnemonic(Mnemonic.Words.ENGLISH).toString();
+}
 
 export default {
   data() {
     return {
       passphrase: '',
-      newAccount: ''
+      newAccount: '',
     };
   },
   methods: {
@@ -52,10 +56,10 @@ export default {
         await this.$store.dispatch('refreshAccounts');
         this.$router.push('/home');
       } catch (error) {
-        console.log(error);
+        console.log('in login', error);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
