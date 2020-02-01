@@ -28,11 +28,11 @@ export default {
   name: 'app',
   components: {
     NavMenu,
-    PageHeader
+    PageHeader,
   },
   computed: {
-    ...mapState(['isLoggedIn'])
-  }
+    ...mapState(['isLoggedIn']),
+  },
 };
 </script>
 

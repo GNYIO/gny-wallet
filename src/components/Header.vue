@@ -18,7 +18,7 @@ import { mapState } from 'vuex';
 export default {
   data() {
     return {
-      blockHeight: null
+      blockHeight: null,
     };
   },
   methods: {
@@ -26,12 +26,15 @@ export default {
       this.$store.dispatch('setToken', null);
       this.$store.dispatch('setUser', null);
       this.$router.push('/login');
-    }
+    },
   },
   computed: {
-    ...mapState(['user', 'latestBlock'])
+    ...mapState(['user', 'latestBlock']),
   },
   async mounted() {
+    // location.reload();
+    // this.$router.go(0);
+
     try {
       // console.log('user', this.user);
       // console.log('block', this.latestBlock.height);
@@ -39,12 +42,12 @@ export default {
         await this.$store.dispatch('refreshAccounts');
         this.blockHeight = this.latestBlock.height;
         // console.log(this.$store.state);
-      }, 10000);
+      }, 50000);
       // this.blockHeight = (await connection.api.Block.getHeight()).height;
     } catch (error) {
       console.log(error);
     }
-  }
+  },
 };
 </script>
 

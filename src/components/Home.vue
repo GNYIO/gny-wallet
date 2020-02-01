@@ -37,6 +37,7 @@ export default {
     return {
       user: {},
       transactions: [],
+      placeholder: '',
     };
   },
   async mounted() {

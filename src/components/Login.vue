@@ -55,6 +55,7 @@ export default {
         this.$store.dispatch('setToken', this.passphrase);
         await this.$store.dispatch('refreshAccounts');
         this.$router.push('/home');
+        location.reload();
       } catch (error) {
         console.log('in login', error);
       }
