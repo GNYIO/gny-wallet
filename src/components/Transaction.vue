@@ -70,7 +70,7 @@ export default {
   },
   mounted() {
     this.form.from = this.$store.state.user.address;
-    this.balance = this.$store.state.user.balance;
+    this.balance = this.$store.state.user.balance / 1e8;
     this.amountPlaceholder = `You have ${this.balance} GNY in your account`;
   },
 };
