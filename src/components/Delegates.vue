@@ -31,7 +31,7 @@
 
 <script>
 import { Connection } from '@gny/client';
-const connection = new Connection('45.76.215.117', 4096, 'testnet');
+const connection = new Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
 export default {
   data() {
     return {
