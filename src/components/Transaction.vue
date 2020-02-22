@@ -2,7 +2,7 @@
   <div>
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="From">
-        <el-input v-model="form.from" readonly></el-input>
+        <el-input v-model="form.from" readonly="true"></el-input>
       </el-form-item>
 
       <el-form-item label="To">
