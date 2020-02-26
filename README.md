@@ -8,6 +8,16 @@ npm ci
 
 ## Development
 
+### Fuel your account
+
+> Your account
+> address: `GtnevSTQqPUcZNAMFJmc8DLUXHFz`
+> secret `sheriff resemble card okay middle fossil stumble light slice toddler alert leg`
+
+```bash
+gny-cli sendmoney --secret "grow pencil ten junk bomb right describe trade rich valid tuna service" --amount 200000000000 --recipient "GtnevSTQqPUcZNAMFJmc8DLUXHFz"
+```
+
 ### Debug in Firefox or Chrome
 
 Install one of the following:
