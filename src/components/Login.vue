@@ -3,7 +3,7 @@
     <img alt="GNY logo" src="../assets/logo.png" />
     <br />
 
-    <el-input v-model="newAccount" readonly="" v-if="!!newAccount"></el-input>
+    <el-input v-model="newAccount" v-if="!!newAccount"></el-input>
     <div align="center" v-if="!!newAccount">
       <el-alert
         title="Please save your passphrase to a safe place!"

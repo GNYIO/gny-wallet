@@ -8,6 +8,14 @@ npm ci
 
 ## Development
 
+### Debug in Firefox or Chrome
+
+Install one of the following:
+- [Debugger for Firefox](https://marketplace.visualstudio.com/items?itemName=firefox-devtools.vscode-firefox-debug)
+- [Debugger for Chrome](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome)
+
+
+
 ### Point to local GNY Blockchain
 
 Create a `.env.development` file with:

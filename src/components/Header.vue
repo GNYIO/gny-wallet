@@ -40,7 +40,6 @@ export default {
       // console.log('block', this.latestBlock.height);
       setInterval(async () => {
         await this.$store.dispatch('refreshAccounts');
-        this.blockHeight = this.latestBlock.height;
         // console.log(this.$store.state);
       }, 50000);
       // this.blockHeight = (await connection.api.Block.getHeight()).height;
@@ -50,8 +49,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.head-wrap {
-}
-</style>

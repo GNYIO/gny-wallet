@@ -1,0 +1,11 @@
+{
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "editor.renderWhitespace": "boundary",
+  "editor.insertSpaces": true,
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "[typescript]": {
+    "editor.rulers": [80]
+  }
+}

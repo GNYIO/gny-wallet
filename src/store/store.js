@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 
 import {
-  Connection
+  Connection, crypto
 } from '@gny/client';
 const connection = new Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
 
@@ -69,10 +69,11 @@ export default new Vuex.Store({
       state
     }) {
       try {
-        const response = await connection.api.Exchange.openAccount(
-          state.passphrase
+        const keys = crypto.getKeys(state.passphrase)
+        const response = await connection.api.Account.openAccount(
+          keys.publicKey
         );
-        console.log(response)
+        console.log(JSON.stringify(response, null, 2))
         commit('setUser', response.account);
         // commit('setToken', response.account.address)
         commit('setLatestBlock', response.latestBlock)
