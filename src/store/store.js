@@ -2,10 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 
-import {
-  Connection, crypto
-} from '@gny/client';
-const connection = new Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
+import * as client from '@gny/client';
+const connection = new client.Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
+const getKeys = client.crypto.getKeys;
 
 Vue.use(Vuex);
 
@@ -69,7 +68,7 @@ export default new Vuex.Store({
       state
     }) {
       try {
-        const keys = crypto.getKeys(state.passphrase)
+        const keys = getKeys(state.passphrase)
         const response = await connection.api.Account.openAccount(
           keys.publicKey
         );

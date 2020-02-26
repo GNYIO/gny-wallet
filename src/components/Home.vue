@@ -29,8 +29,8 @@
 </template>
 
 <script scoped>
-import { Connection } from '@gny/client';
-const connection = new Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
+import * as client from '@gny/client';
+const connection = new client.Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
 
 export default {
   data() {

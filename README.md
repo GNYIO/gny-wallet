@@ -15,6 +15,12 @@ Install one of the following:
 - [Debugger for Chrome](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome)
 
 
+- 1. Set Breakpoints in your code
+- 2. Run `npm run serve` in your console
+  - 2.1. this starts a local webserver on `http://localhost:8080`
+- 3. Start the green button in VS Code to launch the configuration `launch firefox` (from `launch.json`)
+  - 3.1 This opens the `firefox` browser and let you debug the app in VS Code
+
 
 ### Point to local GNY Blockchain
 

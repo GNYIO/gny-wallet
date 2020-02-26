@@ -14,6 +14,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import * as Cookie from 'tiny-cookie';
 
 export default {
   data() {
@@ -23,6 +24,8 @@ export default {
   },
   methods: {
     logout() {
+      Cookie.remove('bip39');
+
       this.$store.dispatch('setToken', null);
       this.$store.dispatch('setUser', null);
       this.$router.push('/login');
@@ -36,13 +39,7 @@ export default {
     // this.$router.go(0);
 
     try {
-      // console.log('user', this.user);
-      // console.log('block', this.latestBlock.height);
-      setInterval(async () => {
-        await this.$store.dispatch('refreshAccounts');
-        // console.log(this.$store.state);
-      }, 50000);
-      // this.blockHeight = (await connection.api.Block.getHeight()).height;
+      await this.$store.dispatch('refreshAccounts');
     } catch (error) {
       console.log(error);
     }

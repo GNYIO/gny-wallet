@@ -31,9 +31,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import * as gnyClient from '@gny/client';
-import { Connection } from '@gny/client';
-const connection = new Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
+import * as client from '@gny/client';
+const connection = new client.Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
 
 export default {
   data() {
@@ -54,7 +53,7 @@ export default {
   methods: {
     async sendTransaction() {
       try {
-        const trs = gnyClient.basic.transfer(
+        const trs = client.basic.transfer(
           this.form.to,
           this.form.amount * 1e8,
           this.form.memo,

@@ -29,6 +29,7 @@
 
 <script>
 import * as Mnemonic from 'bitcore-mnemonic';
+import * as Cookie from 'tiny-cookie'
 
 export function generateSecret() {
   return new Mnemonic(Mnemonic.Words.ENGLISH).toString();
@@ -51,6 +52,8 @@ export default {
     },
     async login() {
       try {
+        Cookie.set('bip39', this.passphrase);
+
         this.$store.dispatch('setPassphrase', this.passphrase);
         this.$store.dispatch('setToken', this.passphrase);
         await this.$store.dispatch('refreshAccounts');
