@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
+import { Notification } from 'element-ui';
 
 import * as client from '@gny/client';
 const connection = new client.Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
@@ -14,6 +15,7 @@ export default new Vuex.Store({
   state: {
     passphrase: null,
     user: null,
+    delegate: null,
     isLoggedIn: false,
     token: '',
     latestBlock: {}
@@ -37,6 +39,9 @@ export default new Vuex.Store({
     },
     setLatestBlock(state, block) {
       state.latestBlock = block;
+    },
+    setDelegateInfo(state, delegate) {
+      state.delegate = delegate;
     },
     setPassphrase(state, passphrase) {
       state.passphrase = passphrase
@@ -80,5 +85,24 @@ export default new Vuex.Store({
         console.log('in store', error)
       }
     },
+    async refreshDelegateInfo({
+      commit,
+      state,
+    }) {
+      try {
+        const result = await connection.api.Delegate.getDelegateByUsername(state.user.username);
+
+        if (result.success) {
+          commit('setDelegateInfo', result.delegate);
+        } else {
+          throw new Error(result.error);
+        }
+      } catch (err) {
+        Notification({
+          title: 'Error',
+          message: err.message
+        })
+      }
+    }
   }
 });

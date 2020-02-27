@@ -35,9 +35,6 @@ export default {
     ...mapState(['user', 'latestBlock']),
   },
   async mounted() {
-    // location.reload();
-    // this.$router.go(0);
-
     try {
       await this.$store.dispatch('refreshAccounts');
     } catch (error) {

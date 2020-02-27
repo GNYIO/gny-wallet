@@ -23,9 +23,8 @@
           <el-button type="primary" @click="setUsername">Set Username</el-button>
         </el-form-item>
       </el-form>
-
-
     </el-card>
+
     <el-card class="box-card2">
       <div slot="header" class="clearfix">
         <span>Transaction History</span>
