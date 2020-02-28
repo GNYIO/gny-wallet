@@ -1,46 +1,59 @@
 <template>
   <div>
-    <el-card class="box-card1">
-      <div slot="header">
-        <span>Account Info</span>
-      </div>
-      <p v-if="user.username">Username: {{ user.username }}</p>
-      <p>Address: {{ user.address }}</p>
-      <p>Balance: {{ user.balance / 1e8 }} GNY</p>
-      <!--<p>Public key: {{ user.publicKey }}</p>-->
-    </el-card>
-    <el-card class="box-card1" v-if="!user.username">
-      <div slot="header" class="clearfix">
-        <span>Set Username</span>
-      </div>
+    <el-row :gutter="20" type="flex">
+      <el-col :span="12">
 
-      <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="Username">
-          <el-input v-model="form.username"></el-input>
-        </el-form-item>
+        <el-card >
+          <div slot="header">
+            <span>Account Info</span>
+          </div>
+          <p v-if="user.username">Username: {{ user.username }}</p>
+          <p>Address: {{ user.address }}</p>
+          <p>Balance: {{ user.balance / 1e8 }} GNY</p>
+          <!--<p>Public key: {{ user.publicKey }}</p>-->
+        </el-card>
+      </el-col>
 
-        <el-form-item>
-          <el-button type="primary" @click="setUsername">Set Username</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
+      <el-col :span="12">
+        <el-card v-if="!user.username">
+          <div slot="header" >
+            <span>Set Username</span>
+          </div>
 
-    <el-card class="box-card2">
-      <div slot="header" class="clearfix">
-        <span>Transaction History</span>
-      </div>
-      <el-table :data="transactions" style="width: 100%">
-        <el-table-column prop="id" label="ID" width="180"></el-table-column>
-        <el-table-column prop="type" label="Type" width="80"></el-table-column>
-        <el-table-column prop="args" label="Args"></el-table-column>
-        <el-table-column
-          prop="height"
-          label="height"
-          width="80"
-        ></el-table-column>
-        <el-table-column prop="message" label="Message"></el-table-column>
-      </el-table>
-    </el-card>
+          <el-form ref="form" :model="form" label-width="80px">
+            <el-form-item label="Username">
+              <el-input v-model="form.username"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+              <el-button type="primary" @click="setUsername">Set Username</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
+      </el-col>
+    </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span=24>
+          <el-card >
+            <div slot="header">
+              <span>Transaction History</span>
+            </div>
+            <el-table :data="transactions" style="width: 100%">
+              <el-table-column prop="id" label="ID" width="180"></el-table-column>
+              <el-table-column prop="type" label="Type" width="80"></el-table-column>
+              <el-table-column prop="args" label="Args"></el-table-column>
+              <el-table-column
+                prop="height"
+                label="height"
+                width="80"
+              ></el-table-column>
+              <el-table-column prop="message" label="Message"></el-table-column>
+            </el-table>
+        </el-card>
+      </el-col>
+    </el-row>
+
   </div>
 </template>
 
@@ -98,17 +111,11 @@ export default {
   padding: 18px 18px;
 }
 
-.box-card1 {
-  margin: 18px 18px;
-  padding: 18px 18px;
-  width: 480px;
-  float: left;
+.el-row {
+  margin-bottom: 20px;
 }
 
-.box-card2 {
-  margin: 18px 18px;
-  padding: 18px 18px;
-  width: 100%;
-  float: left;
+.el-row:last-child {
+  margin-bottom: 0;
 }
 </style>
