@@ -51,7 +51,7 @@ export default {
         await this.$store.dispatch("setToken", this.passphrase);
         await this.$store.dispatch("refreshAccounts");
         this.$router.push("/home");
-        location.reload();
+        // location.reload();
       } catch (error) {
         console.log(`Login error: ${error}`);
       }
@@ -62,15 +62,17 @@ export default {
 
 <style scoped>
 .el-main {
+  background-color: #f9fafb;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 100vh;
 }
 
 img {
   width: 300px;
-  margin: 100px 0;
+  margin-bottom: 100px;
 }
 
 .el-input {
