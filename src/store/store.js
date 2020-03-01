@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
+import { Notification } from 'element-ui';
 
-import {
-  Connection
-} from '@gny/client';
-const connection = new Connection('45.76.215.117', 4096, 'testnet');
+import * as client from '@gny/client';
+const connection = new client.Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
+const getKeys = client.crypto.getKeys;
 
 Vue.use(Vuex);
 
@@ -15,6 +15,7 @@ export default new Vuex.Store({
   state: {
     passphrase: null,
     user: null,
+    delegate: null,
     isLoggedIn: false,
     token: '',
     latestBlock: {}
@@ -38,6 +39,9 @@ export default new Vuex.Store({
     },
     setLatestBlock(state, block) {
       state.latestBlock = block;
+    },
+    setDelegateInfo(state, delegate) {
+      state.delegate = delegate;
     },
     setPassphrase(state, passphrase) {
       state.passphrase = passphrase
@@ -69,10 +73,11 @@ export default new Vuex.Store({
       state
     }) {
       try {
-        const response = await connection.api.Exchange.openAccount(
-          state.passphrase
+        const keys = getKeys(state.passphrase)
+        const response = await connection.api.Account.openAccount(
+          keys.publicKey
         );
-        console.log(response)
+        console.log(JSON.stringify(response, null, 2))
         commit('setUser', response.account);
         // commit('setToken', response.account.address)
         commit('setLatestBlock', response.latestBlock)
@@ -80,5 +85,24 @@ export default new Vuex.Store({
         console.log('in store', error)
       }
     },
+    async refreshDelegateInfo({
+      commit,
+      state,
+    }) {
+      try {
+        const result = await connection.api.Delegate.getDelegateByUsername(state.user.username);
+
+        if (result.success) {
+          commit('setDelegateInfo', result.delegate);
+        } else {
+          throw new Error(result.error);
+        }
+      } catch (err) {
+        Notification({
+          title: 'Error',
+          message: err.message
+        })
+      }
+    }
   }
 });

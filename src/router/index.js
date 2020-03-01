@@ -2,12 +2,16 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import store from '../store/store'
 
+import * as Mnemonic from 'bitcore-mnemonic';
+import * as Cookie from 'tiny-cookie';
+
 import Home from '../components/Home.vue';
 import Transaction from '../components/Transaction.vue';
 import Delegates from '../components/Delegates.vue';
 import MachineLearning from '../components/MachineLearning.vue';
 import Login from '../components/Login.vue';
 import Error404 from '../components/Error404.vue';
+
 
 Vue.use(VueRouter);
 
@@ -40,16 +44,20 @@ const Router = new VueRouter({
       path: '*',
       component: Error404
     }
-  ]
+  ],
+
 });
 
-Router.beforeEach((to, from, next) => {
-  let user = store.state.isLoggedIn
-  if (to.path.indexOf('login') > 0 || user) {
+Router.beforeEach(function (to, from, next) {
+  const wantToNavigateToLogin = to.path.indexOf('login') > 0;
+
+  const cookieIsSet = Mnemonic.isValid(Cookie.get('bip39'));
+  const isLoggedIn = store.state.isLoggedIn;
+
+  if (wantToNavigateToLogin || (cookieIsSet && isLoggedIn)) {
     next({
       params: {
         ...to.params,
-        user: user
       }
     })
     return null
@@ -60,6 +68,6 @@ Router.beforeEach((to, from, next) => {
     })
     return null
   }
-})
+});
 
 export default Router

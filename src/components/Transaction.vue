@@ -2,7 +2,7 @@
   <div>
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="From">
-        <el-input v-model="form.from" readonly></el-input>
+        <el-input v-model="form.from" :disabled="true"></el-input>
       </el-form-item>
 
       <el-form-item label="To">
@@ -17,8 +17,8 @@
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="Memo">
-        <el-input v-model="form.memo"></el-input>
+      <el-form-item label="Message">
+        <el-input v-model="form.message"></el-input>
       </el-form-item>
 
       <el-form-item>
@@ -31,8 +31,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import * as gnyClient from '@gny/client';
-const connection = new gnyClient.Connection('45.76.215.117', 4096, 'testnet');
+import * as client from '@gny/client';
+const connection = new client.Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
 
 export default {
   data() {
@@ -43,7 +43,7 @@ export default {
         from: '',
         to: '',
         amount: '',
-        memo: '',
+        message: '',
       },
     };
   },
@@ -53,10 +53,10 @@ export default {
   methods: {
     async sendTransaction() {
       try {
-        const trs = gnyClient.basic.transfer(
+        const trs = client.basic.transfer(
           this.form.to,
           this.form.amount * 1e8,
-          this.form.memo,
+          this.form.message,
           this.passphrase,
         );
         console.log(trs);
