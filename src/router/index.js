@@ -5,11 +5,13 @@ import store from '../store/store'
 import * as Mnemonic from 'bitcore-mnemonic';
 import * as Cookie from 'tiny-cookie';
 
-import Home from '../components/Home.vue';
+import Login from '../views/Login.vue';
+import Home from '../views/Home.vue';
 import Transaction from '../components/Transaction.vue';
 import Delegates from '../components/Delegates.vue';
 import MachineLearning from '../components/MachineLearning.vue';
-import Login from '../components/Login.vue';
+import Main from '../components/Main.vue';
+
 import Error404 from '../components/Error404.vue';
 
 
@@ -21,24 +23,29 @@ const Router = new VueRouter({
       redirect: 'login'
     },
     {
-      path: '/home',
-      component: Home
-    },
-    {
-      path: '/transaction',
-      component: Transaction
-    },
-    {
-      path: '/delegates',
-      component: Delegates
-    },
-    {
-      path: '/machinelearning',
-      component: MachineLearning
-    },
-    {
       path: '/login',
       component: Login
+    },
+    {
+      path: '/main',
+      component: Main,
+      children: [{
+          path: '/home',
+          component: Home
+        },
+        {
+          path: '/transaction',
+          component: Transaction
+        },
+        {
+          path: '/delegates',
+          component: Delegates
+        },
+        {
+          path: '/machinelearning',
+          component: MachineLearning
+        },
+      ]
     },
     {
       path: '*',
