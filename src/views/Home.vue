@@ -25,7 +25,9 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="setUsername">Set Username</el-button>
+              <el-button type="primary" @click="setUsername"
+                >Set Username</el-button
+              >
             </el-form-item>
           </el-form>
         </el-card>
@@ -40,9 +42,17 @@
           </div>
           <el-table :data="transactions" style="width: 100%">
             <el-table-column prop="id" label="ID" width="180"></el-table-column>
-            <el-table-column prop="type" label="Type" width="80"></el-table-column>
+            <el-table-column
+              prop="type"
+              label="Type"
+              width="80"
+            ></el-table-column>
             <el-table-column prop="args" label="Args"></el-table-column>
-            <el-table-column prop="height" label="height" width="80"></el-table-column>
+            <el-table-column
+              prop="height"
+              label="height"
+              width="80"
+            ></el-table-column>
             <el-table-column prop="message" label="Message"></el-table-column>
           </el-table>
         </el-card>
@@ -52,14 +62,18 @@
 </template>
 
 <script scoped>
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
 
-import * as client from "@gny/client";
-const connection = new client.Connection("testnet.gny.io", 4096, "testnet");
+import * as client from '@gny/client';
+const connection = new client.Connection(
+  process.env['GNY_ENDPOINT'],
+  process.env['GNY_PORT'],
+  process.env['GNY_NETWORK'],
+);
 
 export default {
   computed: {
-    ...mapState(["user", "passphrase"])
+    ...mapState(['user', 'passphrase']),
   },
   methods: {
     async setUsername() {
@@ -69,21 +83,21 @@ export default {
 
         const trs = client.basic.setUserName(
           this.form.username,
-          this.passphrase
+          this.passphrase,
         );
         await connection.api.Transport.sendTransaction(trs);
       } catch (err) {
         console.log(err);
       }
-    }
+    },
   },
   data() {
     return {
       transactions: [],
-      placeholder: "",
+      placeholder: '',
       form: {
-        username: ""
-      }
+        username: '',
+      },
     };
   },
   async mounted() {
@@ -91,10 +105,10 @@ export default {
 
     this.transactions = (
       await connection.api.Transaction.getTransactions({
-        senderId: address
+        senderId: address,
       })
     ).transactions;
-  }
+  },
 };
 </script>
 

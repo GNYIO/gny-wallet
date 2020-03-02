@@ -45,6 +45,7 @@
             <i class="el-icon-user-solid"></i>
             <span> Delegates</span>
           </el-menu-item>
+
           <el-menu-item index="4" route="/machinelearning">
             <i class="el-icon-s-platform"></i>
             <span> Machine Learning</span>
@@ -85,6 +86,7 @@ export default {
   color: #fff;
   text-align: justify;
   line-height: 60px;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .el-aside {
@@ -100,6 +102,7 @@ export default {
   color: #333;
   text-align: center;
   line-height: 160px;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .el-menu {
