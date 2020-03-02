@@ -12,7 +12,11 @@
       v-if="newAccount"
     ></el-alert>
 
-    <el-input placeholder="Enter your passphrase" v-model="passphrase" show-password></el-input>
+    <el-input
+      placeholder="Enter your passphrase"
+      v-model="passphrase"
+      show-password
+    ></el-input>
 
     <el-row>
       <el-button type="info" @click="login">Login</el-button>
@@ -22,8 +26,8 @@
 </template>
 
 <script>
-import * as Mnemonic from "bitcore-mnemonic";
-import * as Cookie from "tiny-cookie";
+import * as Mnemonic from 'bitcore-mnemonic';
+import * as Cookie from 'tiny-cookie';
 
 export function generateSecret() {
   return new Mnemonic(Mnemonic.Words.ENGLISH).toString();
@@ -32,8 +36,8 @@ export function generateSecret() {
 export default {
   data() {
     return {
-      passphrase: "",
-      newAccount: ""
+      passphrase: '',
+      newAccount: '',
     };
   },
   methods: {
@@ -46,17 +50,17 @@ export default {
     },
     async login() {
       try {
-        Cookie.set("bip39", this.passphrase);
-        await this.$store.dispatch("setPassphrase", this.passphrase);
-        await this.$store.dispatch("setToken", this.passphrase);
-        await this.$store.dispatch("refreshAccounts");
-        this.$router.push("/home");
+        Cookie.set('bip39', this.passphrase);
+        await this.$store.dispatch('setPassphrase', this.passphrase);
+        await this.$store.dispatch('setToken', this.passphrase);
+        await this.$store.dispatch('refreshAccounts');
+        this.$router.push('/main');
         // location.reload();
       } catch (error) {
         console.log(`Login error: ${error}`);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -82,9 +86,6 @@ img {
 
 .el-alert {
   width: 500px;
-}
-
-.el-input {
-  display: block-inline;
+  height: 40px;
 }
 </style>

@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
-import { Notification } from 'element-ui';
+import {
+  Notification
+} from 'element-ui';
 
 import * as client from '@gny/client';
-const connection = new client.Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
+const connection = new client.Connection('testnet.gny.io', 4096, 'testnet');
 const getKeys = client.crypto.getKeys;
 
 Vue.use(Vuex);
@@ -23,7 +25,8 @@ export default new Vuex.Store({
   getters: {
     passphrase: state => state.passphrase,
     user: state => state.user,
-    isLoggedIn: state => state.isLoggedIn
+    isLoggedIn: state => state.isLoggedIn,
+    latestBlock: state => state.latestBlock
   },
   mutations: {
     setToken(state, token) {

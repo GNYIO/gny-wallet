@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "app"
+  name: 'app',
 };
 </script>
 
@@ -15,5 +15,8 @@ export default {
   background-color: #0a68ab;
   color: #fff;
   line-height: 60px;
+}
+.app {
+  font-family: 'Courier New', Courier, monospace;
 }
 </style>
