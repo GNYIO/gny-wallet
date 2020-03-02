@@ -6,13 +6,12 @@ import * as Mnemonic from 'bitcore-mnemonic';
 import * as Cookie from 'tiny-cookie';
 
 import Login from '../views/Login.vue';
-import Home from '../views/Home.vue';
-import Transaction from '../components/Transaction.vue';
-import Delegates from '../components/Delegates.vue';
-import MachineLearning from '../components/MachineLearning.vue';
 import Main from '../components/Main.vue';
-
-import Error404 from '../components/Error404.vue';
+import Home from '../views/Home.vue';
+import Transaction from '../views/Transaction.vue';
+import Delegates from '../views/Delegates.vue';
+import MachineLearning from '../views/MachineLearning.vue';
+import Error404 from '../views/Error404.vue';
 
 
 Vue.use(VueRouter);
