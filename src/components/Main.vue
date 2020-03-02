@@ -38,7 +38,7 @@
           <el-menu-item index="2" route="/transaction">
             <i class="el-icon-s-promotion"></i>
             <span> Transaction</span>
-            <router-link></router-link>
+            <router-link to="/transaction"></router-link>
           </el-menu-item>
 
           <el-menu-item index="3" route="/delegates">
