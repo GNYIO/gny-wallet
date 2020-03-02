@@ -6,7 +6,7 @@ import {
 } from 'element-ui';
 
 import * as client from '@gny/client';
-const connection = new client.Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK ']);
+const connection = new client.Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
 const getKeys = client.crypto.getKeys;
 
 Vue.use(Vuex);
