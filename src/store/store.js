@@ -21,7 +21,8 @@ export default new Vuex.Store({
     isLoggedIn: false,
     token: '',
     latestBlock: {},
-    myVoters: []
+    myVoters: [],
+    allDelegateNames: [],
   },
   getters: {
     passphrase: state => state.passphrase,
@@ -52,6 +53,9 @@ export default new Vuex.Store({
     },
     setPassphrase(state, passphrase) {
       state.passphrase = passphrase
+    },
+    setAllDelegateNames(state, allDelegateNames) {
+      state.allDelegateNames = allDelegateNames;
     }
   },
   actions: {
@@ -127,6 +131,26 @@ export default new Vuex.Store({
           title: 'Error',
           message: err.message
         });
+      }
+    },
+    async getAllDelegateNames({
+      commit,
+    }) {
+      const countWrapper = await connection.api.Delegate.count();
+      if (countWrapper.success === true) {
+        const count = countWrapper.count;
+        const all = [];
+        for (let offset = 0; offset < count; offset += 100) {
+          const part = await connection.api.Delegate.getDelegates(offset, 100);
+          if (part.success) {
+            all.push(...part.delegates);
+          }
+        }
+
+        console.log(`all.length: ${all.length}`);
+        commit('setAllDelegateNames', all);
+      } else {
+        commit('setAllDelegateNames', []);
       }
     }
   }

@@ -9,7 +9,7 @@
           <p v-if="user.username">Username: {{ user.username }}</p>
           <p>Address: {{ user.address }}</p>
           <p>Balance: {{ user.balance / 1e8 }} GNY</p>
-          <!--<p>Public key: {{ user.publicKey }}</p>-->
+          <p>Is Locked: {{ user.isLocked }}</p>
         </el-card>
       </el-col>
 

@@ -65,6 +65,37 @@
           </el-table>
         </el-card>
       </el-col>
+
+      <el-col :span="12" v-if="user.isLocked">
+        <h>You can't vote, you need to first lock your account</h>
+      </el-col>
+
+      <el-col :span="12" v-if="!user.isLocked">
+        <el-card>
+          <div slot="header">
+            <span>Vote for</span>
+          </div>
+
+          <el-form :ref="voteForm" :model="voteForm">
+            <el-form-item>
+              <el-select placeholder="select multiple delegates" clearable multiple v-model="voteForm.delegates">
+                <el-option v-for="item in allDelegateNames"
+                :key="item.username"
+                :label="item.username"
+                :value="item.username">
+                <span style="float: left">{{item.username}}</span>
+                <span style="float: right; margin-right: 2em">rank: {{item.rate}}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item>
+              <button type="primary" @click="vote">Vote</button>
+            </el-form-item>
+
+          </el-form>
+        </el-card>
+      </el-col>
     </el-row>
 
     <el-row :gutter="20">
@@ -124,20 +155,27 @@ const connection = new client.Connection(
 
 export default {
   computed: {
-    ...mapState(['user', 'passphrase', 'delegate', 'myVoters']),
+    ...mapState(['user', 'passphrase', 'delegate', 'myVoters', 'allDelegateNames']),
   },
   data() {
     return {
       position: 0,
       form: {},
+      voteForm: {
+        delegates: []
+      },
       delegates: [],
       currentPage: 1,
       pageSize: 20,
       total: 101,
       currentDelegates: [],
+
     };
   },
   methods: {
+    async vote() {
+
+    },
     async registerAsDelegate() {
       try {
         const trs = client.basic.registerDelegate(this.passphrase);
@@ -163,6 +201,16 @@ export default {
     },
   },
   async mounted() {
+    try {
+      await this.$store.dispatch('getAllDelegateNames');
+    } catch(err) {
+      Notification({
+        title: 'Error',
+        message: err.message,
+        type: 'error'
+      })
+    }
+
     try {
       await this.$store.dispatch('getMyVoters');
     } catch (err) {
