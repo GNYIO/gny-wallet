@@ -20,7 +20,8 @@ export default new Vuex.Store({
     delegate: null,
     isLoggedIn: false,
     token: '',
-    latestBlock: {}
+    latestBlock: {},
+    myVoters: []
   },
   getters: {
     passphrase: state => state.passphrase,
@@ -45,6 +46,9 @@ export default new Vuex.Store({
     },
     setDelegateInfo(state, delegate) {
       state.delegate = delegate;
+    },
+    setMyVoters(state, myVoters) {
+      state.myVoters = myVoters;
     },
     setPassphrase(state, passphrase) {
       state.passphrase = passphrase
@@ -105,6 +109,24 @@ export default new Vuex.Store({
           title: 'Error',
           message: err.message
         })
+      }
+    },
+    async getMyVoters({
+      commit,
+      state,
+    }) {
+      try {
+        const result = await connection.api.Delegate.getVoters(state.user.username);
+        if (result.accounts) {
+          commit('setMyVoters', result.accounts)
+        } else {
+          throw new Error(result.error);
+        }
+      } catch (err) {
+        Notification({
+          title: 'Error',
+          message: err.message
+        });
       }
     }
   }

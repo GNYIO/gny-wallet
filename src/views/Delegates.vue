@@ -43,6 +43,31 @@
     </el-row>
 
     <el-row :gutter="20">
+      <el-col :span="12">
+        <el-card>
+          <div slot="header">
+            <span>Who voted for me</span>
+          </div>
+
+          <el-table :data="myVoters" stripe style="width: 100%">
+            <el-table-column
+              prop="balance"
+              label="Balance"
+            ></el-table-column>
+            <el-table-column
+              prop="weightRatio"
+              label="weightRatio"
+            ></el-table-column>
+            <el-table-column
+              prop="address"
+              label="Address"
+            ></el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <el-row :gutter="20">
       <el-col :span="24">
         <el-card>
           <el-table :data="currentDelegates" stripe style="width: 100%">
@@ -99,7 +124,7 @@ const connection = new client.Connection(
 
 export default {
   computed: {
-    ...mapState(['user', 'passphrase', 'delegate']),
+    ...mapState(['user', 'passphrase', 'delegate', 'myVoters']),
   },
   data() {
     return {
@@ -138,6 +163,16 @@ export default {
     },
   },
   async mounted() {
+    try {
+      await this.$store.dispatch('getMyVoters');
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message,
+        type: 'error'
+      })
+    }
+
     try {
       await this.$store.dispatch('refreshDelegateInfo');
     } catch (err) {
