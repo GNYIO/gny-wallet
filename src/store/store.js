@@ -147,7 +147,6 @@ export default new Vuex.Store({
           }
         }
 
-        console.log(`all.length: ${all.length}`);
         commit('setAllDelegateNames', all);
       } else {
         commit('setAllDelegateNames', []);

@@ -66,11 +66,17 @@
         </el-card>
       </el-col>
 
-      <el-col :span="12" v-if="user.isLocked">
-        <h>You can't vote, you need to first lock your account</h>
+      <el-col :span="12" v-if="user.lockHeight == 0">
+        <el-card>
+          <h1>You can't vote, you need to first lock your account</h1>
+          <span>
+            <p>Lock your account here: </p>
+            <router-link to="/home">Home</router-link>
+          </span>
+        </el-card>
       </el-col>
 
-      <el-col :span="12" v-if="!user.isLocked">
+      <el-col :span="12" v-if="user.lockHeight > 0">
         <el-card>
           <div slot="header">
             <span>Vote for</span>
@@ -169,12 +175,16 @@ export default {
       pageSize: 20,
       total: 101,
       currentDelegates: [],
-
     };
   },
   methods: {
     async vote() {
-
+      try {
+        const trs = client.basic.vote(this.voteForm.delegates, this.passphrase);
+        await connection.api.Transport.sendTransaction(trs);
+      } catch (err) {
+        console.log(err);
+      }
     },
     async registerAsDelegate() {
       try {
