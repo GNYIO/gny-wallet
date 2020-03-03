@@ -80,7 +80,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .el-header {
   background-color: #5c89a8;
   color: #fff;
@@ -101,7 +101,6 @@ export default {
   background-color: #e9eef3;
   color: #333;
   text-align: center;
-  line-height: 160px;
   font-family: 'Courier New', Courier, monospace;
 }
 
