@@ -51,8 +51,8 @@
 
           <el-table :data="myVoters" stripe style="width: 100%">
             <el-table-column
-              prop="balance"
-              label="Balance"
+              prop="lockAmount"
+              label="Lock Amount"
             ></el-table-column>
             <el-table-column
               prop="weightRatio"
@@ -62,6 +62,10 @@
               prop="address"
               label="Address"
             ></el-table-column>
+            <el-table-column
+              prop="username"
+              label="Username">
+            </el-table-column>
           </el-table>
         </el-card>
       </el-col>
@@ -207,7 +211,6 @@ export default {
           this.currentDelegates.push(list[from]);
         }
       }
-      console.log(this.tempList);
     },
   },
   async mounted() {

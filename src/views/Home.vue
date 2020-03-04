@@ -113,7 +113,15 @@ export default {
       }
     },
     async lockAccount() {
-
+      try {
+        const height = this.lockAccountForm.lockHeight;
+        const amount = this.lockAccountForm.lockAmount * 1e8;
+        console.log(`height: ${height}, amount: ${amount}`);
+        const trs = await client.basic.lock(height, amount, this.passphrase);
+        await connection.api.Transport.sendTransaction(trs);
+      } catch (err) {
+        console.log(err.message);
+      }
     }
   },
   data() {
