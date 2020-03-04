@@ -83,7 +83,7 @@
       <el-col :span="12" v-if="user.lockHeight > 0">
         <el-card>
           <div slot="header">
-            <span>Vote for</span>
+            <span>Vote for Delegates</span>
           </div>
 
           <el-form :ref="voteForm" :model="voteForm">
@@ -137,6 +137,10 @@
               prop="productivity"
               label="Productivity"
             ></el-table-column>
+            <el-table-column
+              prop="approval"
+              label="Approval">
+            </el-table-column>
           </el-table>
           <div class="block">
             <el-pagination
@@ -208,6 +212,7 @@ export default {
       this.currentDelegates = [];
       for (; from < to; from++) {
         if (list[from]) {
+          console.log(JSON.stringify(this.currentDelegates, null, 2));
           this.currentDelegates.push(list[from]);
         }
       }
@@ -254,6 +259,7 @@ export default {
         rate: delegate.rate,
         rewards: Number(delegate.rewards) / 1e8,
         productivity: delegate.productivity + '%',
+        approval: delegate.approval,
       }));
       this.handleCurrentChange(1);
     } catch (error) {
