@@ -70,6 +70,24 @@
         </el-card>
       </el-col>
 
+      <el-col :span="12">
+        <el-card>
+          <div slot="header">
+            Who I voted for
+          </div>
+
+          <el-table :data="whoIVotedFor" stripe style="width: 100%">
+            <el-table-column
+              prop="username"
+              label="Username"
+            ></el-table-column>
+         </el-table>
+        </el-card>
+      </el-col>
+
+    </el-row>
+
+    <el-row :gutter="20">
       <el-col :span="12" v-if="user.lockHeight == 0">
         <el-card>
           <h1>You can't vote, you need to first lock your account</h1>
@@ -183,6 +201,7 @@ export default {
       pageSize: 20,
       total: 101,
       currentDelegates: [],
+      whoIVotedFor: [],
     };
   },
   methods: {
@@ -212,13 +231,30 @@ export default {
       this.currentDelegates = [];
       for (; from < to; from++) {
         if (list[from]) {
-          console.log(JSON.stringify(this.currentDelegates, null, 2));
           this.currentDelegates.push(list[from]);
         }
       }
     },
   },
   async mounted() {
+    try {
+      const response = await connection.api.Transaction.getTransactions({
+        type: 4,
+        senderId: this.user.address,
+      });
+      if (response.success === true) {
+        const usernames = response.transactions
+          .map(x => JSON.parse(x.args))
+          .map(x => x[0])
+          .map(x => ({ username: x }));
+        console.log(`whoIVotedFor: ${JSON.stringify(usernames, null, 2)}`);
+        this.whoIVotedFor = usernames;
+      }
+
+    } catch (err) {
+      console.log(`error: ${JSON.stringify(err.response, null, 2)}`)
+    }
+
     try {
       await this.$store.dispatch('getAllDelegateNames');
     } catch(err) {
