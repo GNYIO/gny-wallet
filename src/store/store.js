@@ -23,6 +23,9 @@ export default new Vuex.Store({
     latestBlock: {},
     myVoters: [],
     allDelegateNames: [],
+    isIssuer: false,
+    issuer: {},
+    assets: [],
   },
   getters: {
     passphrase: state => state.passphrase,
@@ -56,7 +59,16 @@ export default new Vuex.Store({
     },
     setAllDelegateNames(state, allDelegateNames) {
       state.allDelegateNames = allDelegateNames;
-    }
+    },
+    setIsIssuer(state, isIssuer) {
+      state.isIssuer = isIssuer;
+    },
+    setIssuer(state, issuer) {
+      state.issuer = issuer;
+    },
+    setAssets(state, assets) {
+      state.assets = assets;
+    },
   },
   actions: {
     setToken({
@@ -151,6 +163,40 @@ export default new Vuex.Store({
       } else {
         commit('setAllDelegateNames', []);
       }
-    }
-  }
+    },
+    async refreshIsIssuer({
+      commit
+    }) {
+      const isIssuer = await connection.api.Uia.isIssuer(this.user.address);
+      if (isIssuer.success === true) {
+        commit('setIsIssuer', isIssuer.isIssuer);
+
+        if (isIssuer.isIssuer === true) {
+          const issuer = await connection.api.Uia.getIssuer(this.user.username);
+          if (issuer.success === true) {
+            commit('setIssuer', issuer.issuer);
+          }
+        }
+      }
+    },
+    async refreshAssets({
+      commit
+    }) {
+      const count = await connection.api.Uia.getAssets();
+      if (count.success === true) {
+        const allAssets = [];
+
+        const howManyAssets = count.count;
+        const limit = 100;
+        for (let offset = 0; offset < howManyAssets; offset += limit) {
+          const result = await connection.api.Uia.getAssets(limit, offset);
+          if (result.success) {
+            allAssets.push(...result.assets);
+          }
+        }
+
+        commit('setAssets', allAssets);
+      }
+    },
+  },
 });

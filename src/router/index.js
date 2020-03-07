@@ -10,6 +10,7 @@ import Main from '../components/Main.vue';
 import Home from '../views/Home.vue';
 import Transaction from '../views/Transaction.vue';
 import Delegates from '../views/Delegates.vue';
+import Uia from '../views/Uia.vue';
 import MachineLearning from '../views/MachineLearning.vue';
 import Error404 from '../views/Error404.vue';
 
@@ -39,6 +40,10 @@ const Router = new VueRouter({
         {
           path: '/delegates',
           component: Delegates
+        },
+        {
+          path: '/uia',
+          component: Uia
         },
         {
           path: '/machinelearning',
