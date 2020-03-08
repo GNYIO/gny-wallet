@@ -2,7 +2,18 @@
   <el-main>
     <img alt="GNY logo" src="../assets/logo.png" />
 
-    <el-input v-model="newAccount" v-if="newAccount"></el-input>
+    <div v-if="newAccount">
+      <el-alert
+        :title="newAccount"
+        type="success"
+        center
+        effect="dark"
+        :closable="false"
+      ></el-alert>
+      <!-- <el-button @click="copyPassword" style="display:inline">
+        Copy <i class="el-icon-document-copy"></i>
+      </el-button> -->
+    </div>
 
     <el-alert
       title="Please save your passphrase to a safe place!"
@@ -14,7 +25,7 @@
 
     <el-input
       placeholder="Enter your passphrase"
-      v-model="passphrase"
+      v-model="form.passphrase"
       show-password
     ></el-input>
 
@@ -36,8 +47,10 @@ export function generateSecret() {
 export default {
   data() {
     return {
-      passphrase: '',
       newAccount: '',
+      form: {
+        passphrase: '',
+      },
     };
   },
   methods: {
@@ -50,12 +63,13 @@ export default {
     },
     async login() {
       try {
-        Cookie.set('bip39', this.passphrase);
-        await this.$store.dispatch('setPassphrase', this.passphrase);
-        await this.$store.dispatch('setToken', this.passphrase);
+        const passphrase = this.form.passphrase;
+
+        Cookie.set('bip39', passphrase);
+        await this.$store.dispatch('setPassphrase', passphrase);
+        await this.$store.dispatch('setToken', passphrase);
         await this.$store.dispatch('refreshAccounts');
         this.$router.push('/main');
-        // location.reload();
       } catch (error) {
         console.log(`Login error: ${error}`);
       }
@@ -76,7 +90,6 @@ export default {
 
 img {
   width: 300px;
-  margin-bottom: 100px;
 }
 
 .el-input {
@@ -85,7 +98,8 @@ img {
 }
 
 .el-alert {
-  width: 500px;
-  height: 40px;
+  padding: 2rem;
+  margin-top: 15px;
+  width: auto;
 }
 </style>
