@@ -62,20 +62,18 @@
           <div slot="header">
             <span>Transaction History</span>
           </div>
-          <el-table :data="transactions" style="width: 100%">
-            <el-table-column prop="id" label="ID" width="180"></el-table-column>
+          <el-table stripe :data="transactions" style="width: 100%">
+            <el-table-column prop="id" label="ID"></el-table-column>
             <el-table-column
               prop="type"
               label="Type"
-              width="80"
             ></el-table-column>
             <el-table-column prop="args" label="Args"></el-table-column>
             <el-table-column
               prop="height"
               label="height"
-              width="80"
             ></el-table-column>
-            <el-table-column prop="message" label="Message"></el-table-column>
+            <el-table-column prop="message" label="Message" width="120"></el-table-column>
           </el-table>
         </el-card>
       </el-col>
@@ -85,6 +83,7 @@
 
 <script scoped>
 import { mapState } from 'vuex';
+import { Notification } from 'element-ui';
 
 import * as client from '@gny/client';
 const connection = new client.Connection(
@@ -95,19 +94,20 @@ const connection = new client.Connection(
 
 export default {
   computed: {
-    ...mapState(['user', 'passphrase']),
+    ...mapState(['user', 'passphrase', 'transactions']),
   },
   methods: {
     async setUsername() {
       try {
-        console.log(this.form.username);
-        console.log(this.passphrase);
-
         const trs = client.basic.setUserName(
           this.form.username,
           this.passphrase,
         );
-        await connection.api.Transport.sendTransaction(trs);
+        const result =  await connection.api.Transport.sendTransaction(trs);
+        Notification({
+          title: 'Success',
+          message: result.transactionId,
+        });
       } catch (err) {
         console.log(err);
       }
@@ -126,7 +126,6 @@ export default {
   },
   data() {
     return {
-      transactions: [],
       placeholder: '',
       form: {
         username: '',
@@ -138,13 +137,8 @@ export default {
     };
   },
   async mounted() {
-    const address = this.user.address;
-
-    this.transactions = (
-      await connection.api.Transaction.getTransactions({
-        senderId: address,
-      })
-    ).transactions;
+    await this.$store.dispatch('refreshAccounts');
+    await this.$store.dispatch('getTransactions');
   },
 };
 </script>

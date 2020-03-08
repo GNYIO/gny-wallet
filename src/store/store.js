@@ -26,12 +26,26 @@ export default new Vuex.Store({
     isIssuer: false,
     issuer: {},
     assets: [],
+    transactions: [],
+    whoIVotedFor: [],
   },
   getters: {
     passphrase: state => state.passphrase,
     user: state => state.user,
     isLoggedIn: state => state.isLoggedIn,
-    latestBlock: state => state.latestBlock
+    latestBlock: state => state.latestBlock,
+    prettyDelegates: state => {
+      const delegates = state.allDelegateNames.map(delegate => ({
+        address: delegate.address,
+        username: delegate.username,
+        producedBlocks: delegate.producedBlocks,
+        rate: delegate.rate,
+        rewards: Number(delegate.rewards) / 1e8,
+        productivity: delegate.productivity + '%',
+        approval: delegate.approval,
+      }));
+      return delegates;
+    }
   },
   mutations: {
     setToken(state, token) {
@@ -68,6 +82,12 @@ export default new Vuex.Store({
     },
     setAssets(state, assets) {
       state.assets = assets;
+    },
+    setTransactions(state, transactions) {
+      state.transactions = transactions;
+    },
+    setWhoIVotedFor(state, whoIVotedFor) {
+      state.whoIVotedFor = whoIVotedFor;
     },
   },
   actions: {
@@ -207,6 +227,42 @@ export default new Vuex.Store({
         }
 
         commit('setAssets', allAssets);
+      }
+    },
+    async getTransactions({
+      commit,
+      state
+    }) {
+      const result = await connection.api.Transaction.getTransactions({
+        senderId: state.user.address,
+      });
+      if (result.success === true) {
+        const transactions = result.transactions;
+        commit('setTransactions', transactions);
+      }
+    },
+    async getWhoIVotedFor({
+      commit,
+      state
+    }) {
+      try {
+        const response = await connection.api.Transaction.getTransactions({
+          type: 4,
+          senderId: state.user.address,
+        });
+        if (response.success === true) {
+          const usernames = response.transactions
+            .map(x => JSON.parse(x.args))
+            .map(x => x[0])
+            .map(x => ({ username: x }));
+
+          commit('setWhoIVotedFor', usernames);
+        }
+      } catch(err) {
+        Notification({
+          title: 'Error',
+          message: err.message
+        });
       }
     },
   },

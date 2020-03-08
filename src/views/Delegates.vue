@@ -26,9 +26,9 @@
       </el-col>
 
       <el-col :span="12">
-        <el-card v-if="user.isDelegate === 0">
+        <el-card v-if="user.isDelegate === 0 && user.username !== null">
           <div slot="header">
-            <span>Register</span>
+            <span>Register Delegate</span>
           </div>
 
           <el-form ref="form" :model="form">
@@ -38,6 +38,12 @@
               >
             </el-form-item>
           </el-form>
+        </el-card>
+
+        <el-card v-if="user.isDelegate === 0 && user.username === null">
+          <h1>You need to first set your username before registering as Delegate</h1>
+          <p>Lock your account here: </p>
+          <router-link to="/home">Home</router-link>
         </el-card>
       </el-col>
     </el-row>
@@ -176,7 +182,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
 const connection = new client.Connection(
   process.env['GNY_ENDPOINT'],
@@ -187,6 +193,7 @@ const connection = new client.Connection(
 export default {
   computed: {
     ...mapState(['user', 'passphrase', 'delegate', 'myVoters', 'allDelegateNames']),
+    ...mapGetters(['prettyDelegates'])
   },
   data() {
     return {
@@ -222,7 +229,7 @@ export default {
     },
     handleCurrentChange(currentPage) {
       this.currentPage = currentPage;
-      this.changePage(this.delegates, currentPage);
+      this.changePage(this.prettyDelegates, currentPage);
     },
     changePage(list, currentPage) {
       let from = (currentPage - 1) * this.pageSize;
@@ -236,44 +243,14 @@ export default {
     },
   },
   async mounted() {
-    try {
-      const response = await connection.api.Transaction.getTransactions({
-        type: 4,
-        senderId: this.user.address,
-      });
-      if (response.success === true) {
-        const usernames = response.transactions
-          .map(x => JSON.parse(x.args))
-          .map(x => x[0])
-          .map(x => ({ username: x }));
-        console.log(`whoIVotedFor: ${JSON.stringify(usernames, null, 2)}`);
-        this.whoIVotedFor = usernames;
-      }
-
-    } catch (err) {
-      console.log(`error: ${JSON.stringify(err.response, null, 2)}`)
-    }
+    await this.$store.dispatch('refreshAccounts');
+    await this.$store.dispatch('getWhoIVotedFor');
 
     await this.$store.dispatch('getAllDelegateNames');
     await this.$store.dispatch('getMyVoters');
     await this.$store.dispatch('refreshDelegateInfo');
 
-    try {
-      const delegates = (await connection.api.Delegate.getDelegates(null, 101))
-        .delegates;
-      this.delegates = delegates.map(delegate => ({
-        address: delegate.address,
-        username: delegate.username,
-        producedBlocks: delegate.producedBlocks,
-        rate: delegate.rate,
-        rewards: Number(delegate.rewards) / 1e8,
-        productivity: delegate.productivity + '%',
-        approval: delegate.approval,
-      }));
-      this.handleCurrentChange(1);
-    } catch (error) {
-      console.log(error);
-    }
+    this.handleCurrentChange(1);
   },
 };
 </script>
