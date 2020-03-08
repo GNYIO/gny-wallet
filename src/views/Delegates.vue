@@ -135,46 +135,7 @@
     <el-row :gutter="20">
       <el-col :span="24">
         <el-card>
-          <el-table :data="currentDelegates" stripe style="width: 100%">
-            <el-table-column
-              prop="rate"
-              label="Rate"
-              width="100"
-            ></el-table-column>
-            <el-table-column
-              prop="username"
-              label="Username"
-              width="120"
-            ></el-table-column>
-            <el-table-column prop="address" label="Address"></el-table-column>
-            <el-table-column
-              prop="producedBlocks"
-              label="Produced Blocks"
-              width="180"
-            ></el-table-column>
-            <el-table-column
-              prop="rewards"
-              label="Rewards"
-              width="180"
-            ></el-table-column>
-            <el-table-column
-              prop="productivity"
-              label="Productivity"
-            ></el-table-column>
-            <el-table-column
-              prop="approval"
-              label="Approval">
-            </el-table-column>
-          </el-table>
-          <div class="block">
-            <el-pagination
-              @current-change="handleCurrentChange"
-              :current-page="currentPage"
-              :page-size="20"
-              layout="prev, pager, next"
-              :total="total"
-            ></el-pagination>
-          </div>
+          <DelegatePaged></DelegatePaged>
         </el-card>
       </el-col>
     </el-row>
@@ -182,6 +143,7 @@
 </template>
 
 <script>
+import DelegatePaged from './DelegatesPaged';
 import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
 const connection = new client.Connection(
@@ -191,9 +153,12 @@ const connection = new client.Connection(
 );
 
 export default {
+  components: {
+    DelegatePaged,
+  },
   computed: {
     ...mapState(['user', 'passphrase', 'delegate', 'myVoters', 'allDelegateNames']),
-    ...mapGetters(['prettyDelegates'])
+    ...mapGetters(['prettyDelegates']),
   },
   data() {
     return {
@@ -203,10 +168,6 @@ export default {
         delegates: []
       },
       delegates: [],
-      currentPage: 1,
-      pageSize: 20,
-      total: 101,
-      currentDelegates: [],
       whoIVotedFor: [],
     };
   },
@@ -227,20 +188,6 @@ export default {
         console.log(err);
       }
     },
-    handleCurrentChange(currentPage) {
-      this.currentPage = currentPage;
-      this.changePage(this.prettyDelegates, currentPage);
-    },
-    changePage(list, currentPage) {
-      let from = (currentPage - 1) * this.pageSize;
-      let to = currentPage * this.pageSize;
-      this.currentDelegates = [];
-      for (; from < to; from++) {
-        if (list[from]) {
-          this.currentDelegates.push(list[from]);
-        }
-      }
-    },
   },
   async mounted() {
     await this.$store.dispatch('refreshAccounts');
@@ -250,7 +197,6 @@ export default {
     await this.$store.dispatch('getMyVoters');
     await this.$store.dispatch('refreshDelegateInfo');
 
-    this.handleCurrentChange(1);
   },
 };
 </script>

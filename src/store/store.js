@@ -45,7 +45,8 @@ export default new Vuex.Store({
         approval: delegate.approval,
       }));
       return delegates;
-    }
+    },
+    delegatesCount: state => state.allDelegateNames.length,
   },
   mutations: {
     setToken(state, token) {
