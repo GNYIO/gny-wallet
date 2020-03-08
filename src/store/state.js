@@ -13,5 +13,8 @@ export const state = {
   assets: [],
   transactions: [],
   whoIVotedFor: [],
+
+  hasUsername: false,
+  isLocked: false,
 };
 
