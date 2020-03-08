@@ -100,12 +100,13 @@ export default new Vuex.Store({
         const response = await connection.api.Account.openAccount(
           keys.publicKey
         );
-        console.log(JSON.stringify(response, null, 2))
         commit('setUser', response.account);
-        // commit('setToken', response.account.address)
         commit('setLatestBlock', response.latestBlock)
-      } catch (error) {
-        console.log('in store', error)
+      } catch (err) {
+        Notification({
+          title: 'Error',
+          message: err.message
+        });
       }
     },
     async refreshDelegateInfo({
@@ -113,13 +114,15 @@ export default new Vuex.Store({
       state,
     }) {
       try {
-        const result = await connection.api.Delegate.getDelegateByUsername(state.user.username);
-
-        if (result.success) {
-          commit('setDelegateInfo', result.delegate);
-        } else {
-          throw new Error(result.error);
+        if (state.user.username) {
+          const result = await connection.api.Delegate.getDelegateByUsername(state.user.username);
+          if (result.success) {
+            commit('setDelegateInfo', result.delegate);
+          } else {
+            throw new Error(result.error);
+          }
         }
+
       } catch (err) {
         Notification({
           title: 'Error',
@@ -132,11 +135,13 @@ export default new Vuex.Store({
       state,
     }) {
       try {
-        const result = await connection.api.Delegate.getVoters(state.user.username);
-        if (result.accounts) {
-          commit('setMyVoters', result.accounts)
-        } else {
-          throw new Error(result.error);
+        if (state.user.username) {
+          const result = await connection.api.Delegate.getVoters(state.user.username);
+          if (result.accounts) {
+            commit('setMyVoters', result.accounts)
+          } else {
+            throw new Error(result.error);
+          }
         }
       } catch (err) {
         Notification({
@@ -148,20 +153,26 @@ export default new Vuex.Store({
     async getAllDelegateNames({
       commit,
     }) {
-      const countWrapper = await connection.api.Delegate.count();
-      if (countWrapper.success === true) {
-        const count = countWrapper.count;
-        const all = [];
-        for (let offset = 0; offset < count; offset += 100) {
-          const part = await connection.api.Delegate.getDelegates(offset, 100);
-          if (part.success) {
-            all.push(...part.delegates);
+      try {
+        const countWrapper = await connection.api.Delegate.count();
+        if (countWrapper.success === true) {
+          const count = countWrapper.count;
+          const all = [];
+          for (let offset = 0; offset < count; offset += 100) {
+            const part = await connection.api.Delegate.getDelegates(offset, 100);
+            if (part.success) {
+              all.push(...part.delegates);
+            }
           }
+          commit('setAllDelegateNames', all);
+        } else {
+          commit('setAllDelegateNames', []);
         }
-
-        commit('setAllDelegateNames', all);
-      } else {
-        commit('setAllDelegateNames', []);
+      } catch (err) {
+        Notification({
+          title: 'Error',
+          message: err.message
+        });
       }
     },
     async refreshIsIssuer({

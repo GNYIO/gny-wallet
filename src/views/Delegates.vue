@@ -178,7 +178,6 @@
 <script>
 import { mapState } from 'vuex';
 import * as client from '@gny/client';
-import { Notification } from 'element-ui';
 const connection = new client.Connection(
   process.env['GNY_ENDPOINT'],
   process.env['GNY_PORT'],
@@ -255,35 +254,9 @@ export default {
       console.log(`error: ${JSON.stringify(err.response, null, 2)}`)
     }
 
-    try {
-      await this.$store.dispatch('getAllDelegateNames');
-    } catch(err) {
-      Notification({
-        title: 'Error',
-        message: err.message,
-        type: 'error'
-      })
-    }
-
-    try {
-      await this.$store.dispatch('getMyVoters');
-    } catch (err) {
-      Notification({
-        title: 'Error',
-        message: err.message,
-        type: 'error'
-      })
-    }
-
-    try {
-      await this.$store.dispatch('refreshDelegateInfo');
-    } catch (err) {
-      Notification({
-        title: 'Error',
-        message: err.message,
-        type: 'error',
-      });
-    }
+    await this.$store.dispatch('getAllDelegateNames');
+    await this.$store.dispatch('getMyVoters');
+    await this.$store.dispatch('refreshDelegateInfo');
 
     try {
       const delegates = (await connection.api.Delegate.getDelegates(null, 101))
