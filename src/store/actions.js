@@ -149,12 +149,31 @@ export const actions = {
     commit,
     state
   }) {
-    const result = await connection.api.Transaction.getTransactions({
-      senderId: state.user.address,
-    });
-    if (result.success === true) {
-      const transactions = result.transactions;
-      commit('setTransactions', transactions);
+    try {
+      let result = await connection.api.Transaction.getTransactions({
+        senderId: state.user.address,
+      });
+      if (result.success === true) {
+        const count = result.count;
+        const all = [];
+
+        for (let offset = 0; offset < count; offset += 100) {
+          const result = await connection.api.Transaction.getTransactions({
+            offset: offset,
+            senderId: state.user.address,
+          });
+          if (result.success === true) {
+            all.push(...result.transactions);
+          }
+        }
+        commit('setTransactions', all);
+      }
+
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message
+      });
     }
   },
   async getWhoIVotedFor({

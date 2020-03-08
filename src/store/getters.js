@@ -18,4 +18,9 @@ export const getters = {
     return delegates;
   },
   delegatesCount: state => state.allDelegateNames.length,
+  transactionsNewestFirst: state => {
+    const copy = [];
+    copy.push(...state.transactions);
+    return copy.reverse();
+  },
 };

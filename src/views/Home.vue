@@ -62,7 +62,7 @@
           <div slot="header">
             <span>Transaction History</span>
           </div>
-          <el-table stripe :data="transactions" style="width: 100%">
+          <el-table stripe :data="transactionsNewestFirst" style="width: 100%">
             <el-table-column prop="id" label="ID"></el-table-column>
             <el-table-column
               prop="type"
@@ -82,7 +82,7 @@
 </template>
 
 <script scoped>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import { Notification } from 'element-ui';
 
 import * as client from '@gny/client';
@@ -94,7 +94,8 @@ const connection = new client.Connection(
 
 export default {
   computed: {
-    ...mapState(['user', 'passphrase', 'transactions']),
+    ...mapState(['user', 'passphrase']),
+    ...mapGetters(['transactionsNewestFirst']),
   },
   methods: {
     async setUsername() {
