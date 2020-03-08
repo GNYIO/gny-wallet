@@ -1,111 +1,19 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
-import {
-  Notification
-} from 'element-ui';
 
-import * as client from '@gny/client';
-const connection = new client.Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
-const getKeys = client.crypto.getKeys;
+import { state } from './state';
+import { getters } from './getters';
+import { mutations } from './mutations';
+import { actions } from './actions';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   strict: true,
   plugins: [createPersistedState()],
-  state: {
-    passphrase: null,
-    user: null,
-    delegate: null,
-    isLoggedIn: false,
-    token: '',
-    latestBlock: {}
-  },
-  getters: {
-    passphrase: state => state.passphrase,
-    user: state => state.user,
-    isLoggedIn: state => state.isLoggedIn,
-    latestBlock: state => state.latestBlock
-  },
-  mutations: {
-    setToken(state, token) {
-      state.token = token;
-      if (token) {
-        state.isLoggedIn = true;
-      } else {
-        state.isLoggedIn = false;
-      }
-    },
-    setUser(state, user) {
-      state.user = user;
-    },
-    setLatestBlock(state, block) {
-      state.latestBlock = block;
-    },
-    setDelegateInfo(state, delegate) {
-      state.delegate = delegate;
-    },
-    setPassphrase(state, passphrase) {
-      state.passphrase = passphrase
-    }
-  },
-  actions: {
-    setToken({
-      commit
-    }, token) {
-      commit('setToken', token);
-    },
-    setUser({
-      commit
-    }, user) {
-      commit('setUser', user);
-    },
-    setLatestBlock({
-      commit
-    }, block) {
-      commit('setLatestBlock', block);
-    },
-    setPassphrase({
-      commit
-    }, passphrase) {
-      commit('setPassphrase', passphrase);
-    },
-    async refreshAccounts({
-      commit,
-      state
-    }) {
-      try {
-        const keys = getKeys(state.passphrase)
-        const response = await connection.api.Account.openAccount(
-          keys.publicKey
-        );
-        console.log(JSON.stringify(response, null, 2))
-        commit('setUser', response.account);
-        // commit('setToken', response.account.address)
-        commit('setLatestBlock', response.latestBlock)
-      } catch (error) {
-        console.log('in store', error)
-      }
-    },
-    async refreshDelegateInfo({
-      commit,
-      state,
-    }) {
-      try {
-        const result = await connection.api.Delegate.getDelegateByUsername(state.user.username);
-
-        if (result.success) {
-          commit('setDelegateInfo', result.delegate);
-        } else {
-          throw new Error(result.error);
-        }
-      } catch (err) {
-        Notification({
-          title: 'Error',
-          message: err.message
-        })
-      }
-    }
-  }
+  state: state,
+  getters: getters,
+  mutations: mutations,
+  actions: actions,
 });

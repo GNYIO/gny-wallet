@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "@gny/client": "^1.0.18",
+    "@gny/utils": "^1.0.18",
     "@gny/web-base": "^1.0.18",
     "axios": "^0.19.0",
+    "bignumber.js": "^8.1.1",
     "bitcore-mnemonic": "^8.13.2",
     "core-js": "^3.4.3",
     "element-theme-chalk": "^2.13.0",
