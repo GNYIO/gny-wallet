@@ -3,7 +3,7 @@ import {
   Notification
 } from 'element-ui';
 
-const connection = new client.Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
+const connection = new client.Connection(process.env.VUE_APP_GNY_ENDPOINT, process.env.VUE_APP_GNY_PORT, process.env.VUE_APP_GNY_NETWORK);
 const getKeys = client.crypto.getKeys;
 
 export const actions = {
@@ -170,11 +170,13 @@ export const actions = {
         const usernames = response.transactions
           .map(x => JSON.parse(x.args))
           .map(x => x[0])
-          .map(x => ({ username: x }));
+          .map(x => ({
+            username: x
+          }));
 
         commit('setWhoIVotedFor', usernames);
       }
-    } catch(err) {
+    } catch (err) {
       Notification({
         title: 'Error',
         message: err.message

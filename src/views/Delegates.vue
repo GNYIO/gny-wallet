@@ -9,17 +9,53 @@
 
           <el-row>
             <el-col :span="12">
-              <p><span>Delegate Name: <b>{{ user.username }}</b></span></p>
-              <p><span>Approval: <b>{{ delegate.approval }}</b></span></p>
-              <p><span>Fees (earned): <b>{{ delegate.fees }}</b></span></p>
-              <p><span>Rewards (earned): <b>{{ delegate.rewards }}</b></span></p>
-              <p><span>Produced Blocks: <b>{{ delegate.producedBlocks }}</b></span></p>
+              <p>
+                <span
+                  >Delegate Name: <b>{{ user.username }}</b></span
+                >
+              </p>
+              <p>
+                <span
+                  >Approval: <b>{{ delegate.approval }}</b></span
+                >
+              </p>
+              <p>
+                <span
+                  >Fees (earned): <b>{{ delegate.fees }}</b></span
+                >
+              </p>
+              <p>
+                <span
+                  >Rewards (earned): <b>{{ delegate.rewards }}</b></span
+                >
+              </p>
+              <p>
+                <span
+                  >Produced Blocks: <b>{{ delegate.producedBlocks }}</b></span
+                >
+              </p>
             </el-col>
             <el-col :span="12">
-              <p><span>Missed Blocks: <b>{{ delegate.missedBlocks }}</b></span></p>
-              <p><span>Rate (Position): <b>{{ delegate.rate }}</b></span></p>
-              <p><span>Votes: <b>{{ delegate.votes }}</b></span></p>
-              <p><span>Productivity <b>{{ delegate.productivity }}</b></span></p>
+              <p>
+                <span
+                  >Missed Blocks: <b>{{ delegate.missedBlocks }}</b></span
+                >
+              </p>
+              <p>
+                <span
+                  >Rate (Position): <b>{{ delegate.rate }}</b></span
+                >
+              </p>
+              <p>
+                <span
+                  >Votes: <b>{{ delegate.votes }}</b></span
+                >
+              </p>
+              <p>
+                <span
+                  >Productivity <b>{{ delegate.productivity }}</b></span
+                >
+              </p>
             </el-col>
           </el-row>
         </el-card>
@@ -41,8 +77,10 @@
         </el-card>
 
         <el-card v-if="user.isDelegate === 0 && user.username === null">
-          <h1>You need to first set your username before registering as Delegate</h1>
-          <p>Lock your account here: </p>
+          <h1>
+            You need to first set your username before registering as Delegate
+          </h1>
+          <p>Lock your account here:</p>
           <router-link to="/home">Home</router-link>
         </el-card>
       </el-col>
@@ -64,13 +102,8 @@
               prop="weightRatio"
               label="weightRatio"
             ></el-table-column>
-            <el-table-column
-              prop="address"
-              label="Address"
-            ></el-table-column>
-            <el-table-column
-              prop="username"
-              label="Username">
+            <el-table-column prop="address" label="Address"></el-table-column>
+            <el-table-column prop="username" label="Username">
             </el-table-column>
           </el-table>
         </el-card>
@@ -83,14 +116,10 @@
           </div>
 
           <el-table :data="whoIVotedFor" stripe style="width: 100%">
-            <el-table-column
-              prop="username"
-              label="Username"
-            ></el-table-column>
-         </el-table>
+            <el-table-column prop="username" label="Username"></el-table-column>
+          </el-table>
         </el-card>
       </el-col>
-
     </el-row>
 
     <el-row :gutter="20">
@@ -98,7 +127,7 @@
         <el-card>
           <h1>You can't vote, you need to first lock your account</h1>
           <span>
-            <p>Lock your account here: </p>
+            <p>Lock your account here:</p>
             <router-link to="/home">Home</router-link>
           </span>
         </el-card>
@@ -112,13 +141,22 @@
 
           <el-form :ref="voteForm" :model="voteForm">
             <el-form-item>
-              <el-select placeholder="select multiple delegates" clearable multiple v-model="voteForm.delegates">
-                <el-option v-for="item in allDelegateNames"
-                :key="item.username"
-                :label="item.username"
-                :value="item.username">
-                <span style="float: left">{{item.username}}</span>
-                <span style="float: right; margin-right: 2em">rank: {{item.rate}}</span>
+              <el-select
+                placeholder="select multiple delegates"
+                clearable
+                multiple
+                v-model="voteForm.delegates"
+              >
+                <el-option
+                  v-for="item in allDelegateNames"
+                  :key="item.username"
+                  :label="item.username"
+                  :value="item.username"
+                >
+                  <span style="float: left">{{ item.username }}</span>
+                  <span style="float: right; margin-right: 2em"
+                    >rank: {{ item.rate }}</span
+                  >
                 </el-option>
               </el-select>
             </el-form-item>
@@ -126,7 +164,6 @@
             <el-form-item>
               <button type="primary" @click="vote">Vote</button>
             </el-form-item>
-
           </el-form>
         </el-card>
       </el-col>
@@ -147,9 +184,9 @@ import DelegatePaged from './DelegatesPaged';
 import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
 const connection = new client.Connection(
-  process.env['GNY_ENDPOINT'],
-  process.env['GNY_PORT'],
-  process.env['GNY_NETWORK'],
+  process.env.VUE_APP_GNY_ENDPOINT,
+  process.env.VUE_APP_GNY_PORT,
+  process.env.VUE_APP_GNY_NETWORK,
 );
 
 export default {
@@ -157,7 +194,13 @@ export default {
     DelegatePaged,
   },
   computed: {
-    ...mapState(['user', 'passphrase', 'delegate', 'myVoters', 'allDelegateNames']),
+    ...mapState([
+      'user',
+      'passphrase',
+      'delegate',
+      'myVoters',
+      'allDelegateNames',
+    ]),
     ...mapGetters(['prettyDelegates']),
   },
   data() {
@@ -165,7 +208,7 @@ export default {
       position: 0,
       form: {},
       voteForm: {
-        delegates: []
+        delegates: [],
       },
       delegates: [],
       whoIVotedFor: [],
@@ -196,7 +239,6 @@ export default {
     await this.$store.dispatch('getAllDelegateNames');
     await this.$store.dispatch('getMyVoters');
     await this.$store.dispatch('refreshDelegateInfo');
-
   },
 };
 </script>

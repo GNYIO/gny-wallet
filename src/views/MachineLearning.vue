@@ -87,4 +87,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.el-select {
+  margin-bottom: 30px;
+}
+</style>
