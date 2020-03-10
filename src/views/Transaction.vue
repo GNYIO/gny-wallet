@@ -26,7 +26,7 @@
         <el-button @click="resetForm">Cancel</el-button>
       </el-form-item>
     </el-form>
-    </el-card>
+  </el-card>
 </template>
 
 <script>
@@ -36,9 +36,9 @@ import { isAddress } from '@gny/utils';
 import { BigNumber } from 'bignumber.js';
 
 const connection = new client.Connection(
-  process.env['GNY_ENDPOINT'],
-  process.env['GNY_PORT'],
-  process.env['GNY_NETWORK'],
+  process.env.VUE_APP_GNY_ENDPOINT,
+  process.env.VUE_APP_GNY_PORT,
+  process.env.VUE_APP_GNY_NETWORK,
 );
 
 export default {
@@ -60,7 +60,12 @@ export default {
       if (currentInput.isLessThan(this.user.balance)) {
         callback();
       } else {
-        callback(new Error(`amount too big, you only have "${this.user.balance / 1e8}" available`));
+        callback(
+          new Error(
+            `amount too big, you only have "${this.user.balance /
+              1e8}" available`,
+          ),
+        );
       }
     };
 
@@ -78,9 +83,9 @@ export default {
       }
       const regex = /^$|(^[a-zA-Z0-9]{1}[a-zA-Z0-9 ]*[a-zA-Z0-9]{1}$)/;
       if (regex.test(value)) {
-        callback()
+        callback();
       } else {
-        callback('wrong message format')
+        callback('wrong message format');
       }
     };
 
@@ -95,17 +100,16 @@ export default {
       },
       rules: {
         to: [
-          { required: true, message: 'Please input to address', trigger: 'blur' },
-          { validator: validateAddress, trigger: 'blur' }
+          {
+            required: true,
+            message: 'Please input to address',
+            trigger: 'blur',
+          },
+          { validator: validateAddress, trigger: 'blur' },
         ],
-        amount: [
-          { validator: validateAmount, trigger: 'blur' }
-        ],
-        message: [
-          { validator: validateMessage, trigger: 'blur' }
-        ]
-
-      }
+        amount: [{ validator: validateAmount, trigger: 'blur' }],
+        message: [{ validator: validateMessage, trigger: 'blur' }],
+      },
     };
   },
   computed: {
@@ -113,7 +117,6 @@ export default {
   },
   methods: {
     async sendTransaction() {
-
       try {
         const result = await this.$refs['form'].validate();
         console.log(result);
@@ -139,11 +142,12 @@ export default {
     },
     resetForm() {
       this.$refs['form'].resetFields();
-    }
+    },
   },
   mounted() {
     this.form.from = this.$store.state.user.address;
-    this.amountPlaceholder = `You have ${this.user.balance / 1e8} GNY in your account`;
+    this.amountPlaceholder = `You have ${this.user.balance /
+      1e8} GNY in your account`;
   },
 };
 </script>
