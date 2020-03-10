@@ -23,4 +23,5 @@ export const getters = {
     copy.push(...state.transactions);
     return copy.reverse();
   },
+  transactionsCount: state => state.transactions.length,
 };
