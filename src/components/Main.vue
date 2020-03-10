@@ -35,10 +35,10 @@
             <span> Home</span>
           </el-menu-item>
 
-          <el-menu-item index="2" route="/transaction">
+          <el-menu-item index="2" route="/transfer">
             <i class="el-icon-s-promotion"></i>
-            <span> Transaction</span>
-            <router-link to="/transaction"></router-link>
+            <span> Transfer</span>
+            <router-link to="/transfer"></router-link>
           </el-menu-item>
 
           <el-menu-item index="3" route="/delegates">
