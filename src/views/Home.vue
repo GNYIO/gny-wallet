@@ -72,7 +72,14 @@
           </div>
           <el-table stripe :data="transactionsNewestFirst" style="width: 100%">
             <el-table-column prop="id" label="ID"></el-table-column>
-            <el-table-column prop="type" label="Type"></el-table-column>
+            <el-table-column prop="type" label="Contract Number" width="150"></el-table-column>
+            <el-table-column label="Contract Name">
+              <template slot-scope="scope">
+                <div slot="reference">
+                  {{ scope.row.type | contractMapping }}
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column prop="args" label="Args"></el-table-column>
             <el-table-column prop="height" label="height"></el-table-column>
             <el-table-column
@@ -90,6 +97,7 @@
 <script scoped>
 import { mapState, mapGetters } from 'vuex';
 import { Notification } from 'element-ui';
+import { contractMappingFilter } from '../filters/index';
 
 import * as client from '@gny/client';
 const connection = new client.Connection(
@@ -102,6 +110,9 @@ export default {
   computed: {
     ...mapState(['user', 'passphrase']),
     ...mapGetters(['transactionsNewestFirst']),
+  },
+  filters: {
+    contractMapping: contractMappingFilter,
   },
   methods: {
     async setUsername() {
