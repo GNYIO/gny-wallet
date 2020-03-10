@@ -66,38 +66,16 @@
 
     <el-row :gutter="20">
       <el-col :span="24">
-        <el-card>
-          <div slot="header">
-            <span>Transaction History</span>
-          </div>
-          <el-table stripe :data="transactionsNewestFirst" style="width: 100%">
-            <el-table-column prop="id" label="ID"></el-table-column>
-            <el-table-column prop="type" label="Contract Number" width="150"></el-table-column>
-            <el-table-column label="Contract Name">
-              <template slot-scope="scope">
-                <div slot="reference">
-                  {{ scope.row.type | contractMapping }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="args" label="Args"></el-table-column>
-            <el-table-column prop="height" label="height"></el-table-column>
-            <el-table-column
-              prop="message"
-              label="Message"
-              width="120"
-            ></el-table-column>
-          </el-table>
-        </el-card>
+        <TransactionsPaged></TransactionsPaged>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script scoped>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import { Notification } from 'element-ui';
-import { contractMappingFilter } from '../filters/index';
+import TransactionsPaged from './TransactionsPaged';
 
 import * as client from '@gny/client';
 const connection = new client.Connection(
@@ -107,12 +85,11 @@ const connection = new client.Connection(
 );
 
 export default {
+  components: {
+    TransactionsPaged,
+  },
   computed: {
     ...mapState(['user', 'passphrase']),
-    ...mapGetters(['transactionsNewestFirst']),
-  },
-  filters: {
-    contractMapping: contractMappingFilter,
   },
   methods: {
     async setUsername() {

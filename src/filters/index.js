@@ -23,7 +23,6 @@ const mapping = {
 }
 
 export function contractMappingFilter(contractNumber) {
-  console.log(`called with:${contractNumber}`);
   if (mapping[contractNumber]) {
     return mapping[contractNumber];
   }
