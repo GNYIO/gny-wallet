@@ -29,3 +29,11 @@ export function contractMappingFilter(contractNumber) {
 
   return 'unknown contract';
 }
+
+export function prettyPrintMyAddressFilter(address, myAddress) {
+  if (address === myAddress) {
+    return 'Me';
+  }
+
+  return address;
+}

@@ -4,14 +4,24 @@
       <div slot="header">
         Past Transfers
       </div>
-      <el-table :data="currentTransfers" stripe style="width: 100%">
+      <el-table :data="currentTransfers" style="width: 100%" :row-class-name="tableRowClassName">
         <el-table-column
-          prop="senderId"
-          label="Sender">
+          label="Sender"
+          width="300">
+          <template slot-scope="scope">
+            <div slot="reference">
+              {{ scope.row.senderId | prettyPrintMyAddress(user.address) }}
+            </div>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="recipientId"
-          label="Recipient">
+          label="Recipient"
+          width="300">
+          <template slot-scope="scope">
+            <div slot="reference">
+              {{ scope.row.recipientId | prettyPrintMyAddress(user.address) }}
+            </div>
+          </template>
         </el-table-column>
         <el-table-column
           prop="currency"
@@ -21,6 +31,14 @@
           prop="amount"
           label="Amount"
         ></el-table-column>
+        <el-table-column
+          prop="height"
+          label="Height">
+        </el-table-column>
+        <el-table-column
+          prop="transactions.message"
+          label="Message">
+        </el-table-column>
       </el-table>
       <div class="block">
         <el-pagination
@@ -36,10 +54,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
+import { prettyPrintMyAddressFilter } from '../filters/index';
 
 export default {
+  filters: {
+    prettyPrintMyAddress: prettyPrintMyAddressFilter,
+  },
   computed: {
+    ...mapState(['user']),
     ...mapGetters(['transfersPretty', 'transfersCount']),
   },
   data() {
@@ -64,9 +87,30 @@ export default {
         }
       }
     },
+    tableRowClassName({row}) {
+      if (row.senderId === this.user.address) {
+        return 'warning-row';
+      }
+
+      if (row.recipientId === this.user.address) {
+        return 'success-row';
+      }
+      return '';
+    }
   },
-  async mounted() {
+  mounted() {
     this.handleCurrentChange(1);
   },
-}
+};
 </script>
+
+
+<style>
+.el-table .warning-row {
+  background: oldlace;
+}
+
+.el-table .success-row {
+  background: #f0f9eb;
+}
+</style>

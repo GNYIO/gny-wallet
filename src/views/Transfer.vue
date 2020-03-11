@@ -160,11 +160,13 @@ export default {
     },
   },
   async mounted() {
+    await this.$store.dispatch('getTransfers');
+    await this.$store.dispatch('refreshAccounts');
+
     this.form.from = this.$store.state.user.address;
     this.amountPlaceholder = `You have ${this.user.balance /
       1e8} GNY in your account`;
 
-    await this.$store.dispatch('getTransfers');
   },
 };
 </script>

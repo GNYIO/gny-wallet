@@ -216,15 +216,15 @@ export const actions = {
         const all = [];
         for (let offset = 0; offset < count.count; offset += 100) {
           const result = await connection.api.Transfer.getRoot({
-            ownerId: state.user.address
+            ownerId: state.user.address,
+            limit: 100,
+            offset: offset,
           });
           if (result.success === true) {
             all.push(...result.transfers);
           }
         }
 
-
-        console.log(`transfers: ${JSON.stringify(all, null, 2)}`);
         commit('setTransfers', all);
       }
     } catch (err) {
