@@ -46,7 +46,12 @@
             <span> Delegates</span>
           </el-menu-item>
 
-          <el-menu-item index="4" route="/machinelearning">
+          <el-menu-item index="4" route="/assets">
+            <i class="el-icon-s-order"></i>
+            <span> Assets</span>
+          </el-menu-item>
+
+          <el-menu-item index="5" route="/machinelearning">
             <i class="el-icon-s-platform"></i>
             <span> Machine Learning</span>
           </el-menu-item>

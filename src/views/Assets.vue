@@ -33,7 +33,7 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('refreshIsIssuer');
-    // await this.$store.dispatch('refreshAssets');
+    await this.$store.dispatch('getAssets');
   }
 }
 </script>

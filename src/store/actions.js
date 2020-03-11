@@ -126,7 +126,7 @@ export const actions = {
       }
     }
   },
-  async refreshAssets({
+  async getAssets({
     commit
   }) {
     const count = await connection.api.Uia.getAssets();
