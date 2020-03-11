@@ -1,35 +1,43 @@
 <template>
-  <el-card>
-    <div slot="header">
-      Transfer GNY
-    </div>
-    <el-form :model="form" ref="form" :rules="rules" label-width="80px">
-      <el-form-item label="From">
-        <el-input v-model="form.from" :disabled="true"></el-input>
-      </el-form-item>
+  <div>
+    <el-row :gutter="20">
+      <el-card>
+        <div slot="header">
+          Transfer GNY
+        </div>
+        <el-form :model="form" ref="form" :rules="rules" label-width="80px">
+          <el-form-item label="From">
+            <el-input v-model="form.from" :disabled="true"></el-input>
+          </el-form-item>
 
-      <el-form-item label="To" prop="to" required>
-        <el-input v-model="form.to"></el-input>
-      </el-form-item>
+          <el-form-item label="To" prop="to" required>
+            <el-input v-model="form.to"></el-input>
+          </el-form-item>
 
-      <el-form-item label="Amount" prop="amount" required>
-        <el-input
-          type="text"
-          v-model="form.amount"
-          :placeholder="amountPlaceholder"
-        ></el-input>
-      </el-form-item>
+          <el-form-item label="Amount" prop="amount" required>
+            <el-input
+              type="text"
+              v-model="form.amount"
+              :placeholder="amountPlaceholder"
+            ></el-input>
+          </el-form-item>
 
-      <el-form-item label="Message" prop="message">
-        <el-input v-model="form.message"></el-input>
-      </el-form-item>
+          <el-form-item label="Message" prop="message">
+            <el-input v-model="form.message"></el-input>
+          </el-form-item>
 
-      <el-form-item>
-        <el-button type="primary" @click="sendTransaction">Send</el-button>
-        <el-button @click="resetForm">Cancel</el-button>
-      </el-form-item>
-    </el-form>
-  </el-card>
+          <el-form-item>
+            <el-button type="primary" @click="sendTransaction">Send</el-button>
+            <el-button @click="resetForm">Cancel</el-button>
+          </el-form-item>
+        </el-form>
+      </el-card>
+    </el-row>
+
+    <el-row :gutter="20">
+      <TransfersPaged></TransfersPaged>
+    </el-row>
+  </div>
 </template>
 
 <script>
@@ -37,6 +45,7 @@ import { mapState } from 'vuex';
 import * as client from '@gny/client';
 import { isAddress } from '@gny/utils';
 import { BigNumber } from 'bignumber.js';
+import TransfersPaged from './TransfersPaged';
 
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
@@ -45,6 +54,9 @@ const connection = new client.Connection(
 );
 
 export default {
+  components: {
+    TransfersPaged,
+  },
   data() {
     const validateAddress = (rule, value, callback) => {
       if (isAddress(value)) {
@@ -157,4 +169,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.el-row {
+  margin-bottom: 20px;
+}
+
+.el-row:last-child {
+  margin-bottom: 0;
+}
+</style>

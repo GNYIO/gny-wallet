@@ -24,6 +24,18 @@ export const getters = {
     return copy.reverse();
   },
   transactionsCount: state => state.transactions.length,
-  transfersFromMe: state => state.transfers.filter(x => x.senderId === state.user.address),
-  transfersToMe: state => state.transfers.filter(x => x.recipientId === state.user.address),
+  transfersPretty: state => {
+    const transfers = state.transfers.map(transfer => ({
+      tid: transfer.tid,
+      senderId: transfer.senderId,
+      recipientId: transfer.recipientId,
+      recipientName: transfer.recipientName,
+      currency: transfer.currency,
+      amount: Number(transfer.amount) / 1e8,
+      timestamp: transfer.timestamp,
+      height: transfer.height,
+    }));
+    return transfers;
+  },
+  transfersCount: state => state.transfers.length,
 };
