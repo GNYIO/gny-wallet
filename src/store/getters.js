@@ -24,4 +24,6 @@ export const getters = {
     return copy.reverse();
   },
   transactionsCount: state => state.transactions.length,
+  transfersFromMe: state => state.transfers.filter(x => x.senderId === state.user.address),
+  transfersToMe: state => state.transfers.filter(x => x.recipientId === state.user.address),
 };

@@ -202,4 +202,36 @@ export const actions = {
       });
     }
   },
+
+  async getTransfers({
+    commit,
+    state
+  }) {
+    try {
+      const count = await connection.api.Transfer.getRoot({
+        ownerId: state.user.address
+      });
+
+      if (count.success === true) {
+        const all = [];
+        for (let offset = 0; offset < count.count; offset += 100) {
+          const result = await connection.api.Transfer.getRoot({
+            ownerId: state.user.address
+          });
+          if (result.success === true) {
+            all.push(...result.transfers);
+          }
+        }
+
+
+        console.log(`transfers: ${JSON.stringify(all, null, 2)}`);
+        commit('setTransfers', all);
+      }
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message
+      });
+    }
+  },
 };

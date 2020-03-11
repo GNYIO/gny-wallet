@@ -1,5 +1,8 @@
 <template>
   <el-card>
+    <div slot="header">
+      Transfer GNY
+    </div>
     <el-form :model="form" ref="form" :rules="rules" label-width="80px">
       <el-form-item label="From">
         <el-input v-model="form.from" :disabled="true"></el-input>
@@ -144,10 +147,12 @@ export default {
       this.$refs['form'].resetFields();
     },
   },
-  mounted() {
+  async mounted() {
     this.form.from = this.$store.state.user.address;
     this.amountPlaceholder = `You have ${this.user.balance /
       1e8} GNY in your account`;
+
+    await this.$store.dispatch('getTransfers');
   },
 };
 </script>
