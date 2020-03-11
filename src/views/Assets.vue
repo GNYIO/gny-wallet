@@ -4,19 +4,19 @@
 
     <!-- all assets -->
     <el-row :gutter="20">
-      <el-col :span="12">
-        <el-card>
-
-        </el-card>
-      </el-col>
+      <AssetsPaged></AssetsPaged>
     </el-row>
   </el-main>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import AssetsPaged from './AssetsPaged';
 
 export default {
+  components: {
+    AssetsPaged,
+  },
   computed: {
     ...mapState(['isIssuer', 'assets']),
   },

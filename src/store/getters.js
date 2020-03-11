@@ -38,4 +38,22 @@ export const getters = {
     return transfers;
   },
   transfersCount: state => state.transfers.length,
+  prettyAssets: state => {
+    const assets = state.assets.map(asset => {
+      const prec = Math.pow(10, asset.precision);
+      const one = {
+        name: asset.name,
+        precision: asset.precision,
+        maximum: asset.maximum,
+        maximumPretty: asset.maximum / prec,
+        quantity: asset.quantity,
+        quantityPretty: asset.quantity / prec,
+        desc: asset.desc,
+        issuerId: asset.issuerId,
+      };
+      return one;
+    });
+    return assets;
+  },
+  assetsCount: state => state.assets.length,
 };

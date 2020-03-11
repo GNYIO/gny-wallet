@@ -139,18 +139,18 @@ export const actions = {
   }) {
     const count = await connection.api.Uia.getAssets();
     if (count.success === true) {
-      const allAssets = [];
+      const all = [];
 
       const howManyAssets = count.count;
       const limit = 100;
       for (let offset = 0; offset < howManyAssets; offset += limit) {
         const result = await connection.api.Uia.getAssets(limit, offset);
         if (result.success) {
-          allAssets.push(...result.assets);
+          all.push(...result.assets);
         }
       }
 
-      commit('setAssets', allAssets);
+      commit('setAssets', all);
     }
   },
   async getTransactions({
