@@ -56,4 +56,5 @@ export const getters = {
     return assets;
   },
   assetsCount: state => state.assets.length,
+  ownAsssets: state => state.assets.filter(x => x.issuerId === state.user.address),
 };

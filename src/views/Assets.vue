@@ -36,8 +36,12 @@
       <el-col :span="12">
         <el-card>
           <div slot="header">
-            My Assets
+            My Created Assets
           </div>
+          <el-table stripe :v-model="ownAssets" style="width: 100%">
+            <el-table-column prop="name" label="Name">
+            </el-table-column>
+          </el-table>
         </el-card>
       </el-col>
     </el-row>
@@ -50,7 +54,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import AssetsPaged from './AssetsPaged';
 
 import * as client from '@gny/client';
@@ -74,6 +78,7 @@ export default {
   },
   computed: {
     ...mapState(['isIssuer', 'issuer', 'passphrase']),
+    ...mapGetters(['ownAsssets']),
   },
   methods: {
     async registerIssuer() {
