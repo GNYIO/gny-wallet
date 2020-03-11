@@ -112,18 +112,26 @@ export const actions = {
     }
   },
   async refreshIsIssuer({
-    commit
+    commit,
+    state
   }) {
-    const isIssuer = await connection.api.Uia.isIssuer(this.user.address);
-    if (isIssuer.success === true) {
-      commit('setIsIssuer', isIssuer.isIssuer);
+    try {
+      const isIssuer = await connection.api.Uia.isIssuer(state.user.address);
+      if (isIssuer.success === true) {
+        commit('setIsIssuer', isIssuer.isIssuer);
 
-      if (isIssuer.isIssuer === true) {
-        const issuer = await connection.api.Uia.getIssuer(this.user.username);
-        if (issuer.success === true) {
-          commit('setIssuer', issuer.issuer);
+        if (isIssuer.isIssuer === true) {
+          const issuer = await connection.api.Uia.getIssuer(state.user.username);
+          if (issuer.success === true) {
+            commit('setIssuer', issuer.issuer);
+          }
         }
       }
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message
+      });
     }
   },
   async getAssets({
