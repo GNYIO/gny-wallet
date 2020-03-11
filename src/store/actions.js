@@ -119,12 +119,27 @@ export const actions = {
       const isIssuer = await connection.api.Uia.isIssuer(state.user.address);
       if (isIssuer.success === true) {
         commit('setIsIssuer', isIssuer.isIssuer);
+        console.log(`isIssuer: ${isIssuer.isIssuer}`);
 
-        if (isIssuer.isIssuer === true) {
-          const issuer = await connection.api.Uia.getIssuer(state.user.username);
-          if (issuer.success === true) {
-            commit('setIssuer', issuer.issuer);
-          }
+
+      }
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message
+      });
+    }
+  },
+  async getIssuer({
+    state,
+    commit
+  }) {
+    try {
+      if (state.isIssuer === true) {
+        const result = await connection.api.Uia.getIssuer(state.user.address);
+        if (result.success === true) {
+          console.log(JSON.stringify(result.issuer, null, 2));
+          commit('setIssuer', result.issuer);
         }
       }
     } catch (err) {
