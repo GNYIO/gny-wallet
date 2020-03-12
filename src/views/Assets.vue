@@ -125,6 +125,18 @@
       <el-col :span="12">
         <AssetTransfer></AssetTransfer>
       </el-col>
+
+      <el-col :span="12">
+        <el-card>
+          <div slot="header">
+            Balances
+          </div>
+          <el-table stripe :data="prettyBalances" style="width: 100%">
+            <el-table-column prop="currency" label="Currency"></el-table-column>
+            <el-table-column prop="balancePretty" label="Balance"></el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
     </el-row>
 
     <!-- all assets -->
@@ -171,7 +183,7 @@ export default {
   },
   computed: {
     ...mapState(['isIssuer', 'issuer', 'passphrase']),
-    ...mapGetters(['ownAssets']),
+    ...mapGetters(['ownAssets', 'prettyBalances']),
   },
   methods: {
     async registerIssuer() {
@@ -236,6 +248,7 @@ export default {
     await this.$store.dispatch('refreshIsIssuer');
     await this.$store.dispatch('getIssuer');
     await this.$store.dispatch('getAssets');
+    await this.$store.dispatch('getBalances');
   }
 }
 </script>

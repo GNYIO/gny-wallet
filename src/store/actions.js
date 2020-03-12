@@ -225,7 +225,6 @@ export const actions = {
       });
     }
   },
-
   async getTransfers({
     commit,
     state
@@ -257,4 +256,36 @@ export const actions = {
       });
     }
   },
+  async getBalances({
+    state,
+    commit
+  }) {
+    try {
+      const address = state.user.address;
+      const count =  await connection.api.Uia.getBalances(address);
+
+      if (count.success === true) {
+
+        const all = [];
+        for (let offset = 0; offset < count.count; offset += 100) {
+          const result = await connection.api.Uia.getBalances(
+            address,
+            100,
+            offset
+          );
+          if (result.success) {
+            all.push(...result.balances)
+          }
+        }
+
+        console.log(`balances: ${JSON.stringify(all, null, 2)}`);
+        commit('setBalances', all);
+      }
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message
+      });
+    }
+  }
 };

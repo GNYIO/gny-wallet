@@ -61,4 +61,21 @@ export const getters = {
   },
   assetsCount: state => state.assets.length,
   ownAssets: (state, getters) => getters.prettyAssets.filter(x => x.issuerId === state.user.address),
+
+  prettyBalances: (state, getters) => {
+    const balances = state.balances.map(balance => {
+      const asset = getters.prettyAssets.filter(x => x.name === balance.currency)[0];
+      const precision = Math.pow(10, asset.precision);
+
+      const one = {
+        address: balance.address,
+        currency: balance.currency,
+        flat: balance.flag,
+        balance: balance.balance,
+        balancePretty: balance.balance / precision,
+      };
+      return one;
+    });
+    return balances;
+  },
 };

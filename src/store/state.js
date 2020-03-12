@@ -18,5 +18,6 @@ export const state = {
   isLocked: false,
 
   transfers: [],
+  balances: [],
 };
 

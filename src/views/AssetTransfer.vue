@@ -38,7 +38,7 @@
         <el-input v-model="transferAssetForm.message"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="transferAsset" style="float: left;">Register Issuer</el-button>
+        <el-button type="primary" @click="transferAsset" style="float: left;">Transfer Asset</el-button>
       </el-form-item>
     </el-form>
   </el-card>

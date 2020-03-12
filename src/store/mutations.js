@@ -44,4 +44,7 @@ export const mutations = {
   setTransfers(state, transfers) {
     state.transfers = transfers;
   },
+  setBalances(state, balances) {
+    state.balances = balances;
+  },
 };
