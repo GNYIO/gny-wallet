@@ -133,6 +133,7 @@
         </el-card>
       </el-col>
 
+      <!-- vote for delegates -->
       <el-col :span="12" v-if="user.lockHeight > 0">
         <el-card>
           <div slot="header">
@@ -167,6 +168,45 @@
           </el-form>
         </el-card>
       </el-col>
+
+
+      <!-- unvote delegates -->
+      <el-col :span="12" v-if="user.lockHeight > 0">
+        <el-card>
+          <div slot="header">
+            <span>Vote for Delegates</span>
+          </div>
+
+          <el-form :ref="unvoteForm" :model="unvoteForm">
+            <el-form-item>
+              <el-select
+                placeholder="select multiple delegates"
+                clearable
+                multiple
+                v-model="unvoteForm.delegates"
+              >
+                <el-option
+                  v-for="item in allDelegateNames"
+                  :key="item.username"
+                  :label="item.username"
+                  :value="item.username"
+                >
+                  <span style="float: left">{{ item.username }}</span>
+                  <span style="float: right; margin-right: 2em"
+                    >rank: {{ item.rate }}</span
+                  >
+                </el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item>
+              <button type="primary" @click="unvote">Unvote</button>
+            </el-form-item>
+          </el-form>
+
+        </el-card>
+      </el-col>
+
     </el-row>
 
     <el-row :gutter="20">
@@ -200,6 +240,7 @@ export default {
       'delegate',
       'myVoters',
       'allDelegateNames',
+      'whoIVotedFor',
     ]),
     ...mapGetters(['prettyDelegates']),
   },
@@ -210,14 +251,24 @@ export default {
       voteForm: {
         delegates: [],
       },
+      unvoteForm: {
+        delegates: [],
+      },
       delegates: [],
-      whoIVotedFor: [],
     };
   },
   methods: {
     async vote() {
       try {
         const trs = client.basic.vote(this.voteForm.delegates, this.passphrase);
+        await connection.api.Transport.sendTransaction(trs);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async unvote() {
+      try {
+        const trs = client.basic.unvote(this.unvoteForm.delegates, this.passphrase);
         await connection.api.Transport.sendTransaction(trs);
       } catch (err) {
         console.log(err);

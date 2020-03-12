@@ -278,7 +278,6 @@ export const actions = {
           }
         }
 
-        console.log(`balances: ${JSON.stringify(all, null, 2)}`);
         commit('setBalances', all);
       }
     } catch (err) {
