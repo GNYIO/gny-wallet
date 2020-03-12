@@ -39,9 +39,11 @@
             My Created Assets
           </div>
           <el-table stripe :data="ownAssets" style="width: 100%">
-            <el-table-column prop="name" label="Name">
+            <el-table-column prop="name" label="Asset Name">
             </el-table-column>
             <el-table-column prop="desc" label="Description">
+            </el-table-column>
+            <el-table-column prop="leftToIssuePretty" label="Left to Issue">
             </el-table-column>
           </el-table>
         </el-card>
@@ -226,7 +228,6 @@ export default {
     await this.$store.dispatch('refreshIsIssuer');
     await this.$store.dispatch('getIssuer');
     await this.$store.dispatch('getAssets');
-    console.log(`ownAssets: ${JSON.stringify(this.ownAssets, null, 2)}`);
   }
 }
 </script>

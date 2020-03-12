@@ -2,7 +2,7 @@
   <div>
     <el-card>
       <div slot="header">
-        All Assets
+        All Assets (from all users)
       </div>
       <el-table :data="currentAssets" stripe style="width: 100%">
         <el-table-column
@@ -18,16 +18,12 @@
           label="Maximum">
         </el-table-column>
         <el-table-column
-          prop="maximum"
-          label="Maximum Raw">
-        </el-table-column>
-        <el-table-column
           prop="quantityPretty"
-          label="Quantity">
+          label="Already Issued Quantity">
         </el-table-column>
         <el-table-column
-          prop="quantity"
-          label="Quantity Raw">
+          prop="leftToIssuePretty"
+          label="Left to Issue">
         </el-table-column>
         <el-table-column
           prop="issuerId"

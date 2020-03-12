@@ -1,4 +1,4 @@
-
+import { BigNumber } from 'bignumber.js';
 
 export const getters = {
   passphrase: state => state.passphrase,
@@ -41,6 +41,8 @@ export const getters = {
   prettyAssets: state => {
     const assets = state.assets.map(asset => {
       const prec = Math.pow(10, asset.precision);
+      const difference = new BigNumber(asset.maximum).minus(asset.quantity).toFixed();
+
       const one = {
         name: asset.name,
         precision: asset.precision,
@@ -48,6 +50,8 @@ export const getters = {
         maximumPretty: asset.maximum / prec,
         quantity: asset.quantity,
         quantityPretty: asset.quantity / prec,
+        leftToIssue: difference,
+        leftToIssuePretty: difference / prec,
         desc: asset.desc,
         issuerId: asset.issuerId,
       };
@@ -56,5 +60,5 @@ export const getters = {
     return assets;
   },
   assetsCount: state => state.assets.length,
-  ownAssets: state => state.assets.filter(x => x.issuerId === state.user.address),
+  ownAssets: (state, getters) => getters.prettyAssets.filter(x => x.issuerId === state.user.address),
 };
