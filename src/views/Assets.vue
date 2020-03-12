@@ -75,6 +75,48 @@
 
         </el-card>
       </el-col>
+
+      <el-col :span="12">
+        <el-card>
+          <div slot="header">
+            Issue Assets
+          </div>
+
+          <el-form label-position="left" :ref="issueAssetsForm" :model="issueAssetsForm" label-width="80px">
+            <el-form-item label="Asset">
+              <el-select
+                placeholder="select currency"
+                clearable
+                v-model="issueAssetsForm.currency"
+                style="float: left"
+              >
+                <el-option
+                  v-for="item in ownAssets"
+                  :key="item.name"
+                  :label="item.name"
+                  :value="item"
+                >
+                    <span style="float: left">{{ item.name }}</span>
+                    <span style="float: right; margin-right: 2em"
+                      >{{ item.desc }}</span
+                    >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="Amount">
+                <el-input-number
+                  v-model="issueAssetsForm.amount"
+                  style="float: left; width: 300px"
+                  :min="0">
+                </el-input-number>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="issueAsset" style="float: left;">Issue Asset</el-button>
+              </el-form-item>
+          </el-form>
+        </el-card>
+      </el-col>
     </el-row>
 
     <!-- all assets -->
@@ -110,6 +152,10 @@ export default {
         description: '',
         precision: 8,
         maximum: 1000000 * 1e8,
+      },
+      issueAssetsForm: {
+        currency: null,
+        amount: '',
       },
     };
   },
@@ -147,6 +193,26 @@ export default {
           maximum,
           precision,
           this.passphrase,
+        );
+
+        await connection.api.Transport.sendTransaction(trs);
+      } catch (err) {
+        console.log(err.response && err.response.data);
+      }
+    },
+    async issueAsset() {
+      try {
+        const currency = this.issueAssetsForm.currency.name;
+
+        const precision = Math.pow(10, this.issueAssetsForm.currency.precision);
+        const amount = String(this.issueAssetsForm.amount * precision);
+
+        console.log(`currency: ${currency}, amount: ${amount}`);
+
+        const trs = client.uia.issue(
+          currency,
+          amount,
+          this.passphrase
         );
 
         await connection.api.Transport.sendTransaction(trs);
