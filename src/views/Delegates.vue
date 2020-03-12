@@ -174,7 +174,7 @@
       <el-col :span="12" v-if="user.lockHeight > 0">
         <el-card>
           <div slot="header">
-            <span>Vote for Delegates</span>
+            <span>Unvote Delegates</span>
           </div>
 
           <el-form :ref="unvoteForm" :model="unvoteForm">
