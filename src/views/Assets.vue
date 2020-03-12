@@ -96,7 +96,7 @@
                   v-for="item in ownAssets"
                   :key="item.name"
                   :label="item.name"
-                  :value="item"
+                  :value="item.name"
                 >
                     <span style="float: left">{{ item.name }}</span>
                     <span style="float: right; margin-right: 2em"
@@ -121,6 +121,12 @@
       </el-col>
     </el-row>
 
+    <el-row :gutter="20">
+      <el-col :span="12">
+        <AssetTransfer></AssetTransfer>
+      </el-col>
+    </el-row>
+
     <!-- all assets -->
     <el-row :gutter="20">
       <AssetsPaged></AssetsPaged>
@@ -131,6 +137,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import AssetsPaged from './AssetsPaged';
+import AssetTransfer from './AssetTransfer';
 
 import * as client from '@gny/client';
 const connection = new client.Connection(
@@ -142,6 +149,7 @@ const connection = new client.Connection(
 export default {
   components: {
     AssetsPaged,
+    AssetTransfer,
   },
   data() {
     return {
@@ -156,7 +164,7 @@ export default {
         maximum: 1000000 * 1e8,
       },
       issueAssetsForm: {
-        currency: null,
+        currency: '',
         amount: '',
       },
     };
@@ -204,7 +212,7 @@ export default {
     },
     async issueAsset() {
       try {
-        const currency = this.issueAssetsForm.currency.name;
+        const currency = this.issueAssetsForm.currency;
 
         const precision = Math.pow(10, this.issueAssetsForm.currency.precision);
         const amount = String(this.issueAssetsForm.amount * precision);
