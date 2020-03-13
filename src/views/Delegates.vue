@@ -1,5 +1,5 @@
 <template>
-  <el-main>
+  <div>
     <el-row :gutter="20">
       <el-col :span="12">
         <el-card v-if="user.isDelegate === 1">
@@ -140,13 +140,14 @@
             <span>Vote for Delegates</span>
           </div>
 
-          <el-form :ref="voteForm" :model="voteForm">
-            <el-form-item>
+          <el-form :ref="voteForm" :model="voteForm" label-width="80">
+            <el-form-item label="Delegates">
               <el-select
                 placeholder="select multiple delegates"
                 clearable
                 multiple
                 v-model="voteForm.delegates"
+                style="float: left; width:80%"
               >
                 <el-option
                   v-for="item in allDelegateNames"
@@ -163,7 +164,7 @@
             </el-form-item>
 
             <el-form-item>
-              <button type="primary" @click="vote">Vote</button>
+              <el-button type="primary" @click="vote">Vote</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -177,13 +178,14 @@
             <span>Unvote Delegates</span>
           </div>
 
-          <el-form :ref="unvoteForm" :model="unvoteForm">
-            <el-form-item>
+          <el-form :ref="unvoteForm" :model="unvoteForm" label-width="80">
+            <el-form-item label="Delegates">
               <el-select
                 placeholder="select multiple delegates"
                 clearable
                 multiple
                 v-model="unvoteForm.delegates"
+                style="float: left; width:80%"
               >
                 <el-option
                   v-for="item in allDelegateNames"
@@ -200,7 +202,7 @@
             </el-form-item>
 
             <el-form-item>
-              <button type="primary" @click="unvote">Unvote</button>
+              <el-button type="primary" @click="unvote">Unvote</el-button>
             </el-form-item>
           </el-form>
 
@@ -216,7 +218,7 @@
         </el-card>
       </el-col>
     </el-row>
-  </el-main>
+  </div>
 </template>
 
 <script>

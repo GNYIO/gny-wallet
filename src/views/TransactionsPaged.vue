@@ -13,7 +13,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="args" label="Args"></el-table-column>
+        <el-table-column prop="args" label="Contract Arguments"></el-table-column>
         <el-table-column prop="height" label="height"></el-table-column>
         <el-table-column
           prop="message"

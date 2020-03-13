@@ -1,5 +1,5 @@
 <template>
-  <el-main>
+  <div>
     <el-row :gutter="20" v-if="!isIssuer">
       <el-col :span="12">
         <el-card>
@@ -59,7 +59,9 @@
 
           <el-form :ref="createAssetsForm" :model="createAssetsForm" label-width="80px">
             <el-form-item label="Name">
-              <el-input v-model="createAssetsForm.name"></el-input>
+              <el-tooltip effect="light" content="Asset name e.g. AAA" placement="top-start">
+                <el-input v-model="createAssetsForm.name"></el-input>
+              </el-tooltip>
             </el-form-item>
             <el-form-item label="Desc.">
               <el-input v-model="createAssetsForm.desc"></el-input>
@@ -90,7 +92,7 @@
                 placeholder="select currency"
                 clearable
                 v-model="issueAssetsForm.currency"
-                style="float: left"
+                style="float: left; width:80%"
               >
                 <el-option
                   v-for="item in ownAssets"
@@ -141,9 +143,11 @@
 
     <!-- all assets -->
     <el-row :gutter="20">
-      <AssetsPaged></AssetsPaged>
+      <el-col :span="24">
+        <AssetsPaged></AssetsPaged>
+      </el-col>
     </el-row>
-  </el-main>
+  </div>
 </template>
 
 <script>

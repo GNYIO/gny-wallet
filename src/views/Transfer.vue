@@ -1,41 +1,45 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-card>
-        <div slot="header">
-          Transfer GNY
-        </div>
-        <el-form :model="form" ref="form" :rules="rules" label-width="80px">
-          <el-form-item label="From">
-            <el-input v-model="form.from" :disabled="true"></el-input>
-          </el-form-item>
+      <el-col :span="24">
+        <el-card>
+          <div slot="header">
+            Transfer GNY
+          </div>
+          <el-form :model="form" ref="form" :rules="rules" label-width="80px">
+            <el-form-item label="From">
+              <el-input v-model="form.from" :disabled="true"></el-input>
+            </el-form-item>
 
-          <el-form-item label="To" prop="to" required>
-            <el-input v-model="form.to"></el-input>
-          </el-form-item>
+            <el-form-item label="To" prop="to" required>
+              <el-input v-model="form.to"></el-input>
+            </el-form-item>
 
-          <el-form-item label="Amount" prop="amount" required>
-            <el-input
-              type="text"
-              v-model="form.amount"
-              :placeholder="amountPlaceholder"
-            ></el-input>
-          </el-form-item>
+            <el-form-item label="Amount" prop="amount" required>
+              <el-input
+                type="text"
+                v-model="form.amount"
+                :placeholder="amountPlaceholder"
+              ></el-input>
+            </el-form-item>
 
-          <el-form-item label="Message" prop="message">
-            <el-input v-model="form.message"></el-input>
-          </el-form-item>
+            <el-form-item label="Message" prop="message">
+              <el-input v-model="form.message"></el-input>
+            </el-form-item>
 
-          <el-form-item>
-            <el-button type="primary" @click="sendTransaction">Send</el-button>
-            <el-button @click="resetForm">Cancel</el-button>
-          </el-form-item>
-        </el-form>
-      </el-card>
+            <el-form-item>
+              <el-button type="primary" @click="sendTransaction">Send</el-button>
+              <el-button @click="resetForm">Cancel</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
+      </el-col>
     </el-row>
 
     <el-row :gutter="20">
-      <TransfersPaged></TransfersPaged>
+      <el-col :span="24">
+        <TransfersPaged></TransfersPaged>
+      </el-col>
     </el-row>
   </div>
 </template>

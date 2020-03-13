@@ -18,6 +18,9 @@
           <p>
             Is Locked: <b>{{ user.lockHeight === '0' ? 'No' : 'Yes' }}</b>
           </p>
+          <p v-if="user.lockHeight !== '0'">
+            Lock Height: <b>{{ user.lockHeight }}</b>
+          </p>
         </el-card>
       </el-col>
 
@@ -57,7 +60,7 @@
               <el-input v-model="lockAccountForm.lockAmount"></el-input>
             </el-form-item>
             <el-form-item>
-              <button @click="lockAccount">Lock Account</button>
+              <el-button @click="lockAccount">Lock Account</el-button>
             </el-form-item>
           </el-form>
         </el-card>
