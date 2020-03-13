@@ -140,8 +140,8 @@
             <span>Vote for Delegates</span>
           </div>
 
-          <el-form :ref="voteForm" :model="voteForm" label-width="80">
-            <el-form-item label="Delegates">
+          <el-form ref="voteForm" :model="voteForm" :rules="voteFormRules" label-width="80">
+            <el-form-item label="Delegates" prop="delegates">
               <el-select
                 placeholder="select multiple delegates"
                 clearable
@@ -165,6 +165,7 @@
 
             <el-form-item>
               <el-button type="primary" @click="vote">Vote</el-button>
+              <el-button @click="resetVoteForm">Reset</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -178,8 +179,8 @@
             <span>Unvote Delegates</span>
           </div>
 
-          <el-form :ref="unvoteForm" :model="unvoteForm" label-width="80">
-            <el-form-item label="Delegates">
+          <el-form ref="unvoteForm" :model="unvoteForm" :rules="unvoteFormRules" label-width="80">
+            <el-form-item label="Delegates" prop="delegates">
               <el-select
                 placeholder="select multiple delegates"
                 clearable
@@ -203,6 +204,7 @@
 
             <el-form-item>
               <el-button type="primary" @click="unvote">Unvote</el-button>
+              <el-button @click="resetUnvoteForm">Unvote</el-button>
             </el-form-item>
           </el-form>
 
@@ -253,8 +255,18 @@ export default {
       voteForm: {
         delegates: [],
       },
+      voteFormRules: {
+        delegates: [
+          { required: true, message: 'Please selact at least one delegate', trigger: 'change' }
+        ]
+      },
       unvoteForm: {
         delegates: [],
+      },
+      unvoteFormRules: {
+        delegates: [
+          { required: true, message: 'Please selact at least one delegate', trigger: 'change' }
+        ]
       },
       delegates: [],
     };
@@ -262,19 +274,40 @@ export default {
   methods: {
     async vote() {
       try {
+        await this.$refs['voteForm'].validate();
+      } catch (err) {
+        console.log(`validation for voteForm failed`)
+        return;
+      }
+
+      try {
         const trs = client.basic.vote(this.voteForm.delegates, this.passphrase);
         await connection.api.Transport.sendTransaction(trs);
       } catch (err) {
         console.log(err);
       }
     },
+    resetVoteForm() {
+      this.$refs['voteForm'].resetFields();
+    },
     async unvote() {
       try {
+        await this.$refs['unvoteForm'].validate();
+      } catch (err) {
+        console.log(`validation for unvoteForm failed`);
+        return;
+      }
+
+      try {
         const trs = client.basic.unvote(this.unvoteForm.delegates, this.passphrase);
-        await connection.api.Transport.sendTransaction(trs);
+        const result = await connection.api.Transport.sendTransaction(trs);
+        this.$message(result.transactionId);
       } catch (err) {
         console.log(err);
       }
+    },
+    resetUnvoteForm() {
+      this.$refs['unvoteForm'].resetFields();
     },
     async registerAsDelegate() {
       try {
