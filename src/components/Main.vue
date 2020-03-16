@@ -14,7 +14,7 @@
         </el-col>
         <el-col :span="2">
           <div class="grid-content">
-            <el-button @click="logout" type="info">Logout</el-button>
+            <el-button @click="logout" type="info" >Logout</el-button>
           </div>
         </el-col>
       </el-row>
@@ -35,10 +35,10 @@
             <span> Home</span>
           </el-menu-item>
 
-          <el-menu-item index="2" route="/transaction">
+          <el-menu-item index="2" route="/transfer">
             <i class="el-icon-s-promotion"></i>
-            <span> Transaction</span>
-            <router-link to="/transaction"></router-link>
+            <span> Transfer</span>
+            <router-link to="/transfer"></router-link>
           </el-menu-item>
 
           <el-menu-item index="3" route="/delegates">
@@ -46,7 +46,12 @@
             <span> Delegates</span>
           </el-menu-item>
 
-          <el-menu-item index="4" route="/machinelearning">
+          <el-menu-item index="4" route="/assets">
+            <i class="el-icon-s-order"></i>
+            <span> Assets</span>
+          </el-menu-item>
+
+          <el-menu-item index="5" route="/machinelearning">
             <i class="el-icon-s-platform"></i>
             <span> Machine Learning</span>
           </el-menu-item>

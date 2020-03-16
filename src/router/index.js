@@ -8,8 +8,9 @@ import * as Cookie from 'tiny-cookie';
 import Login from '../views/Login.vue';
 import Main from '../components/Main.vue';
 import Home from '../views/Home.vue';
-import Transaction from '../views/Transaction.vue';
+import Transfer from '../views/Transfer.vue';
 import Delegates from '../views/Delegates.vue';
+import Assets from '../views/Assets.vue';
 import MachineLearning from '../views/MachineLearning.vue';
 import Error404 from '../views/Error404.vue';
 
@@ -33,12 +34,16 @@ const Router = new VueRouter({
           component: Home
         },
         {
-          path: '/transaction',
-          component: Transaction
+          path: '/transfer',
+          component: Transfer
         },
         {
           path: '/delegates',
           component: Delegates
+        },
+        {
+          path: '/assets',
+          component: Assets
         },
         {
           path: '/machinelearning',

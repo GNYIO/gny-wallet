@@ -6,10 +6,21 @@
           <div slot="header">
             <span>Account Info</span>
           </div>
-          <p v-if="user.username">Username: <b>{{ user.username }}</b></p>
-          <p>Address: <b>{{ user.address }}</b></p>
-          <p>Balance: <b>{{ user.balance / 1e8 }} GNY</b></p>
-          <p>Is Locked: <b>{{ user.lockHeight === '0' ? 'No' : 'Yes' }}</b></p>
+          <p v-if="user.username">
+            Username: <b>{{ user.username }}</b>
+          </p>
+          <p>
+            Address: <b>{{ user.address }}</b>
+          </p>
+          <p>
+            Balance: <b>{{ user.balance / 1e8 }} GNY</b>
+          </p>
+          <p>
+            Is Locked: <b>{{ user.lockHeight === '0' ? 'No' : 'Yes' }}</b>
+          </p>
+          <p v-if="user.lockHeight !== '0'">
+            Lock Height: <b>{{ user.lockHeight }}</b>
+          </p>
         </el-card>
       </el-col>
 
@@ -35,47 +46,30 @@
     </el-row>
 
     <el-row :gutter="20" v-if="user.lockHeight === '0'">
-        <el-col :span="12">
-          <el-card>
-            <div slot="header">
-              Lock your account
-            </div>
+      <el-col :span="12">
+        <el-card>
+          <div slot="header">
+            Lock your account
+          </div>
 
-            <el-form :ref="lockAccountForm" label-width="80px">
-              <el-form-item label="height">
-                <el-input v-model="lockAccountForm.lockHeight"></el-input>
-              </el-form-item>
-              <el-form-item label="amount">
-                <el-input v-model="lockAccountForm.lockAmount"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <button @click="lockAccount">Lock Account</button>
-              </el-form-item>
-            </el-form>
-          </el-card>
+          <el-form :ref="lockAccountForm" label-width="80px">
+            <el-form-item label="height">
+              <el-input v-model="lockAccountForm.lockHeight"></el-input>
+            </el-form-item>
+            <el-form-item label="amount">
+              <el-input v-model="lockAccountForm.lockAmount"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button @click="lockAccount">Lock Account</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
       </el-col>
     </el-row>
 
     <el-row :gutter="20">
       <el-col :span="24">
-        <el-card>
-          <div slot="header">
-            <span>Transaction History</span>
-          </div>
-          <el-table stripe :data="transactions" style="width: 100%">
-            <el-table-column prop="id" label="ID"></el-table-column>
-            <el-table-column
-              prop="type"
-              label="Type"
-            ></el-table-column>
-            <el-table-column prop="args" label="Args"></el-table-column>
-            <el-table-column
-              prop="height"
-              label="height"
-            ></el-table-column>
-            <el-table-column prop="message" label="Message" width="120"></el-table-column>
-          </el-table>
-        </el-card>
+        <TransactionsPaged></TransactionsPaged>
       </el-col>
     </el-row>
   </div>
@@ -84,17 +78,21 @@
 <script scoped>
 import { mapState } from 'vuex';
 import { Notification } from 'element-ui';
+import TransactionsPaged from './TransactionsPaged';
 
 import * as client from '@gny/client';
 const connection = new client.Connection(
-  process.env['GNY_ENDPOINT'],
-  process.env['GNY_PORT'],
-  process.env['GNY_NETWORK'],
+  process.env.VUE_APP_GNY_ENDPOINT,
+  process.env.VUE_APP_GNY_PORT,
+  process.env.VUE_APP_GNY_NETWORK,
 );
 
 export default {
+  components: {
+    TransactionsPaged,
+  },
   computed: {
-    ...mapState(['user', 'passphrase', 'transactions']),
+    ...mapState(['user', 'passphrase']),
   },
   methods: {
     async setUsername() {
@@ -103,7 +101,7 @@ export default {
           this.form.username,
           this.passphrase,
         );
-        const result =  await connection.api.Transport.sendTransaction(trs);
+        const result = await connection.api.Transport.sendTransaction(trs);
         Notification({
           title: 'Success',
           message: result.transactionId,
@@ -122,7 +120,7 @@ export default {
       } catch (err) {
         console.log(err.message);
       }
-    }
+    },
   },
   data() {
     return {

@@ -1,4 +1,4 @@
-
+import { BigNumber } from 'bignumber.js';
 
 export const getters = {
   passphrase: state => state.passphrase,
@@ -18,4 +18,64 @@ export const getters = {
     return delegates;
   },
   delegatesCount: state => state.allDelegateNames.length,
+  transactionsNewestFirst: state => {
+    const copy = [];
+    copy.push(...state.transactions);
+    return copy.reverse();
+  },
+  transactionsCount: state => state.transactions.length,
+  transfersPretty: state => {
+    const transfers = state.transfers.map(transfer => ({
+      tid: transfer.tid,
+      senderId: transfer.senderId,
+      recipientId: transfer.recipientId,
+      recipientName: transfer.recipientName,
+      currency: transfer.currency,
+      amount: Number(transfer.amount) / 1e8,
+      timestamp: transfer.timestamp,
+      height: transfer.height,
+    }));
+    return transfers;
+  },
+  transfersCount: state => state.transfers.length,
+  prettyAssets: state => {
+    const assets = state.assets.map(asset => {
+      const prec = Math.pow(10, asset.precision);
+      const difference = new BigNumber(asset.maximum).minus(asset.quantity).toFixed();
+
+      const one = {
+        name: asset.name,
+        precision: asset.precision,
+        maximum: asset.maximum,
+        maximumPretty: asset.maximum / prec,
+        quantity: asset.quantity,
+        quantityPretty: asset.quantity / prec,
+        leftToIssue: difference,
+        leftToIssuePretty: difference / prec,
+        desc: asset.desc,
+        issuerId: asset.issuerId,
+      };
+      return one;
+    });
+    return assets;
+  },
+  assetsCount: state => state.assets.length,
+  ownAssets: (state, getters) => getters.prettyAssets.filter(x => x.issuerId === state.user.address),
+
+  prettyBalances: (state, getters) => {
+    const balances = state.balances.map(balance => {
+      const asset = getters.prettyAssets.filter(x => x.name === balance.currency)[0];
+      const precision = Math.pow(10, asset.precision);
+
+      const one = {
+        address: balance.address,
+        currency: balance.currency,
+        flat: balance.flag,
+        balance: balance.balance,
+        balancePretty: balance.balance / precision,
+      };
+      return one;
+    });
+    return balances;
+  },
 };

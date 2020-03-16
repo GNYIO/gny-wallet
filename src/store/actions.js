@@ -3,7 +3,7 @@ import {
   Notification
 } from 'element-ui';
 
-const connection = new client.Connection(process.env['GNY_ENDPOINT'], process.env['GNY_PORT'], process.env['GNY_NETWORK']);
+const connection = new client.Connection(process.env.VUE_APP_GNY_ENDPOINT, process.env.VUE_APP_GNY_PORT, process.env.VUE_APP_GNY_NETWORK);
 const getKeys = client.crypto.getKeys;
 
 export const actions = {
@@ -112,49 +112,91 @@ export const actions = {
     }
   },
   async refreshIsIssuer({
-    commit
+    commit,
+    state
   }) {
-    const isIssuer = await connection.api.Uia.isIssuer(this.user.address);
-    if (isIssuer.success === true) {
-      commit('setIsIssuer', isIssuer.isIssuer);
+    try {
+      const isIssuer = await connection.api.Uia.isIssuer(state.user.address);
+      if (isIssuer.success === true) {
+        commit('setIsIssuer', isIssuer.isIssuer);
+        console.log(`isIssuer: ${isIssuer.isIssuer}`);
 
-      if (isIssuer.isIssuer === true) {
-        const issuer = await connection.api.Uia.getIssuer(this.user.username);
-        if (issuer.success === true) {
-          commit('setIssuer', issuer.issuer);
-        }
+
       }
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message
+      });
     }
   },
-  async refreshAssets({
+  async getIssuer({
+    state,
+    commit
+  }) {
+    try {
+      if (state.isIssuer === true) {
+        const result = await connection.api.Uia.getIssuer(state.user.address);
+        if (result.success === true) {
+          console.log(JSON.stringify(result.issuer, null, 2));
+          commit('setIssuer', result.issuer);
+        }
+      }
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message
+      });
+    }
+  },
+  async getAssets({
     commit
   }) {
     const count = await connection.api.Uia.getAssets();
     if (count.success === true) {
-      const allAssets = [];
+      const all = [];
 
       const howManyAssets = count.count;
       const limit = 100;
       for (let offset = 0; offset < howManyAssets; offset += limit) {
         const result = await connection.api.Uia.getAssets(limit, offset);
         if (result.success) {
-          allAssets.push(...result.assets);
+          all.push(...result.assets);
         }
       }
 
-      commit('setAssets', allAssets);
+      commit('setAssets', all);
     }
   },
   async getTransactions({
     commit,
     state
   }) {
-    const result = await connection.api.Transaction.getTransactions({
-      senderId: state.user.address,
-    });
-    if (result.success === true) {
-      const transactions = result.transactions;
-      commit('setTransactions', transactions);
+    try {
+      let result = await connection.api.Transaction.getTransactions({
+        senderId: state.user.address,
+      });
+      if (result.success === true) {
+        const count = result.count;
+        const all = [];
+
+        for (let offset = 0; offset < count; offset += 100) {
+          const result = await connection.api.Transaction.getTransactions({
+            offset: offset,
+            senderId: state.user.address,
+          });
+          if (result.success === true) {
+            all.push(...result.transactions);
+          }
+        }
+        commit('setTransactions', all);
+      }
+
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message
+      });
     }
   },
   async getWhoIVotedFor({
@@ -170,15 +212,79 @@ export const actions = {
         const usernames = response.transactions
           .map(x => JSON.parse(x.args))
           .map(x => x[0])
-          .map(x => ({ username: x }));
+          .map(x => ({
+            username: x
+          }));
 
         commit('setWhoIVotedFor', usernames);
       }
-    } catch(err) {
+    } catch (err) {
       Notification({
         title: 'Error',
         message: err.message
       });
     }
   },
+  async getTransfers({
+    commit,
+    state
+  }) {
+    try {
+      const count = await connection.api.Transfer.getRoot({
+        ownerId: state.user.address
+      });
+
+      if (count.success === true) {
+        const all = [];
+        for (let offset = 0; offset < count.count; offset += 100) {
+          const result = await connection.api.Transfer.getRoot({
+            ownerId: state.user.address,
+            limit: 100,
+            offset: offset,
+          });
+          if (result.success === true) {
+            all.push(...result.transfers);
+          }
+        }
+
+        commit('setTransfers', all);
+      }
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message
+      });
+    }
+  },
+  async getBalances({
+    state,
+    commit
+  }) {
+    try {
+      const address = state.user.address;
+      const count =  await connection.api.Uia.getBalances(address);
+
+      if (count.success === true) {
+
+        const all = [];
+        for (let offset = 0; offset < count.count; offset += 100) {
+          const result = await connection.api.Uia.getBalances(
+            address,
+            100,
+            offset
+          );
+          if (result.success) {
+            all.push(...result.balances)
+          }
+        }
+
+        commit('setBalances', all);
+      }
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message
+      });
+    }
+  }
 };

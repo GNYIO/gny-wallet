@@ -69,7 +69,7 @@ export default {
         await this.$store.dispatch('setPassphrase', passphrase);
         await this.$store.dispatch('setToken', passphrase);
         await this.$store.dispatch('refreshAccounts');
-        this.$router.push('/main');
+        this.$router.push('/home');
       } catch (error) {
         console.log(`Login error: ${error}`);
       }
