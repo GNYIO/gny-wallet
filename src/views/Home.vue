@@ -97,15 +97,16 @@ export default {
   methods: {
     async setUsername() {
       try {
-        const trs = client.basic.setUserName(
+        const result = await connection.contract.Basic.setUserName(
           this.form.username,
           this.passphrase,
         );
-        const result = await connection.api.Transport.sendTransaction(trs);
-        Notification({
-          title: 'Success',
-          message: result.transactionId,
-        });
+        if (result.success) {
+          Notification({
+            title: 'Success',
+            message: result.transactionId,
+          });
+        }
       } catch (err) {
         console.log(err);
       }
@@ -114,9 +115,14 @@ export default {
       try {
         const height = this.lockAccountForm.lockHeight;
         const amount = this.lockAccountForm.lockAmount * 1e8;
-        console.log(`height: ${height}, amount: ${amount}`);
-        const trs = await client.basic.lock(height, amount, this.passphrase);
-        await connection.api.Transport.sendTransaction(trs);
+
+        const result = await connection.contract.Basic.lockAccount(height, amount, this.passphrase);
+        if (result.success) {
+          Notification({
+            title: 'Success',
+            message: result.transactionId,
+          });
+        }
       } catch (err) {
         console.log(err.message);
       }

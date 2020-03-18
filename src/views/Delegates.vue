@@ -227,6 +227,7 @@
 import DelegatePaged from './DelegatesPaged';
 import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
+import { Notification } from 'element-ui';
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
   process.env.VUE_APP_GNY_PORT,
@@ -282,6 +283,7 @@ export default {
 
       try {
         const trs = client.basic.vote(this.voteForm.delegates, this.passphrase);
+        console.log(`trs: ${JSON.stringify(trs, null, 2)}`);
         await connection.api.Transport.sendTransaction(trs);
       } catch (err) {
         console.log(err);
@@ -310,11 +312,12 @@ export default {
       this.$refs['unvoteForm'].resetFields();
     },
     async registerAsDelegate() {
-      try {
-        const trs = client.basic.registerDelegate(this.passphrase);
-        await connection.api.Transport.sendTransaction(trs);
-      } catch (err) {
-        console.log(err);
+      const result = await connection.contract.Basic.registerDelegate(this.passphrase);
+      if (result.success) {
+        Notification({
+          title: 'Success',
+          message: result.transactionId,
+        });
       }
     },
   },

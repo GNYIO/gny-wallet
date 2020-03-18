@@ -145,16 +145,15 @@ export default {
       }
 
       try {
-        const trs = client.basic.transfer(
+        const result = await connection.contract.Basic.send(
           this.form.to,
           this.form.amount * 1e8,
           this.form.message,
           this.passphrase,
         );
-        console.log(trs);
-        const response = await connection.api.Transport.sendTransaction(trs);
-        console.log(response);
-        this.$message(`Transaction id: ${response.transactionId}`);
+        if (result.success) {
+          this.$message(`Transaction id: ${result.transactionId}`);
+        }
       } catch (error) {
         console.log(error);
       }
