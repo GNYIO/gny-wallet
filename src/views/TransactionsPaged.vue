@@ -1,37 +1,31 @@
 <template>
-    <el-card>
-      <div slot="header">
-        <span>Transaction History</span>
-      </div>
-      <el-table stripe :data="currentTransactions" style="width: 100%">
-        <el-table-column prop="id" label="ID"></el-table-column>
-        <el-table-column prop="type" label="Contract Number" width="150"></el-table-column>
-        <el-table-column label="Contract Name">
-          <template slot-scope="scope">
-            <div slot="reference">
-              {{ scope.row.type | contractMapping }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="args" label="Contract Arguments"></el-table-column>
-        <el-table-column prop="height" label="height"></el-table-column>
-        <el-table-column
-          prop="message"
-          label="Message"
-          width="120"
-        ></el-table-column>
-      </el-table>
+  <el-card>
+    <div slot="header">
+      <span>Transaction History</span>
+    </div>
+    <el-table stripe :data="currentTransactions" style="width: 100%">
+      <el-table-column prop="id" label="ID"></el-table-column>
+      <el-table-column prop="type" label="Contract Number" width="150"></el-table-column>
+      <el-table-column label="Contract Name">
+        <template slot-scope="scope">
+          <div slot="reference">{{ scope.row.type | contractMapping }}</div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="args" label="Contract Arguments"></el-table-column>
+      <el-table-column prop="height" label="height"></el-table-column>
+      <el-table-column prop="message" label="Message" width="120"></el-table-column>
+    </el-table>
 
-      <div class="block">
-        <el-pagination
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-size="10"
-          layout="prev, pager, next"
-          :total="transactionsCount"
-        ></el-pagination>
-      </div>
-    </el-card>
+    <div class="block">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-size="10"
+        layout="prev, pager, next"
+        :total="transactionsCount"
+      ></el-pagination>
+    </div>
+  </el-card>
 </template>
 
 <script>
@@ -71,5 +65,5 @@ export default {
   async mounted() {
     this.handleCurrentChange(1);
   },
-}
+};
 </script>

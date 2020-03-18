@@ -3,16 +3,10 @@
     <img alt="GNY logo" src="../assets/logo.png" />
 
     <div v-if="newAccount">
-      <el-alert
-        :title="newAccount"
-        type="success"
-        center
-        effect="dark"
-        :closable="false"
-      ></el-alert>
+      <el-alert :title="newAccount" type="success" center effect="dark" :closable="false"></el-alert>
       <!-- <el-button @click="copyPassword" style="display:inline">
         Copy <i class="el-icon-document-copy"></i>
-      </el-button> -->
+      </el-button>-->
     </div>
 
     <el-alert
@@ -23,11 +17,7 @@
       v-if="newAccount"
     ></el-alert>
 
-    <el-input
-      placeholder="Enter your passphrase"
-      v-model="form.passphrase"
-      show-password
-    ></el-input>
+    <el-input placeholder="Enter your passphrase" v-model="form.passphrase" show-password></el-input>
 
     <el-row>
       <el-button type="info" @click="login">Login</el-button>
@@ -100,6 +90,6 @@ img {
 .el-alert {
   padding: 2rem;
   margin-top: 15px;
-  width: auto;
+  width: 500px;
 }
 </style>

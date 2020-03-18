@@ -1,34 +1,14 @@
 <template>
   <div>
     <el-card>
-      <div slot="header">
-        All Assets (from all users)
-      </div>
+      <div slot="header">All Assets (from all users)</div>
       <el-table :data="currentAssets" stripe style="width: 100%">
-        <el-table-column
-          prop="name"
-          label="Name">
-        </el-table-column>
-        <el-table-column
-          prop="precision"
-          label="Precision">
-        </el-table-column>
-        <el-table-column
-          prop="maximumPretty"
-          label="Maximum">
-        </el-table-column>
-        <el-table-column
-          prop="quantityPretty"
-          label="Already Issued Quantity">
-        </el-table-column>
-        <el-table-column
-          prop="leftToIssuePretty"
-          label="Left to Issue">
-        </el-table-column>
-        <el-table-column
-          prop="issuerId"
-          label="Issuer">
-        </el-table-column>
+        <el-table-column prop="name" label="Name"></el-table-column>
+        <el-table-column prop="precision" label="Precision"></el-table-column>
+        <el-table-column prop="maximumPretty" label="Maximum"></el-table-column>
+        <el-table-column prop="quantityPretty" label="Already Issued Quantity"></el-table-column>
+        <el-table-column prop="leftToIssuePretty" label="Left to Issue"></el-table-column>
+        <el-table-column prop="issuerId" label="Issuer"></el-table-column>
       </el-table>
 
       <div class="block">
@@ -78,5 +58,5 @@ export default {
   mounted() {
     this.handleCurrentChange(1);
   },
-}
+};
 </script>

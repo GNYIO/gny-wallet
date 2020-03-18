@@ -17,25 +17,19 @@
       :auto-upload="false"
       :on-change="readFile"
       :file-list="fileList"
+      v-if="value === 201"
     >
-      <el-button slot="trigger" size="small" type="primary"
-        >Select a file</el-button
-      >
-      <el-button
-        style="margin-left: 10px;"
-        size="small"
-        type="success"
-        @click="submitUpload"
-        >Upload</el-button
-      >
-      <div slot="tip" class="el-upload__tip">
-        Your file must follow the GNY format.
-      </div>
+      <el-button slot="trigger" size="small" type="primary">Select a file</el-button>
+      <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
+      <div slot="tip" class="el-upload__tip">Your file must follow the GNY format.</div>
     </el-upload>
+
+    <el-button style="margin-left: 10px;" type="primary" @click="callContract">Call Contract</el-button>
   </div>
 </template>
 
 <script>
+import * as axios from 'axios';
 export default {
   data() {
     return {
@@ -80,8 +74,23 @@ export default {
         this.$message('You must choose an machine learning algorithm.');
       }
     },
-    callContract: function(type, args, fee) {
-      console.log(type, args, fee);
+    async callContract() {
+      try {
+        const response = await axios.put(
+          'http://45.76.215.117:4096/api/exchange',
+          {
+            secret:
+              'rally border matter square stuff flash hungry cry again divide trade drip',
+            fee: '10000000',
+            type: this.value,
+            args: [],
+            message: '',
+          },
+        );
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
