@@ -4,40 +4,29 @@
       <div slot="header">
         Past Transfers
       </div>
-      <el-table :data="currentTransfers" style="width: 100%" :row-class-name="tableRowClassName">
-        <el-table-column
-          label="Sender"
-          width="300">
+      <el-table
+        :data="currentTransfers"
+        style="width: 100%"
+        :row-class-name="tableRowClassName"
+      >
+        <el-table-column label="Sender" width="300">
           <template slot-scope="scope">
             <div slot="reference">
               {{ scope.row.senderId | prettyPrintMyAddress(user.address) }}
             </div>
           </template>
         </el-table-column>
-        <el-table-column
-          label="Recipient"
-          width="300">
+        <el-table-column label="Recipient" width="300">
           <template slot-scope="scope">
             <div slot="reference">
               {{ scope.row.recipientId | prettyPrintMyAddress(user.address) }}
             </div>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="currency"
-          label="Currency"
-        ></el-table-column>
-        <el-table-column
-          prop="amount"
-          label="Amount"
-        ></el-table-column>
-        <el-table-column
-          prop="height"
-          label="Height">
-        </el-table-column>
-        <el-table-column
-          prop="transactions.message"
-          label="Message">
+        <el-table-column prop="currency" label="Currency"></el-table-column>
+        <el-table-column prop="amount" label="Amount"></el-table-column>
+        <el-table-column prop="height" label="Height"> </el-table-column>
+        <el-table-column prop="transactions.message" label="Message">
         </el-table-column>
       </el-table>
       <div class="block">
@@ -87,7 +76,7 @@ export default {
         }
       }
     },
-    tableRowClassName({row}) {
+    tableRowClassName({ row }) {
       if (row.senderId === this.user.address) {
         return 'warning-row';
       }
@@ -96,14 +85,13 @@ export default {
         return 'success-row';
       }
       return '';
-    }
+    },
   },
   mounted() {
     this.handleCurrentChange(1);
   },
 };
 </script>
-
 
 <style>
 .el-table .warning-row {

@@ -14,7 +14,7 @@
         </el-col>
         <el-col :span="2">
           <div class="grid-content">
-            <el-button @click="logout" type="info" >Logout</el-button>
+            <el-button @click="logout" type="info">Logout</el-button>
           </div>
         </el-col>
       </el-row>

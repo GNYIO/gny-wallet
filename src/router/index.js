@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import store from '../store/store'
+import store from '../store/store';
 
 import * as Mnemonic from 'bitcore-mnemonic';
 import * as Cookie from 'tiny-cookie';
@@ -14,52 +14,52 @@ import Assets from '../views/Assets.vue';
 import MachineLearning from '../views/MachineLearning.vue';
 import Error404 from '../views/Error404.vue';
 
-
 Vue.use(VueRouter);
 
 const Router = new VueRouter({
-  routes: [{
+  routes: [
+    {
       path: '/',
-      redirect: 'login'
+      redirect: 'login',
     },
     {
       path: '/login',
-      component: Login
+      component: Login,
     },
     {
       path: '/main',
       component: Main,
-      children: [{
+      children: [
+        {
           path: '/home',
-          component: Home
+          component: Home,
         },
         {
           path: '/transfer',
-          component: Transfer
+          component: Transfer,
         },
         {
           path: '/delegates',
-          component: Delegates
+          component: Delegates,
         },
         {
           path: '/assets',
-          component: Assets
+          component: Assets,
         },
         {
           path: '/machinelearning',
-          component: MachineLearning
+          component: MachineLearning,
         },
-      ]
+      ],
     },
     {
       path: '*',
-      component: Error404
-    }
+      component: Error404,
+    },
   ],
-
 });
 
-Router.beforeEach(function (to, from, next) {
+Router.beforeEach(function(to, from, next) {
   const wantToNavigateToLogin = to.path.indexOf('login') > 0;
 
   const cookieIsSet = Mnemonic.isValid(Cookie.get('bip39'));
@@ -69,16 +69,16 @@ Router.beforeEach(function (to, from, next) {
     next({
       params: {
         ...to.params,
-      }
-    })
-    return null
+      },
+    });
+    return null;
   } else {
     next({
       path: '/login',
-      replace: true
-    })
-    return null
+      replace: true,
+    });
+    return null;
   }
 });
 
-export default Router
+export default Router;

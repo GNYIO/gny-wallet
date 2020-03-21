@@ -3,7 +3,11 @@
     <div slot="header">
       Transfer Asset
     </div>
-    <el-form :ref="transferAssetForm" :model="transferAssetForm" label-width="80px">
+    <el-form
+      :ref="transferAssetForm"
+      :model="transferAssetForm"
+      label-width="80px"
+    >
       <el-form-item label="Currency">
         <el-select
           placeholder="select currency"
@@ -18,9 +22,7 @@
             :value="item.name"
           >
             <span style="float: left">{{ item.name }}</span>
-            <span style="float: right; margin-right: 2em"
-              >{{ item.desc }}</span
-            >
+            <span style="float: right; margin-right: 2em">{{ item.desc }}</span>
           </el-option>
         </el-select>
       </el-form-item>
@@ -28,7 +30,8 @@
         <el-input-number
           v-model="transferAssetForm.amount"
           style="float: left; width: 300px"
-          :min="0">
+          :min="0"
+        >
         </el-input-number>
       </el-form-item>
       <el-form-item label="Recipient">
@@ -38,7 +41,9 @@
         <el-input v-model="transferAssetForm.message"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="transferAsset" style="float: left;">Transfer Asset</el-button>
+        <el-button type="primary" @click="transferAsset" style="float: left;"
+          >Transfer Asset</el-button
+        >
       </el-form-item>
     </el-form>
   </el-card>
@@ -46,15 +51,13 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import * as client from '@gny/client'
+import * as client from '@gny/client';
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
   process.env.VUE_APP_GNY_PORT,
   process.env.VUE_APP_GNY_NETWORK,
 );
-import {
-  Notification
-} from 'element-ui';
+import { Notification } from 'element-ui';
 
 export default {
   data() {
@@ -92,7 +95,9 @@ export default {
         );
         await connection.api.Transport.sendTransaction(trs);
       } catch (err) {
-        const message = (err.response && err.response.data && err.response.data.error) || 'request failed';
+        const message =
+          (err.response && err.response.data && err.response.data.error) ||
+          'request failed';
         Notification({
           title: 'Error',
           message: message,
@@ -100,5 +105,5 @@ export default {
       }
     },
   },
-}
+};
 </script>

@@ -116,7 +116,11 @@ export default {
         const height = this.lockAccountForm.lockHeight;
         const amount = this.lockAccountForm.lockAmount * 1e8;
 
-        const result = await connection.contract.Basic.lockAccount(height, amount, this.passphrase);
+        const result = await connection.contract.Basic.lockAccount(
+          height,
+          amount,
+          this.passphrase,
+        );
         if (result.success) {
           Notification({
             title: 'Success',

@@ -1,4 +1,3 @@
-
 export const state = {
   passphrase: null,
   user: null,
@@ -20,4 +19,3 @@ export const state = {
   transfers: [],
   balances: [],
 };
-

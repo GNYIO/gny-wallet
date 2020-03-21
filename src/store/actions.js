@@ -1,80 +1,66 @@
 import * as client from '@gny/client';
-import {
-  Notification
-} from 'element-ui';
+import { Notification } from 'element-ui';
 
-const connection = new client.Connection(process.env.VUE_APP_GNY_ENDPOINT, process.env.VUE_APP_GNY_PORT, process.env.VUE_APP_GNY_NETWORK);
+const connection = new client.Connection(
+  process.env.VUE_APP_GNY_ENDPOINT,
+  process.env.VUE_APP_GNY_PORT,
+  process.env.VUE_APP_GNY_NETWORK,
+);
 const getKeys = client.crypto.getKeys;
 
 export const actions = {
-  setToken({
-    commit
-  }, token) {
+  setToken({ commit }, token) {
     commit('setToken', token);
   },
-  setUser({
-    commit
-  }, user) {
+  setUser({ commit }, user) {
     commit('setUser', user);
   },
-  setLatestBlock({
-    commit
-  }, block) {
+  setLatestBlock({ commit }, block) {
     commit('setLatestBlock', block);
   },
-  setPassphrase({
-    commit
-  }, passphrase) {
+  setPassphrase({ commit }, passphrase) {
     commit('setPassphrase', passphrase);
   },
-  async refreshAccounts({
-    commit,
-    state
-  }) {
+  async refreshAccounts({ commit, state }) {
     try {
-      const keys = getKeys(state.passphrase)
-      const response = await connection.api.Account.openAccount(
-        keys.publicKey
-      );
+      const keys = getKeys(state.passphrase);
+      const response = await connection.api.Account.openAccount(keys.publicKey);
       commit('setUser', response.account);
-      commit('setLatestBlock', response.latestBlock)
+      commit('setLatestBlock', response.latestBlock);
     } catch (err) {
       Notification({
         title: 'Error',
-        message: err.message
+        message: err.message,
       });
     }
   },
-  async refreshDelegateInfo({
-    commit,
-    state,
-  }) {
+  async refreshDelegateInfo({ commit, state }) {
     try {
       if (state.user.username) {
-        const result = await connection.api.Delegate.getDelegateByUsername(state.user.username);
+        const result = await connection.api.Delegate.getDelegateByUsername(
+          state.user.username,
+        );
         if (result.success) {
           commit('setDelegateInfo', result.delegate);
         } else {
           throw new Error(result.error);
         }
       }
-
     } catch (err) {
       Notification({
         title: 'Error',
-        message: err.message
-      })
+        message: err.message,
+      });
     }
   },
-  async getMyVoters({
-    commit,
-    state,
-  }) {
+  async getMyVoters({ commit, state }) {
     try {
       if (state.user.username) {
-        const result = await connection.api.Delegate.getVoters(state.user.username);
+        const result = await connection.api.Delegate.getVoters(
+          state.user.username,
+        );
         if (result.accounts) {
-          commit('setMyVoters', result.accounts)
+          commit('setMyVoters', result.accounts);
         } else {
           throw new Error(result.error);
         }
@@ -82,13 +68,11 @@ export const actions = {
     } catch (err) {
       Notification({
         title: 'Error',
-        message: err.message
+        message: err.message,
       });
     }
   },
-  async getAllDelegateNames({
-    commit,
-  }) {
+  async getAllDelegateNames({ commit }) {
     try {
       const countWrapper = await connection.api.Delegate.count();
       if (countWrapper.success === true) {
@@ -107,33 +91,25 @@ export const actions = {
     } catch (err) {
       Notification({
         title: 'Error',
-        message: err.message
+        message: err.message,
       });
     }
   },
-  async refreshIsIssuer({
-    commit,
-    state
-  }) {
+  async refreshIsIssuer({ commit, state }) {
     try {
       const isIssuer = await connection.api.Uia.isIssuer(state.user.address);
       if (isIssuer.success === true) {
         commit('setIsIssuer', isIssuer.isIssuer);
         console.log(`isIssuer: ${isIssuer.isIssuer}`);
-
-
       }
     } catch (err) {
       Notification({
         title: 'Error',
-        message: err.message
+        message: err.message,
       });
     }
   },
-  async getIssuer({
-    state,
-    commit
-  }) {
+  async getIssuer({ state, commit }) {
     try {
       if (state.isIssuer === true) {
         const result = await connection.api.Uia.getIssuer(state.user.address);
@@ -145,13 +121,11 @@ export const actions = {
     } catch (err) {
       Notification({
         title: 'Error',
-        message: err.message
+        message: err.message,
       });
     }
   },
-  async getAssets({
-    commit
-  }) {
+  async getAssets({ commit }) {
     const count = await connection.api.Uia.getAssets();
     if (count.success === true) {
       const all = [];
@@ -168,10 +142,7 @@ export const actions = {
       commit('setAssets', all);
     }
   },
-  async getTransactions({
-    commit,
-    state
-  }) {
+  async getTransactions({ commit, state }) {
     try {
       let result = await connection.api.Transaction.getTransactions({
         senderId: state.user.address,
@@ -191,18 +162,14 @@ export const actions = {
         }
         commit('setTransactions', all);
       }
-
     } catch (err) {
       Notification({
         title: 'Error',
-        message: err.message
+        message: err.message,
       });
     }
   },
-  async getWhoIVotedFor({
-    commit,
-    state
-  }) {
+  async getWhoIVotedFor({ commit, state }) {
     try {
       const response = await connection.api.Transaction.getTransactions({
         type: 4,
@@ -213,7 +180,7 @@ export const actions = {
           .map(x => JSON.parse(x.args))
           .map(x => x[0])
           .map(x => ({
-            username: x
+            username: x,
           }));
 
         commit('setWhoIVotedFor', usernames);
@@ -221,17 +188,14 @@ export const actions = {
     } catch (err) {
       Notification({
         title: 'Error',
-        message: err.message
+        message: err.message,
       });
     }
   },
-  async getTransfers({
-    commit,
-    state
-  }) {
+  async getTransfers({ commit, state }) {
     try {
       const count = await connection.api.Transfer.getRoot({
-        ownerId: state.user.address
+        ownerId: state.user.address,
       });
 
       if (count.success === true) {
@@ -252,29 +216,25 @@ export const actions = {
     } catch (err) {
       Notification({
         title: 'Error',
-        message: err.message
+        message: err.message,
       });
     }
   },
-  async getBalances({
-    state,
-    commit
-  }) {
+  async getBalances({ state, commit }) {
     try {
       const address = state.user.address;
-      const count =  await connection.api.Uia.getBalances(address);
+      const count = await connection.api.Uia.getBalances(address);
 
       if (count.success === true) {
-
         const all = [];
         for (let offset = 0; offset < count.count; offset += 100) {
           const result = await connection.api.Uia.getBalances(
             address,
             100,
-            offset
+            offset,
           );
           if (result.success) {
-            all.push(...result.balances)
+            all.push(...result.balances);
           }
         }
 
@@ -283,8 +243,8 @@ export const actions = {
     } catch (err) {
       Notification({
         title: 'Error',
-        message: err.message
+        message: err.message,
       });
     }
-  }
+  },
 };

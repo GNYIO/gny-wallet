@@ -1,4 +1,3 @@
-
 export const mutations = {
   setToken(state, token) {
     state.token = token;
@@ -21,7 +20,7 @@ export const mutations = {
     state.myVoters = myVoters;
   },
   setPassphrase(state, passphrase) {
-    state.passphrase = passphrase
+    state.passphrase = passphrase;
   },
   setAllDelegateNames(state, allDelegateNames) {
     state.allDelegateNames = allDelegateNames;

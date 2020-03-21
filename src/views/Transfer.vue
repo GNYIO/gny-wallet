@@ -28,7 +28,9 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="sendTransaction">Send</el-button>
+              <el-button type="primary" @click="sendTransaction"
+                >Send</el-button
+              >
               <el-button @click="resetForm">Cancel</el-button>
             </el-form-item>
           </el-form>
@@ -169,7 +171,6 @@ export default {
     this.form.from = this.$store.state.user.address;
     this.amountPlaceholder = `You have ${this.user.balance /
       1e8} GNY in your account`;
-
   },
 };
 </script>

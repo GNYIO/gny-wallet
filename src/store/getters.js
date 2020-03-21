@@ -41,7 +41,9 @@ export const getters = {
   prettyAssets: state => {
     const assets = state.assets.map(asset => {
       const prec = Math.pow(10, asset.precision);
-      const difference = new BigNumber(asset.maximum).minus(asset.quantity).toFixed();
+      const difference = new BigNumber(asset.maximum)
+        .minus(asset.quantity)
+        .toFixed();
 
       const one = {
         name: asset.name,
@@ -60,11 +62,14 @@ export const getters = {
     return assets;
   },
   assetsCount: state => state.assets.length,
-  ownAssets: (state, getters) => getters.prettyAssets.filter(x => x.issuerId === state.user.address),
+  ownAssets: (state, getters) =>
+    getters.prettyAssets.filter(x => x.issuerId === state.user.address),
 
   prettyBalances: (state, getters) => {
     const balances = state.balances.map(balance => {
-      const asset = getters.prettyAssets.filter(x => x.name === balance.currency)[0];
+      const asset = getters.prettyAssets.filter(
+        x => x.name === balance.currency,
+      )[0];
       const precision = Math.pow(10, asset.precision);
 
       const one = {
