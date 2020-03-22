@@ -3,6 +3,8 @@ import { BigNumber } from 'bignumber.js';
 export const getters = {
   passphrase: state => state.passphrase,
   user: state => state.user,
+  hasSecondPassphrase: state => !!state.user.secondPublicKey,
+  secondPublicKey: state => state.user.secondPublicKey,
   isLoggedIn: state => state.isLoggedIn,
   latestBlock: state => state.latestBlock,
   prettyDelegates: state => {

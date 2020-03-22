@@ -22,6 +22,9 @@ export const mutations = {
   setPassphrase(state, passphrase) {
     state.passphrase = passphrase;
   },
+  setSecondPassphrase(state, secondPassphrase) {
+    state.secondPassphrase = secondPassphrase;
+  },
   setAllDelegateNames(state, allDelegateNames) {
     state.allDelegateNames = allDelegateNames;
   },

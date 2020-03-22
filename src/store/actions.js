@@ -21,6 +21,9 @@ export const actions = {
   setPassphrase({ commit }, passphrase) {
     commit('setPassphrase', passphrase);
   },
+  setSecondPassphrase({ commit }, secondPassphrase) {
+    commit('setSecondPassphrase', secondPassphrase);
+  },
   async refreshAccounts({ commit, state }) {
     try {
       const keys = getKeys(state.passphrase);
