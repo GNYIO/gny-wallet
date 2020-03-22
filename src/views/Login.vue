@@ -30,12 +30,8 @@
         :rules="loginFormRules"
         v-show="secondPublicKey === null"
       >
-        <el-form-item prop="passphrase" >
-          <el-tooltip
-            effect="light"
-            content="Passphrase"
-            placement="top-start"
-          >
+        <el-form-item prop="passphrase">
+          <el-tooltip effect="light" content="Passphrase" placement="top-start">
             <el-input
               placeholder="Enter your passphrase"
               v-model="loginForm.passphrase"
@@ -70,12 +66,12 @@
         </el-form-item>
 
         <div class="button-container">
-          <el-button type="primary" @click="secondLogin">Login with second Passphrase</el-button>
+          <el-button type="primary" @click="secondLogin"
+            >Login with second Passphrase</el-button
+          >
         </div>
       </el-form>
     </el-row>
-
-
   </el-main>
 </template>
 
@@ -120,7 +116,7 @@ export default {
           callback(new Error('not a valid BIP39'));
         }
       } catch (err) {
-        callback(new Error('not a valid BIP39'))
+        callback(new Error('not a valid BIP39'));
       }
     };
 
@@ -137,9 +133,8 @@ export default {
         if (typedSecondPublicKey === secondPublicKey) {
           callback();
         } else {
-          callback(new Error('not valid second passphrase'))
+          callback(new Error('not valid second passphrase'));
         }
-
       } catch (err) {
         callback(new Error('not valid second passphrase'));
       }
@@ -153,9 +148,7 @@ export default {
         passphrase: '',
       },
       loginFormRules: {
-        passphrase: [
-          { validator: validatePassphrase, trigger: 'change' },
-        ],
+        passphrase: [{ validator: validatePassphrase, trigger: 'change' }],
       },
       secondLoginForm: {
         secondPassphrase: '',
@@ -201,7 +194,6 @@ export default {
 
           this.$router.push('/home');
         }
-
       } catch (error) {
         console.log(`Login error: ${error}`);
       }
@@ -227,7 +219,7 @@ export default {
       await this.$store.dispatch('refreshAccounts');
 
       this.$router.push('/home');
-    }
+    },
   },
 };
 </script>
