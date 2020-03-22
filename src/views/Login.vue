@@ -23,11 +23,17 @@
       v-if="newAccount"
     ></el-alert>
 
-    <el-input
-      placeholder="Enter your passphrase"
-      v-model="form.passphrase"
-      show-password
-    ></el-input>
+    <el-row>
+      <el-form ref="loginForm" :model="loginForm" :rules="loginFormRules">
+        <el-form-item prop="passphrase">
+          <el-input
+            placeholder="Enter your passphrase"
+            v-model="loginForm.passphrase"
+            show-password
+          ></el-input>
+        </el-form-item>
+      </el-form>
+    </el-row>
 
     <el-row>
       <el-button type="info" @click="login">Login</el-button>
@@ -46,10 +52,27 @@ export function generateSecret() {
 
 export default {
   data() {
+    const validatePassphrase = (rule, value, callback) => {
+      try {
+        if (Mnemonic.isValid(value)) {
+          callback();
+        } else {
+          callback(new Error('not a valid BIP39'));
+        }
+      } catch (err) {
+        callback(new Error('not a valid BIP39'))
+      }
+    };
+
     return {
       newAccount: '',
-      form: {
+      loginForm: {
         passphrase: '',
+      },
+      loginFormRules: {
+        passphrase: [
+          { validator: validatePassphrase, trigger: 'change' },
+        ],
       },
     };
   },
@@ -63,7 +86,14 @@ export default {
     },
     async login() {
       try {
-        const passphrase = this.form.passphrase;
+        await this.$refs['loginForm'].validate();
+      } catch (err) {
+        console.log(`validation for loginForm failed`);
+        return;
+      }
+
+      try {
+        const passphrase = this.loginForm.passphrase;
 
         Cookie.set('bip39', passphrase);
         await this.$store.dispatch('setPassphrase', passphrase);
