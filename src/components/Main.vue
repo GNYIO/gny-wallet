@@ -91,7 +91,6 @@ export default {
   color: #fff;
   text-align: justify;
   line-height: 60px;
-  font-family: 'Courier New', Courier, monospace;
 }
 
 .el-aside {

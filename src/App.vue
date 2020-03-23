@@ -11,7 +11,8 @@ export default {
 </script>
 
 <style>
+/* set font-family for whole project */
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Courier New', Courier, monospace;
 }
 </style>
