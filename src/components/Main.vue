@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container direction="vertical">
     <el-header>
       <el-row :gutter="20">
         <el-col :span="6">
@@ -20,13 +20,11 @@
       </el-row>
     </el-header>
 
-    <el-container>
-      <el-aside width="200px">
+    <el-container direction="horizontal">
+      <div style="display:relative">
+      <el-aside>
         <el-menu
           class="el-menu-vertical"
-          default-active="1"
-          background-color="#545c64"
-          text-color="#fff"
           active-text-color="#ffd04b"
           router
         >
@@ -38,7 +36,6 @@
           <el-menu-item index="2" route="/transfer">
             <i class="el-icon-s-promotion"></i>
             <span> Transfer</span>
-            <router-link to="/transfer"></router-link>
           </el-menu-item>
 
           <el-menu-item index="3" route="/delegates">
@@ -57,11 +54,14 @@
           </el-menu-item>
         </el-menu>
       </el-aside>
+      </div>
 
       <el-main>
         <router-view></router-view>
       </el-main>
+
     </el-container>
+
   </el-container>
 </template>
 
@@ -95,22 +95,14 @@ export default {
 }
 
 .el-aside {
-  background-color: #d3dce6;
-  color: #333;
-  text-align: center;
-  line-height: 200px;
-  height: 100vh;
+  top: 60px;
+  height: 100%;
+  z-index: 100;
+  border-right: solid 1px #e6e6e6;
+  margin:0px;
+}
+.el-aside > * {
+  border-right: solid 0px;
 }
 
-.el-main {
-  background-color: #e9eef3;
-  color: #333;
-  text-align: center;
-  font-family: 'Courier New', Courier, monospace;
-}
-
-.el-menu {
-  background-color: #545c64;
-  color: #fff;
-}
 </style>
