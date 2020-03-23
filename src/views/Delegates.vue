@@ -78,7 +78,7 @@
 
         <el-card v-if="user.isDelegate === 0 && user.username === null">
           <h3>
-            You need to first set your username before registering as Delegate
+            Set your username before registering as Delegate
           </h3>
           <p>Lock your account here:</p>
           <router-link to="/home">Home</router-link>

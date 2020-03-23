@@ -85,4 +85,5 @@ export const getters = {
     });
     return balances;
   },
+  positiveBalance: state => new BigNumber(state.user.balance).isGreaterThan(0),
 };

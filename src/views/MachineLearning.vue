@@ -42,18 +42,6 @@
         </el-card>
       </el-col>
     </el-row>
-
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <el-card>
-          <div slot="header">
-            ML Data Structure
-          </div>
-
-          <el-table stripe :data="mlDataTypes" style="width: 100%"> </el-table>
-        </el-card>
-      </el-col>
-    </el-row>
   </div>
 </template>
 
@@ -61,7 +49,6 @@
 export default {
   data() {
     return {
-      mlDataTypes: [],
       contracts: [
         {
           type: 201,
@@ -111,6 +98,10 @@ export default {
 </script>
 
 <style scoped>
+.el-select {
+  margin-bottom: 20px;
+}
+
 .el-row {
   margin-bottom: 20px;
 }

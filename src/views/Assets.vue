@@ -2,7 +2,11 @@
   <div>
     <el-row :gutter="20" v-if="!isIssuer">
       <el-col :span="12">
-        <el-card>
+        <el-card v-if="!positiveBalance">
+          <h3>You need 100 GNY to register as issuer</h3>
+        </el-card>
+
+        <el-card v-if="positiveBalance">
           <div slot="header">
             Register as Issuer
           </div>
@@ -18,7 +22,10 @@
               <el-input v-model="registerIssuerForm.description"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button @click="registerIssuer" style="float: left;"
+              <el-button
+                type="primary"
+                @click="registerIssuer"
+                style="float: left;"
                 >Register Issuer</el-button
               >
             </el-form-item>
@@ -223,7 +230,7 @@ export default {
   },
   computed: {
     ...mapState(['isIssuer', 'issuer', 'passphrase']),
-    ...mapGetters(['ownAssets', 'prettyBalances']),
+    ...mapGetters(['ownAssets', 'prettyBalances', 'positiveBalance']),
   },
   methods: {
     async registerIssuer() {

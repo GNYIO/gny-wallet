@@ -2,7 +2,11 @@
   <div>
     <el-row :gutter="20">
       <el-col :span="24">
-        <el-card>
+        <el-card v-if="!positiveBalance">
+          <h3>You have currently no GNY to transfer</h3>
+        </el-card>
+
+        <el-card v-if="positiveBalance">
           <div slot="header">
             Transfer GNY
           </div>
@@ -47,7 +51,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
 import { isAddress } from '@gny/utils';
 import { BigNumber } from 'bignumber.js';
@@ -135,6 +139,7 @@ export default {
   },
   computed: {
     ...mapState(['user', 'passphrase']),
+    ...mapGetters(['positiveBalance']),
   },
   methods: {
     async sendTransaction() {

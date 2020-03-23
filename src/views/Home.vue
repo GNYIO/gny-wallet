@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row :gutter="20" type="flex">
+    <el-row :gutter="20">
       <el-col :span="12">
         <el-card>
           <div slot="header">
@@ -25,7 +25,13 @@
       </el-col>
 
       <el-col :span="12">
-        <el-card v-if="!user.username">
+        <el-card v-if="!positiveBalance">
+          <div>
+            <h3>You need 5 GNY to set your username</h3>
+          </div>
+        </el-card>
+
+        <el-card v-if="!user.username && positiveBalance">
           <div slot="header">
             <span>Set Username</span>
           </div>
@@ -47,7 +53,13 @@
 
     <el-row :gutter="20" v-if="user.lockHeight === '0'">
       <el-col :span="12">
-        <el-card>
+        <el-card v-if="!positiveBalance">
+          <div>
+            <h3>You need 0.1 GNY to lock your account</h3>
+          </div>
+        </el-card>
+
+        <el-card v-if="positiveBalance">
           <div slot="header">
             Lock your account
           </div>
@@ -76,7 +88,7 @@
 </template>
 
 <script scoped>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import { Notification } from 'element-ui';
 import TransactionsPaged from './TransactionsPaged';
 
@@ -93,6 +105,7 @@ export default {
   },
   computed: {
     ...mapState(['user', 'passphrase']),
+    ...mapGetters(['positiveBalance']),
   },
   methods: {
     async setUsername() {
