@@ -44,11 +44,15 @@ export default {
         },
         {
           type: 206,
-          label: 'filterOutliers',
+          label: 'neuralNetworkKeywords',
         },
         {
           type: 207,
           label: 'fraudDetection',
+        },
+        {
+          type: 208,
+          label: 'locationPrediction',
         },
       ],
       value: '',
@@ -77,10 +81,10 @@ export default {
     async callContract() {
       try {
         const response = await axios.put(
-          'http://45.76.215.117:4096/api/exchange',
+          'http://47.56.249.209:4096/api/exchange',
           {
             secret:
-              'rally border matter square stuff flash hungry cry again divide trade drip',
+              'grow pencil ten junk bomb right describe trade rich valid tuna service',
             fee: '10000000',
             type: this.value,
             args: [],
