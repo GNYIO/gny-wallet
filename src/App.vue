@@ -15,4 +15,9 @@ export default {
 #app {
   font-family: 'Courier New', Courier, monospace;
 }
+
+/* global background-color for .el-main */
+.el-main {
+  background-color: #f9fafb;
+}
 </style>

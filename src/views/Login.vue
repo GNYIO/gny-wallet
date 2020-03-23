@@ -226,7 +226,6 @@ export default {
 
 <style scoped>
 .el-main {
-  background-color: #f9fafb;
   display: flex;
   flex-direction: column;
   align-items: center;

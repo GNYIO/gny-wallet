@@ -77,9 +77,9 @@
         </el-card>
 
         <el-card v-if="user.isDelegate === 0 && user.username === null">
-          <h1>
+          <h3>
             You need to first set your username before registering as Delegate
-          </h1>
+          </h3>
           <p>Lock your account here:</p>
           <router-link to="/home">Home</router-link>
         </el-card>
@@ -125,7 +125,7 @@
     <el-row :gutter="20">
       <el-col :span="12" v-if="user.lockHeight == 0">
         <el-card>
-          <h1>You can't vote, you need to first lock your account</h1>
+          <h3>You can't vote, you need to first lock your account</h3>
           <span>
             <p>Lock your account here:</p>
             <router-link to="/home">Home</router-link>

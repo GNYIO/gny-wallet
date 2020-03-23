@@ -23,7 +23,7 @@
     <el-container direction="horizontal">
       <div>
         <el-aside>
-          <el-menu class="el-menu-vertical" active-text-color="#ffd04b" router>
+          <el-menu class="el-menu-vertical" router>
             <el-menu-item index="1" route="/home">
               <i class="el-icon-s-home"></i>
               <span> Home</span>
@@ -56,7 +56,6 @@
         <router-view></router-view>
       </el-main>
     </el-container>
-
   </el-container>
 </template>
 
@@ -100,6 +99,7 @@ export default {
   border-right: solid 1px #e6e6e6;
   margin: 0px;
 }
+
 .el-aside > * {
   border-right: solid 0px;
 }
