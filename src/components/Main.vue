@@ -97,4 +97,8 @@ export default {
 .el-aside > * {
   border-right: solid 0px;
 }
+
+.el-main {
+  text-align: center;
+}
 </style>
