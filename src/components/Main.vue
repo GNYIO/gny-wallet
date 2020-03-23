@@ -1,5 +1,5 @@
 <template>
-  <el-container direction="vertical">
+  <el-container direction="vertical" class="page-container">
     <el-header>
       <el-row :gutter="20">
         <el-col :span="6">
@@ -21,7 +21,7 @@
     </el-header>
 
     <el-container direction="horizontal">
-      <div style="display:relative">
+      <div>
         <el-aside>
           <el-menu class="el-menu-vertical" active-text-color="#ffd04b" router>
             <el-menu-item index="1" route="/home">
@@ -56,6 +56,7 @@
         <router-view></router-view>
       </el-main>
     </el-container>
+
   </el-container>
 </template>
 
@@ -80,6 +81,11 @@ export default {
 </script>
 
 <style scoped>
+.page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
 .el-header {
   background-color: #5c89a8;
   color: #fff;
