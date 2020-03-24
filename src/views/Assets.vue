@@ -15,12 +15,20 @@
             label-width="80px"
           >
             <el-form-item label="Name" prop="name">
-              <el-tooltip effect="light" content="Example: AAA" placement="top-start">
+              <el-tooltip
+                effect="light"
+                content="Example: AAA"
+                placement="top-start"
+              >
                 <el-input v-model="registerIssuerForm.name"></el-input>
               </el-tooltip>
             </el-form-item>
             <el-form-item label="Desc." prop="description">
-              <el-tooltip effect="light" content="Description" placement="top-start">
+              <el-tooltip
+                effect="light"
+                content="Description"
+                placement="top-start"
+              >
                 <el-input v-model="registerIssuerForm.description"></el-input>
               </el-tooltip>
             </el-form-item>
@@ -29,6 +37,7 @@
                 type="primary"
                 @click="registerIssuer"
                 style="float: left;"
+                :disabled="alreayRegisteredIssuer"
                 >Register Issuer</el-button
               >
             </el-form-item>
@@ -215,6 +224,7 @@ export default {
   },
   data() {
     return {
+      alreayRegisteredIssuer: false,
       registerIssuerForm: {
         name: '',
         description: '',
@@ -242,7 +252,7 @@ export default {
             max: 4096,
             message: 'Length should not be longer than 4096',
             trigger: 'blur',
-          }
+          },
         ],
       },
       createAssetsForm: {
@@ -273,7 +283,8 @@ export default {
           this.passphrase,
         );
 
-        await connection.api.Transport.sendTransaction(trs);
+        this.$message(trs.transactionId);
+        this.alreayRegisteredIssuer = true;
       } catch (err) {
         console.log(err.message);
       }
