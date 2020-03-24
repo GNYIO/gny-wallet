@@ -267,7 +267,7 @@ export default {
         delegates: [
           {
             required: true,
-            message: 'Please selact at least one delegate',
+            message: 'Please select at least one delegate',
             trigger: 'change',
           },
         ],
@@ -279,7 +279,7 @@ export default {
         delegates: [
           {
             required: true,
-            message: 'Please selact at least one delegate',
+            message: 'Please select at least one delegate',
             trigger: 'change',
           },
         ],

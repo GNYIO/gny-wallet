@@ -7,19 +7,22 @@
         </el-card>
 
         <el-card v-if="positiveBalance">
-          <div slot="header">
-            Register as Issuer
-          </div>
+          <div slot="header">Register as Issuer</div>
           <el-form
             :ref="registerIssuerForm"
             :model="registerIssuerForm"
+            :rules="registerIssuerFormRules"
             label-width="80px"
           >
-            <el-form-item label="Name">
-              <el-input v-model="registerIssuerForm.name"></el-input>
+            <el-form-item label="Name" prop="name">
+              <el-tooltip effect="light" content="Example: AAA" placement="top-start">
+                <el-input v-model="registerIssuerForm.name"></el-input>
+              </el-tooltip>
             </el-form-item>
-            <el-form-item label="Desc.">
-              <el-input v-model="registerIssuerForm.description"></el-input>
+            <el-form-item label="Desc." prop="description">
+              <el-tooltip effect="light" content="Description" placement="top-start">
+                <el-input v-model="registerIssuerForm.description"></el-input>
+              </el-tooltip>
             </el-form-item>
             <el-form-item>
               <el-button
@@ -215,6 +218,32 @@ export default {
       registerIssuerForm: {
         name: '',
         description: '',
+      },
+      registerIssuerFormRules: {
+        name: [
+          {
+            required: true,
+            message: 'Please add a name',
+            trigger: 'blur',
+          },
+          {
+            type: 'string',
+            pattern: /^[A-Za-z]{1,16}$/,
+            trigger: 'blur',
+          },
+        ],
+        description: [
+          {
+            required: true,
+            message: 'Please add a description',
+            trigger: 'blur',
+          },
+          {
+            max: 4096,
+            message: 'Length should not be longer than 4096',
+            trigger: 'blur',
+          }
+        ],
       },
       createAssetsForm: {
         name: '',
