@@ -36,13 +36,19 @@
             <span>Set Username</span>
           </div>
 
-          <el-form ref="form" :model="form" label-width="80px">
-            <el-form-item label="Username">
-              <el-input v-model="form.username"></el-input>
+          <el-form
+            ref="usernameForm"
+            :model="usernameForm"
+            label-width="80px"
+            :rules="usernameFormRules"
+          >
+            <el-form-item label="Username" prop="username">
+              <el-input v-model="usernameForm.username" :disabled="hasUsername"></el-input>
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="setUsername"
+              <el-button type="primary" @click="setUsername" style="float: left"
+                         :disabled="hasUsername"
                 >Set Username</el-button
               >
             </el-form-item>
@@ -102,6 +108,34 @@ export default {
   components: {
     TransactionsPaged,
   },
+  data() {
+    return {
+      hasUsername: false,
+
+      placeholder: '',
+      usernameForm: {
+        username: '',
+      },
+      usernameFormRules: {
+        username: [
+          {
+            required: true,
+            message: 'Please add a username',
+            trigger: 'blur',
+          },
+          {
+            type: 'string',
+            pattern: /^[a-z0-9_]{2,20}$/,
+            trigger: 'change',
+          },
+        ],
+      },
+      lockAccountForm: {
+        lockHeight: '0',
+        lockAmount: '0',
+      },
+    };
+  },
   computed: {
     ...mapState(['user', 'passphrase', 'secondPassphrase']),
     ...mapGetters(['positiveBalance']),
@@ -109,12 +143,20 @@ export default {
   methods: {
     async setUsername() {
       try {
+        await this.$refs['usernameForm'].validate();
+      } catch (err) {
+        console.log('Validation for usernameForm failed');
+        return;
+      }
+
+      try {
         const result = await connection.contract.Basic.setUserName(
-          this.form.username,
+          this.usernameForm.username,
           this.passphrase,
           this.secondPassphrase,
         );
         this.$message(result.transactionId);
+        this.hasUsername = true;
       } catch (err) {
         console.log(err);
       }
@@ -135,18 +177,6 @@ export default {
         console.log(err.message);
       }
     },
-  },
-  data() {
-    return {
-      placeholder: '',
-      form: {
-        username: '',
-      },
-      lockAccountForm: {
-        lockHeight: '0',
-        lockAmount: '0',
-      },
-    };
   },
   async mounted() {
     await this.$store.dispatch('refreshAccounts');
