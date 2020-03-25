@@ -42,14 +42,64 @@
             label-width="80px"
             :rules="usernameFormRules"
           >
-            <el-form-item label="Username" prop="username">
-              <el-input v-model="usernameForm.username" :disabled="hasUsername"></el-input>
+            <el-form-item label="Usern." prop="username">
+              <el-input
+                v-model="usernameForm.username"
+                :disabled="hasUsername"
+              ></el-input>
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="setUsername" style="float: left"
-                         :disabled="hasUsername"
+              <el-button
+                type="primary"
+                @click="setUsername"
+                style="float: left"
+                :disabled="hasUsername"
                 >Set Username</el-button
+              >
+            </el-form-item>
+          </el-form>
+        </el-card>
+      </el-col>
+
+      <el-col :span="12">
+        <el-card v-if="!positiveBalance">
+          <div>
+            <h3>You need 5 GNY to set a second password</h3>
+          </div>
+        </el-card>
+
+        <el-card v-if="!hasSecondPassphrase && positiveBalance">
+          <div slot="header">
+            <span>Set Second password</span>
+          </div>
+
+          <el-form
+            ref="secondPassphraseForm"
+            :model="secondPassphraseForm"
+            label-width="80px"
+            :rules="secondPassphraseFormRules"
+          >
+            <el-form-item label="2nd P." prop="secondPassphrase">
+              <el-tooltip
+                effect="light"
+                content="Second Passphrase"
+                placement="top-start"
+              >
+                <el-input
+                  :disabled="isSecondPassphrase"
+                  v-model="secondPassphraseForm.secondPassphrase"
+                ></el-input>
+              </el-tooltip>
+            </el-form-item>
+
+            <el-form-item>
+              <el-button
+                type="primary"
+                @click="setSecondPassphrase"
+                style="float: left"
+                :disabled="isSecondPassphrase"
+                >Set Second Passphrase</el-button
               >
             </el-form-item>
           </el-form>
@@ -111,6 +161,7 @@ export default {
   data() {
     return {
       hasUsername: false,
+      isSecondPassphrase: false,
 
       placeholder: '',
       usernameForm: {
@@ -130,6 +181,20 @@ export default {
           },
         ],
       },
+
+      secondPassphraseForm: {
+        secondPassphrase: '',
+      },
+      secondPassphraseFormRules: {
+        secondPassphrase: [
+          {
+            required: true,
+            message: 'Please add a second passphrase',
+            trigger: 'blur',
+          },
+        ],
+      },
+
       lockAccountForm: {
         lockHeight: '0',
         lockAmount: '0',
@@ -138,7 +203,7 @@ export default {
   },
   computed: {
     ...mapState(['user', 'passphrase', 'secondPassphrase']),
-    ...mapGetters(['positiveBalance']),
+    ...mapGetters(['positiveBalance', 'hasSecondPassphrase']),
   },
   methods: {
     async setUsername() {
@@ -157,6 +222,27 @@ export default {
         );
         this.$message(result.transactionId);
         this.hasUsername = true;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async setSecondPassphrase() {
+      try {
+        await this.$refs['secondPassphraseForm'].validate();
+      } catch (err) {
+        console.log('Validation for secondPassphraseForm failed');
+        return;
+      }
+
+      try {
+        const result = await connection.contract.Basic.setSecondPassphrase(
+          this.passphrase,
+          this.secondPassphraseForm.secondPassphrase,
+        );
+        this.$message(result.transactionId);
+
+        // TODO set
+        this.isSecondPassphrase = true;
       } catch (err) {
         console.log(err);
       }
