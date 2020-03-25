@@ -319,12 +319,11 @@ export default {
       }
 
       try {
-        const trs = client.basic.unvote(
+        const result = await connection.contract.Basic.unvote(
           this.unvoteForm.delegates,
           this.passphrase,
           this.secondPassphrase,
         );
-        const result = await connection.api.Transport.sendTransaction(trs);
         this.$message(result.transactionId);
       } catch (err) {
         console.log(err);

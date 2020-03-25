@@ -391,7 +391,6 @@ export default {
           this.secondPassphrase,
         );
 
-        console.log(`after createAsset: ${JSON.stringify(trs, null, 2)}`);
         if (trs.transactionId) {
           this.$message(trs.transactionId);
           this.$refs['createAssetsForm'].resetFields();
