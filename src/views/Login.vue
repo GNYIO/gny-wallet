@@ -188,6 +188,10 @@ export default {
           return;
         } else {
           Cookie.set('bip39', passphrase);
+          Cookie.set('bip39Second', null);
+
+          await this.$store.dispatch('setSecondPassphrase', null);
+
           await this.$store.dispatch('setPassphrase', passphrase);
           await this.$store.dispatch('setToken', passphrase);
           await this.$store.dispatch('refreshAccounts');
