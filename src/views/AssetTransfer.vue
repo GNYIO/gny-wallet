@@ -57,7 +57,6 @@ const connection = new client.Connection(
   process.env.VUE_APP_GNY_PORT,
   process.env.VUE_APP_GNY_NETWORK,
 );
-import { Notification } from 'element-ui';
 
 export default {
   data() {
@@ -71,7 +70,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['user', 'passphrase']),
+    ...mapState(['user', 'passphrase', 'secondPassphrase']),
     ...mapGetters(['ownAssets']),
   },
   methods: {
@@ -86,22 +85,20 @@ export default {
         const recipientId = this.transferAssetForm.recipientId;
         const message = this.transferAssetForm.message;
 
-        const trs = client.uia.transfer(
+        const result = connection.contract.Uia.transfer(
           currency,
           amount,
           recipientId,
           message,
           this.passphrase,
+          this.secondPassphrase,
         );
-        await connection.api.Transport.sendTransaction(trs);
+        this.$message(result.transactionId);
       } catch (err) {
         const message =
           (err.response && err.response.data && err.response.data.error) ||
           'request failed';
-        Notification({
-          title: 'Error',
-          message: message,
-        });
+        this.$message(`Error: ${message}`);
       }
     },
   },

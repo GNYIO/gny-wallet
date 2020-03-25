@@ -234,7 +234,6 @@
 import DelegatePaged from './DelegatesPaged';
 import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
-import { Notification } from 'element-ui';
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
   process.env.VUE_APP_GNY_PORT,
@@ -249,6 +248,7 @@ export default {
     ...mapState([
       'user',
       'passphrase',
+      'secondPassphrase',
       'delegate',
       'myVoters',
       'allDelegateNames',
@@ -297,9 +297,12 @@ export default {
       }
 
       try {
-        const trs = client.basic.vote(this.voteForm.delegates, this.passphrase);
-        console.log(`trs: ${JSON.stringify(trs, null, 2)}`);
-        await connection.api.Transport.sendTransaction(trs);
+        const result = connection.contract.Basic.vote(
+          this.voteForm.delegates,
+          this.passphrase,
+          this.secondPassphrase,
+        );
+        this.$message(result.transactionId);
       } catch (err) {
         console.log(err);
       }
@@ -319,6 +322,7 @@ export default {
         const trs = client.basic.unvote(
           this.unvoteForm.delegates,
           this.passphrase,
+          this.secondPassphrase,
         );
         const result = await connection.api.Transport.sendTransaction(trs);
         this.$message(result.transactionId);
@@ -332,13 +336,9 @@ export default {
     async registerAsDelegate() {
       const result = await connection.contract.Basic.registerDelegate(
         this.passphrase,
+        this.secondPassphrase,
       );
-      if (result.success) {
-        Notification({
-          title: 'Success',
-          message: result.transactionId,
-        });
-      }
+      this.$message(result.transactionId);
     },
   },
   async mounted() {

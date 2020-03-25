@@ -89,7 +89,6 @@
 
 <script scoped>
 import { mapState, mapGetters } from 'vuex';
-import { Notification } from 'element-ui';
 import TransactionsPaged from './TransactionsPaged';
 
 import * as client from '@gny/client';
@@ -104,7 +103,7 @@ export default {
     TransactionsPaged,
   },
   computed: {
-    ...mapState(['user', 'passphrase']),
+    ...mapState(['user', 'passphrase', 'secondPassphrase']),
     ...mapGetters(['positiveBalance']),
   },
   methods: {
@@ -113,13 +112,9 @@ export default {
         const result = await connection.contract.Basic.setUserName(
           this.form.username,
           this.passphrase,
+          this.secondPassphrase,
         );
-        if (result.success) {
-          Notification({
-            title: 'Success',
-            message: result.transactionId,
-          });
-        }
+        this.$message(result.transactionId);
       } catch (err) {
         console.log(err);
       }
@@ -133,13 +128,9 @@ export default {
           height,
           amount,
           this.passphrase,
+          this.secondPassphrase,
         );
-        if (result.success) {
-          Notification({
-            title: 'Success',
-            message: result.transactionId,
-          });
-        }
+        this.$message(result.transactionId);
       } catch (err) {
         console.log(err.message);
       }

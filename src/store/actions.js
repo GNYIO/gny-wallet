@@ -103,7 +103,6 @@ export const actions = {
       const isIssuer = await connection.api.Uia.isIssuer(state.user.address);
       if (isIssuer.success === true) {
         commit('setIsIssuer', isIssuer.isIssuer);
-        console.log(`isIssuer: ${isIssuer.isIssuer}`);
       }
     } catch (err) {
       Notification({

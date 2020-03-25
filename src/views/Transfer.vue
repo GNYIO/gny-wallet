@@ -138,7 +138,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['user', 'passphrase']),
+    ...mapState(['user', 'passphrase', 'secondPassphrase']),
     ...mapGetters(['positiveBalance']),
   },
   methods: {
@@ -157,10 +157,9 @@ export default {
           this.form.amount * 1e8,
           this.form.message,
           this.passphrase,
+          this.secondPassphrase,
         );
-        if (result.success) {
-          this.$message(`Transaction id: ${result.transactionId}`);
-        }
+        this.$message(result.transactionId);
       } catch (error) {
         console.log(error);
       }

@@ -20,7 +20,10 @@
                 content="Example: AAA"
                 placement="top-start"
               >
-                <el-input v-model="registerIssuerForm.name"></el-input>
+                <el-input
+                  v-model="registerIssuerForm.name"
+                  :disabled="alreayRegisteredIssuer"
+                ></el-input>
               </el-tooltip>
             </el-form-item>
             <el-form-item label="Desc." prop="description">
@@ -29,7 +32,10 @@
                 content="Description"
                 placement="top-start"
               >
-                <el-input v-model="registerIssuerForm.description"></el-input>
+                <el-input
+                  v-model="registerIssuerForm.description"
+                  :disabled="alreayRegisteredIssuer"
+                ></el-input>
               </el-tooltip>
             </el-form-item>
             <el-form-item>
@@ -87,30 +93,49 @@
           <el-form
             :ref="createAssetsForm"
             :model="createAssetsForm"
+            :rules="createAssetsFormRules"
             label-width="80px"
           >
-            <el-form-item label="Name">
+            <el-form-item label="Name" prop="name">
               <el-tooltip
                 effect="light"
-                content="Asset name e.g. AAA"
+                content="Asset name e.g. BBB"
                 placement="top-start"
               >
                 <el-input v-model="createAssetsForm.name"></el-input>
               </el-tooltip>
             </el-form-item>
-            <el-form-item label="Desc.">
-              <el-input v-model="createAssetsForm.desc"></el-input>
+            <el-form-item label="Desc." prop="desc">
+              <el-tooltip
+                effect="light"
+                content="Description"
+                placement="top-start"
+              >
+                <el-input v-model="createAssetsForm.desc"></el-input>
+              </el-tooltip>
             </el-form-item>
-            <el-form-item label="Precision">
-              <el-input-number
-                v-model="createAssetsForm.precision"
-                :min="1"
-                :max="10"
-                style="float: left;"
-              ></el-input-number>
+            <el-form-item label="Prec." prop="precision">
+              <el-tooltip
+                effect="light"
+                content="Precision"
+                placement="top-start"
+              >
+                <el-input-number
+                  v-model="createAssetsForm.precision"
+                  :min="1"
+                  :max="16"
+                  style="float: left;"
+                ></el-input-number>
+              </el-tooltip>
             </el-form-item>
-            <el-form-item label="Maximum">
-              <el-input v-model="createAssetsForm.maximum"></el-input>
+            <el-form-item label="Maximum" prop="maximum">
+              <el-tooltip
+                effect="light"
+                content="Maximum"
+                placement="top-start"
+              >
+                <el-input v-model="createAssetsForm.maximum"></el-input>
+              </el-tooltip>
             </el-form-item>
             <el-form-item>
               <el-button
@@ -118,6 +143,9 @@
                 style="float: left;"
                 type="primary"
                 >Create Asset</el-button
+              >
+              <el-button @click="resetCreateAssetsForm" style="float: left;"
+                >Reset</el-button
               >
             </el-form-item>
           </el-form>
@@ -225,6 +253,7 @@ export default {
   data() {
     return {
       alreayRegisteredIssuer: false,
+
       registerIssuerForm: {
         name: '',
         description: '',
@@ -239,7 +268,7 @@ export default {
           {
             type: 'string',
             pattern: /^[A-Za-z]{1,16}$/,
-            trigger: 'blur',
+            trigger: 'change',
           },
         ],
         description: [
@@ -254,12 +283,59 @@ export default {
             trigger: 'blur',
           },
         ],
+        maximum: [
+          {
+            required: true,
+            message: 'Please add a maximum',
+            trigger: 'blur',
+          },
+        ],
       },
       createAssetsForm: {
         name: '',
         description: '',
         precision: 8,
         maximum: 1000000 * 1e8,
+      },
+      createAssetsFormRules: {
+        name: [
+          {
+            required: true,
+            message: 'Please add a name',
+            trigger: 'blur',
+          },
+          {
+            type: 'string',
+            pattern: /^[A-Z]{3,6}$/,
+            trigger: 'change',
+          },
+        ],
+        desc: [
+          {
+            required: true,
+            message: 'Please add a description',
+            trigger: 'blur',
+          },
+          {
+            max: 4096,
+            message: 'Length should not be longer than 4096',
+            trigger: 'blur',
+          },
+        ],
+        precision: [
+          {
+            required: true,
+            message: 'Please add a precision',
+            trigger: 'blur',
+          },
+        ],
+        maximum: [
+          {
+            required: true,
+            message: 'Please add a maximum',
+            trigger: 'blur',
+          },
+        ],
       },
       issueAssetsForm: {
         currency: '',
@@ -268,7 +344,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['isIssuer', 'issuer', 'passphrase']),
+    ...mapState(['isIssuer', 'issuer', 'passphrase', 'secondPassphrase']),
     ...mapGetters(['ownAssets', 'prettyBalances', 'positiveBalance']),
   },
   methods: {
@@ -281,6 +357,7 @@ export default {
           name,
           description,
           this.passphrase,
+          this.secondPassphrase,
         );
 
         this.$message(trs.transactionId);
@@ -290,6 +367,15 @@ export default {
       }
     },
     async createAsset() {
+      try {
+        await this.$refs['createAssetsForm'].validate();
+      } catch (err) {
+        console.log(
+          `validation for createAssetsForm failed, error: ${err.message}`,
+        );
+        return;
+      }
+
       try {
         const name = this.createAssetsForm.name;
         const description = this.createAssetsForm.description;
@@ -302,12 +388,20 @@ export default {
           maximum,
           precision,
           this.passphrase,
+          this.secondPassphrase,
         );
 
-        await connection.api.Transport.sendTransaction(trs);
+        console.log(`after createAsset: ${JSON.stringify(trs, null, 2)}`);
+        if (trs.transactionId) {
+          this.$message(trs.transactionId);
+          this.$refs['createAssetsForm'].resetFields();
+        }
       } catch (err) {
         console.log(err.response && err.response.data);
       }
+    },
+    resetCreateAssetsForm() {
+      this.$refs['createAssetsForm'].resetFields();
     },
     async issueAsset() {
       try {
@@ -316,11 +410,13 @@ export default {
         const precision = Math.pow(10, this.issueAssetsForm.currency.precision);
         const amount = String(this.issueAssetsForm.amount * precision);
 
-        console.log(`currency: ${currency}, amount: ${amount}`);
-
-        const trs = client.uia.issue(currency, amount, this.passphrase);
-
-        await connection.api.Transport.sendTransaction(trs);
+        const result = connection.contract.Uia.issueAsset(
+          currency,
+          amount,
+          this.passphrase,
+          this.secondPassphrase,
+        );
+        this.$message(result.transactionId);
       } catch (err) {
         console.log(err.response && err.response.data);
       }
