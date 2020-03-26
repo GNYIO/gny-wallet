@@ -21,6 +21,13 @@
           <p v-if="user.lockHeight !== '0'">
             Lock Height: <b>{{ user.lockHeight }}</b>
           </p>
+          <p v-if="user.secondPublicKey">
+            Has Second Secret:
+            <b>{{ user.secondPublicKey === null ? 'No' : 'Yes' }}</b>
+          </p>
+          <p v-if="user.secondPublicKey">
+            Second PublicKey: <b>{{ user.secondPublicKey }}</b>
+          </p>
         </el-card>
       </el-col>
 
@@ -61,7 +68,9 @@
           </el-form>
         </el-card>
       </el-col>
+    </el-row>
 
+    <el-row :gutter="20" v-if="user.lockHeight === '0'">
       <el-col :span="12">
         <el-card v-if="!positiveBalance">
           <div>
@@ -105,9 +114,7 @@
           </el-form>
         </el-card>
       </el-col>
-    </el-row>
 
-    <el-row :gutter="20" v-if="user.lockHeight === '0'">
       <el-col :span="12">
         <el-card v-if="!positiveBalance">
           <div>
@@ -128,7 +135,12 @@
               <el-input v-model="lockAccountForm.lockAmount"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button @click="lockAccount">Lock Account</el-button>
+              <el-button
+                type="primary"
+                @click="lockAccount"
+                style="float: left;"
+                >Lock Account</el-button
+              >
             </el-form-item>
           </el-form>
         </el-card>
@@ -143,7 +155,8 @@
   </div>
 </template>
 
-<script scoped>
+<script>
+import * as Cookie from 'tiny-cookie';
 import { mapState, mapGetters } from 'vuex';
 import TransactionsPaged from './TransactionsPaged';
 
@@ -235,14 +248,20 @@ export default {
       }
 
       try {
+        const secondPassphrase = this.secondPassphraseForm.secondPassphrase;
         const result = await connection.contract.Basic.setSecondPassphrase(
           this.passphrase,
-          this.secondPassphraseForm.secondPassphrase,
+          secondPassphrase,
         );
         this.$message(result.transactionId);
 
-        // TODO set
+        // disable button and input
         this.isSecondPassphrase = true;
+
+        // set cookie
+        Cookie.set('bip39Second', secondPassphrase);
+        await this.$store.dispatch('setSecondPassphrase', secondPassphrase);
+        await this.$store.dispatch('refreshAccounts');
       } catch (err) {
         console.log(err);
       }

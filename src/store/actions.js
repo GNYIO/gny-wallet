@@ -28,6 +28,7 @@ export const actions = {
     try {
       const keys = getKeys(state.passphrase);
       const response = await connection.api.Account.openAccount(keys.publicKey);
+      console.log(`accounts: ${JSON.stringify(response, null, 2)}`);
       commit('setUser', response.account);
       commit('setLatestBlock', response.latestBlock);
     } catch (err) {

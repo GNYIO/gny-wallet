@@ -333,11 +333,16 @@ export default {
       this.$refs['unvoteForm'].resetFields();
     },
     async registerAsDelegate() {
-      const result = await connection.contract.Basic.registerDelegate(
-        this.passphrase,
-        this.secondPassphrase,
-      );
-      this.$message(result.transactionId);
+      try {
+        const result = await connection.contract.Basic.registerDelegate(
+          this.passphrase,
+          this.secondPassphrase,
+        );
+        this.$message(result.transactionId);
+      } catch (err) {
+        console.log(err.message);
+        console.log(err.response && err.response.data);
+      }
     },
   },
   async mounted() {

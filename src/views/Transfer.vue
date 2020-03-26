@@ -32,7 +32,11 @@
             </el-form-item>
 
             <el-form-item label="Amount" prop="amount" required>
-              <el-tooltip effect="light" content="Amount" placement="top-start">
+              <el-tooltip
+                effect="light"
+                :content="amountPlaceholder"
+                placement="top-start"
+              >
                 <el-input
                   type="text"
                   v-model="form.amount"
