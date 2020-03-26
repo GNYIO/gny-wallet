@@ -12,23 +12,43 @@
           </div>
           <el-form :model="form" ref="form" :rules="rules" label-width="80px">
             <el-form-item label="From">
-              <el-input v-model="form.from" :disabled="true"></el-input>
+              <el-tooltip
+                effect="light"
+                content="Own Address"
+                placement="top-start"
+              >
+                <el-input v-model="form.from" :disabled="true"></el-input>
+              </el-tooltip>
             </el-form-item>
 
             <el-form-item label="To" prop="to" required>
-              <el-input v-model="form.to"></el-input>
+              <el-tooltip
+                effect="light"
+                content="Address e.g.: GWrAxgXSiZxieGrLWungJqWe4Xws"
+                placement="top-start"
+              >
+                <el-input v-model="form.to"></el-input>
+              </el-tooltip>
             </el-form-item>
 
             <el-form-item label="Amount" prop="amount" required>
-              <el-input
-                type="text"
-                v-model="form.amount"
-                :placeholder="amountPlaceholder"
-              ></el-input>
+              <el-tooltip effect="light" content="Amount" placement="top-start">
+                <el-input
+                  type="text"
+                  v-model="form.amount"
+                  :placeholder="amountPlaceholder"
+                ></el-input>
+              </el-tooltip>
             </el-form-item>
 
             <el-form-item label="Message" prop="message">
-              <el-input v-model="form.message"></el-input>
+              <el-tooltip
+                effect="light"
+                content="Optional message (unencrypted)"
+                placement="top-start"
+              >
+                <el-input v-model="form.message"></el-input>
+              </el-tooltip>
             </el-form-item>
 
             <el-form-item>
@@ -155,11 +175,12 @@ export default {
         const result = await connection.contract.Basic.send(
           this.form.to,
           this.form.amount * 1e8,
-          this.form.message,
           this.passphrase,
+          this.form.message,
           this.secondPassphrase,
         );
         this.$message(result.transactionId);
+        this.$refs['form'].resetFields();
       } catch (error) {
         console.log(error);
       }
