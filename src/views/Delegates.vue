@@ -69,7 +69,10 @@
 
           <el-form ref="form" :model="form">
             <el-form-item>
-              <el-button type="primary" @click="registerAsDelegate"
+              <el-button
+                type="primary"
+                @click="registerAsDelegate"
+                :disabled="alreadyDelegate"
                 >Register as Delegate</el-button
               >
             </el-form-item>
@@ -258,6 +261,8 @@ export default {
   },
   data() {
     return {
+      alreadyDelegate: false,
+
       position: 0,
       form: {},
       voteForm: {
@@ -339,6 +344,8 @@ export default {
           this.secondPassphrase,
         );
         this.$message(result.transactionId);
+
+        this.alreadyDelegate = true;
       } catch (err) {
         console.log(err.message);
         console.log(err.response && err.response.data);
