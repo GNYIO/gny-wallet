@@ -119,7 +119,22 @@
           </div>
 
           <el-table :data="whoIVotedFor" stripe style="width: 100%">
-            <el-table-column prop="username" label="Username"></el-table-column>
+            <el-table-column
+              prop="username"
+              label="Username"
+              width="90"
+            ></el-table-column>
+            <el-table-column
+              prop="rate"
+              label="Rank"
+              width="80"
+            ></el-table-column>
+            <el-table-column prop="address" label="Address"></el-table-column>
+            <el-table-column prop="approval" label="Approval"></el-table-column>
+            <el-table-column
+              prop="productivity"
+              label="Productivity"
+            ></el-table-column>
           </el-table>
         </el-card>
       </el-col>
@@ -307,6 +322,7 @@ export default {
           this.passphrase,
           this.secondPassphrase,
         );
+        console.log(`vote result: ${JSON.stringify(result, null, 2)}`);
         this.$message(result.transactionId);
       } catch (err) {
         console.log(err);

@@ -40,7 +40,7 @@ export const mutations = {
   setTransactions(state, transactions) {
     state.transactions = transactions;
   },
-  setWhoIVotedFor(state, whoIVotedFor) {
+  setOwnVotes(state, whoIVotedFor) {
     state.whoIVotedFor = whoIVotedFor;
   },
   setTransfers(state, transfers) {

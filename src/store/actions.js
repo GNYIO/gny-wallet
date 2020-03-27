@@ -174,19 +174,20 @@ export const actions = {
   },
   async getWhoIVotedFor({ commit, state }) {
     try {
-      const response = await connection.api.Transaction.getTransactions({
-        type: 4,
-        senderId: state.user.address,
-      });
-      if (response.success === true) {
-        const usernames = response.transactions
-          .map(x => JSON.parse(x.args))
-          .map(x => x[0])
-          .map(x => ({
-            username: x,
-          }));
+      const address = state.user.address;
 
-        commit('setWhoIVotedFor', usernames);
+      if (address) {
+        let result = await connection.api.Delegate.getOwnVotes({
+          address,
+        });
+
+        if (result.success === true) {
+          commit('setOwnVotes', result.delegates);
+        } else {
+          commit('setOwnVotes', []);
+        }
+      } else {
+        commit('setOwnVotes', []);
       }
     } catch (err) {
       Notification({

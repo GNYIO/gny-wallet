@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table :data="currentDelegates" stripe style="width: 100%">
-      <el-table-column prop="rate" label="Rate" width="100"></el-table-column>
+      <el-table-column prop="rate" label="Rank" width="100"></el-table-column>
       <el-table-column
         prop="username"
         label="Username"
