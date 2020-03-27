@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :span="24">
+      <el-col :span="18">
         <el-card v-if="!positiveBalance">
           <h3>You have currently no GNY to transfer</h3>
         </el-card>
@@ -48,7 +48,7 @@
             <el-form-item label="Message" prop="message">
               <el-tooltip
                 effect="light"
-                content="Optional message (unencrypted)"
+                content="Optional message (unencrypted) e.g. 'test message'"
                 placement="top-start"
               >
                 <el-input v-model="form.message"></el-input>
@@ -56,10 +56,15 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="sendTransaction"
+              <el-button
+                type="primary"
+                @click="sendTransaction"
+                style="float: left"
                 >Send</el-button
               >
-              <el-button @click="resetForm">Cancel</el-button>
+              <el-button @click="resetForm" style="float: left"
+                >Cancel</el-button
+              >
             </el-form-item>
           </el-form>
         </el-card>
@@ -118,26 +123,6 @@ export default {
       }
     };
 
-    const validateMessage = (rule, value, callback) => {
-      if (value === '' || value === null) {
-        callback();
-      }
-
-      if (typeof value !== 'string') {
-        callback(new Error('message must be a string'));
-      }
-
-      if (value.length > 256) {
-        callback(new Error('max length is 256'));
-      }
-      const regex = /^$|(^[a-zA-Z0-9]{1}[a-zA-Z0-9 ]*[a-zA-Z0-9]{1}$)/;
-      if (regex.test(value)) {
-        callback();
-      } else {
-        callback('wrong message format');
-      }
-    };
-
     return {
       balance: 0,
       amountPlaceholder: '',
@@ -157,7 +142,18 @@ export default {
           { validator: validateAddress, trigger: 'blur' },
         ],
         amount: [{ validator: validateAmount, trigger: 'blur' }],
-        message: [{ validator: validateMessage, trigger: 'blur' }],
+        message: [
+          {
+            max: 256,
+            message: 'Length should not be longer than 256',
+            trigger: 'change',
+          },
+          {
+            type: 'string',
+            pattern: /^$|(^[a-zA-Z0-9]{1}[a-zA-Z0-9 ]*[a-zA-Z0-9]{1}$)/,
+            trigger: 'change',
+          },
+        ],
       },
     };
   },
@@ -168,8 +164,7 @@ export default {
   methods: {
     async sendTransaction() {
       try {
-        const result = await this.$refs['form'].validate();
-        console.log(result);
+        await this.$refs['form'].validate();
       } catch (err) {
         console.log(`err: ${err}`);
         return; // remove TODOO
