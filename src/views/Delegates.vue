@@ -167,33 +167,43 @@
             ref="voteForm"
             :model="voteForm"
             :rules="voteFormRules"
-            label-width="80"
+            label-width="80px"
           >
-            <el-form-item label="Delegates" prop="delegates">
-              <el-select
-                placeholder="select multiple delegates"
-                clearable
-                multiple
-                v-model="voteForm.delegates"
-                style="float: left; width:80%"
+            <el-form-item label="Del." prop="delegates">
+              <el-tooltip
+                effect="light"
+                content="Delegates to vote for"
+                placement="top-start"
               >
-                <el-option
-                  v-for="item in delegatesForWhichIHaveNotVotedYet"
-                  :key="item.username"
-                  :label="item.username"
-                  :value="item.username"
+                <el-select
+                  placeholder="select multiple delegates"
+                  clearable
+                  multiple
+                  v-model="voteForm.delegates"
+                  style="float: left; width:80%"
                 >
-                  <span style="float: left">{{ item.username }}</span>
-                  <span style="float: right; margin-right: 2em"
-                    >rank: {{ item.rate }}</span
+                  <el-option
+                    v-for="item in delegatesForWhichIHaveNotVotedYet"
+                    :key="item.username"
+                    :label="item.username"
+                    :value="item.username"
                   >
-                </el-option>
-              </el-select>
+                    <span style="float: left">{{ item.username }}</span>
+                    <span style="float: right; margin-right: 2em"
+                      >rank: {{ item.rate }}</span
+                    >
+                  </el-option>
+                </el-select>
+              </el-tooltip>
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="vote">Vote</el-button>
-              <el-button @click="resetVoteForm">Reset</el-button>
+              <el-button type="primary" @click="vote" style="float: left"
+                >Vote</el-button
+              >
+              <el-button @click="resetVoteForm" style="float: left"
+                >Reset</el-button
+              >
             </el-form-item>
           </el-form>
         </el-card>
@@ -210,33 +220,43 @@
             ref="unvoteForm"
             :model="unvoteForm"
             :rules="unvoteFormRules"
-            label-width="80"
+            label-width="80px"
           >
-            <el-form-item label="Delegates" prop="delegates">
-              <el-select
-                placeholder="select multiple delegates"
-                clearable
-                multiple
-                v-model="unvoteForm.delegates"
-                style="float: left; width:80%"
+            <el-form-item label="Del." prop="delegates">
+              <el-tooltip
+                effect="light"
+                content="Delegates to unvote"
+                placement="top-start"
               >
-                <el-option
-                  v-for="item in whoIVotedFor"
-                  :key="item.username"
-                  :label="item.username"
-                  :value="item.username"
+                <el-select
+                  placeholder="select multiple delegates"
+                  clearable
+                  multiple
+                  v-model="unvoteForm.delegates"
+                  style="float: left; width:80%"
                 >
-                  <span style="float: left">{{ item.username }}</span>
-                  <span style="float: right; margin-right: 2em"
-                    >rank: {{ item.rate }}</span
+                  <el-option
+                    v-for="item in whoIVotedFor"
+                    :key="item.username"
+                    :label="item.username"
+                    :value="item.username"
                   >
-                </el-option>
-              </el-select>
+                    <span style="float: left">{{ item.username }}</span>
+                    <span style="float: right; margin-right: 2em"
+                      >rank: {{ item.rate }}</span
+                    >
+                  </el-option>
+                </el-select>
+              </el-tooltip>
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="unvote">Unvote</el-button>
-              <el-button @click="resetUnvoteForm">Unvote</el-button>
+              <el-button type="primary" @click="unvote" style="float: left"
+                >Unvote</el-button
+              >
+              <el-button @click="resetUnvoteForm" style="float: left"
+                >Unvote</el-button
+              >
             </el-form-item>
           </el-form>
         </el-card>
@@ -388,6 +408,10 @@ export default {
 </script>
 
 <style scoped>
+.item {
+  padding: 18px 18px;
+}
+
 .el-row {
   margin-bottom: 20px;
 }
