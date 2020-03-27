@@ -127,18 +127,42 @@
             Lock your account
           </div>
 
-          <el-form :ref="lockAccountForm" label-width="80px">
-            <el-form-item label="height">
-              <el-input v-model="lockAccountForm.lockHeight"></el-input>
+          <el-form
+            ref="lockAccountForm"
+            :model="lockAccountForm"
+            label-width="80px"
+            :rules="lockAccountFormRules"
+          >
+            <el-form-item label="height" prop="lockHeight">
+              <el-tooltip
+                effect="light"
+                content="Hide amount until lock height"
+                placement="top-start"
+              >
+                <el-input
+                  v-model="lockAccountForm.lockHeight"
+                  :disabled="isLocked"
+                ></el-input>
+              </el-tooltip>
             </el-form-item>
-            <el-form-item label="amount">
-              <el-input v-model="lockAccountForm.lockAmount"></el-input>
+            <el-form-item label="amount" prop="lockAmount">
+              <el-tooltip
+                effect="light"
+                content="Amount to lock"
+                placement="top-start"
+              >
+                <el-input
+                  v-model="lockAccountForm.lockAmount"
+                  :disabled="isLocked"
+                ></el-input>
+              </el-tooltip>
             </el-form-item>
             <el-form-item>
               <el-button
                 type="primary"
                 @click="lockAccount"
                 style="float: left;"
+                :disabled="isLocked"
                 >Lock Account</el-button
               >
             </el-form-item>
@@ -159,6 +183,7 @@
 import * as Cookie from 'tiny-cookie';
 import { mapState, mapGetters } from 'vuex';
 import TransactionsPaged from './TransactionsPaged';
+import { BigNumber } from 'bignumber.js';
 
 import * as client from '@gny/client';
 const connection = new client.Connection(
@@ -172,9 +197,27 @@ export default {
     TransactionsPaged,
   },
   data() {
+    const validateBlockHeight = (rule, value, callback) => {
+      try {
+        const minLockHeight = new BigNumber(this.minLockHeight);
+        if (minLockHeight.isLessThan(value)) {
+          callback();
+        } else {
+          callback(
+            new Error(`Lock height must be greater than ${this.minLockHeight}`),
+          );
+        }
+      } catch (err) {
+        callback(
+          new Error(`Lock height must be greater than ${this.minLockHeight}`),
+        );
+      }
+    };
+
     return {
       hasUsername: false,
       isSecondPassphrase: false,
+      isLocked: false,
 
       placeholder: '',
       usernameForm: {
@@ -209,14 +252,42 @@ export default {
       },
 
       lockAccountForm: {
-        lockHeight: '0',
-        lockAmount: '0',
+        lockHeight: '',
+        lockAmount: '',
+      },
+      lockAccountFormRules: {
+        lockHeight: [
+          {
+            required: true,
+            message: 'Please add a lockHeight',
+            trigger: 'change',
+          },
+          {
+            pattern: /^[1-9][0-9]*$/,
+            trigger: 'change',
+          },
+          {
+            validator: validateBlockHeight,
+            trigger: 'change',
+          },
+        ],
+        lockAmount: [
+          {
+            required: true,
+            message: 'Please add a lockAmount',
+            trigger: 'change',
+          },
+          {
+            pattern: /^[1-9][0-9]*$/,
+            trigger: 'change',
+          },
+        ],
       },
     };
   },
   computed: {
     ...mapState(['user', 'passphrase', 'secondPassphrase']),
-    ...mapGetters(['positiveBalance', 'hasSecondPassphrase']),
+    ...mapGetters(['positiveBalance', 'hasSecondPassphrase', 'minLockHeight']),
   },
   methods: {
     async setUsername() {
@@ -268,6 +339,14 @@ export default {
     },
     async lockAccount() {
       try {
+        await this.$refs['lockAccountForm'].validate();
+      } catch (err) {
+        console.log(err);
+        console.log('Validation for lockAccountForm failed');
+        return;
+      }
+
+      try {
         const height = this.lockAccountForm.lockHeight;
         const amount = this.lockAccountForm.lockAmount * 1e8;
 
@@ -278,6 +357,7 @@ export default {
           this.secondPassphrase,
         );
         this.$message(result.transactionId);
+        this.isLocked = true;
       } catch (err) {
         console.log(err.message);
       }
