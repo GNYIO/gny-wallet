@@ -96,7 +96,7 @@
             <span>Who voted for me</span>
           </div>
 
-          <el-table :data="myVoters" stripe style="width: 100%">
+          <el-table :data="myVoters" stripe style="width: 100%" :height="250">
             <el-table-column
               prop="lockAmount"
               label="Lock Amount"
@@ -118,7 +118,12 @@
             Who I voted for
           </div>
 
-          <el-table :data="whoIVotedFor" stripe style="width: 100%">
+          <el-table
+            :data="whoIVotedFor"
+            stripe
+            style="width: 100%"
+            :height="250"
+          >
             <el-table-column
               prop="username"
               label="Username"
@@ -173,7 +178,7 @@
                 style="float: left; width:80%"
               >
                 <el-option
-                  v-for="item in allDelegateNames"
+                  v-for="item in delegatesForWhichIHaveNotVotedYet"
                   :key="item.username"
                   :label="item.username"
                   :value="item.username"
@@ -216,7 +221,7 @@
                 style="float: left; width:80%"
               >
                 <el-option
-                  v-for="item in allDelegateNames"
+                  v-for="item in whoIVotedFor"
                   :key="item.username"
                   :label="item.username"
                   :value="item.username"
@@ -272,7 +277,7 @@ export default {
       'allDelegateNames',
       'whoIVotedFor',
     ]),
-    ...mapGetters(['prettyDelegates']),
+    ...mapGetters(['prettyDelegates', 'delegatesForWhichIHaveNotVotedYet']),
   },
   data() {
     return {
@@ -317,13 +322,14 @@ export default {
       }
 
       try {
-        const result = connection.contract.Basic.vote(
+        const result = await connection.contract.Basic.vote(
           this.voteForm.delegates,
           this.passphrase,
           this.secondPassphrase,
         );
-        console.log(`vote result: ${JSON.stringify(result, null, 2)}`);
         this.$message(result.transactionId);
+
+        this.$refs['voteForm'].resetFields();
       } catch (err) {
         console.log(err);
       }
@@ -346,6 +352,8 @@ export default {
           this.secondPassphrase,
         );
         this.$message(result.transactionId);
+
+        this.$refs['unvoteForm'].resetFields();
       } catch (err) {
         console.log(err);
       }

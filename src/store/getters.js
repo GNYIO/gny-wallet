@@ -20,6 +20,15 @@ export const getters = {
     return delegates;
   },
   delegatesCount: state => state.allDelegateNames.length,
+  delegatesForWhichIHaveNotVotedYet: state => {
+    const alreadyVotedFor = state.whoIVotedFor.map(x => x.username);
+
+    const delegates = state.allDelegateNames.filter(
+      x => !alreadyVotedFor.includes(x.username),
+    );
+
+    return delegates;
+  },
   transactionsNewestFirst: state => {
     const copy = [];
     copy.push(...state.transactions);
