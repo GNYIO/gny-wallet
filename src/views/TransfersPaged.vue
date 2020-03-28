@@ -2,7 +2,7 @@
   <div>
     <el-card>
       <div slot="header">
-        Past Transfers
+        Past GNY Transfers
       </div>
       <el-table
         :data="currentTransfers"
@@ -35,7 +35,7 @@
           :current-page="currentPage"
           :page-size="10"
           layout="prev, pager, next"
-          :total="transfersCount"
+          :total="gnyTransfersPrettyCount"
         ></el-pagination>
       </div>
     </el-card>
@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     ...mapState(['user']),
-    ...mapGetters(['transfersPretty', 'transfersCount']),
+    ...mapGetters(['gnyTransfersPretty', 'gnyTransfersPrettyCount']),
   },
   data() {
     return {
@@ -64,7 +64,7 @@ export default {
   methods: {
     handleCurrentChange(currentPage) {
       this.currentPage = currentPage;
-      this.changePage(this.transfersPretty, currentPage);
+      this.changePage(this.gnyTransfersPretty, currentPage);
     },
     changePage(list, currentPage) {
       let from = (currentPage - 1) * this.pageSize;

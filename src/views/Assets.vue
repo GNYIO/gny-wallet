@@ -238,6 +238,13 @@
       </el-col>
     </el-row>
 
+    <!-- own asset transfers -->
+    <el-row :gutter="20">
+      <el-col :span="24">
+        <AssetsOwnTransfers></AssetsOwnTransfers>
+      </el-col>
+    </el-row>
+
     <!-- all assets -->
     <el-row :gutter="20">
       <el-col :span="24">
@@ -251,6 +258,7 @@
 import { mapState, mapGetters } from 'vuex';
 import AssetsPaged from './AssetsPaged';
 import AssetTransfer from './AssetTransfer';
+import AssetsOwnTransfers from './AssetsOwnTransfers';
 import { BigNumber } from 'bignumber.js';
 
 import * as client from '@gny/client';
@@ -264,6 +272,7 @@ export default {
   components: {
     AssetsPaged,
     AssetTransfer,
+    AssetsOwnTransfers,
   },
   data() {
     const validateIssueAmount = (rule, value, callback) => {

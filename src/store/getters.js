@@ -35,6 +35,7 @@ export const getters = {
     return copy.reverse();
   },
   transactionsCount: state => state.transactions.length,
+
   transfersPretty: state => {
     const transfers = state.transfers.map(transfer => ({
       tid: transfer.tid,
@@ -49,6 +50,17 @@ export const getters = {
     return transfers;
   },
   transfersCount: state => state.transfers.length,
+
+  gnyTransfersPretty: (state, getters) =>
+    getters.transfersPretty.filter(x => x.currency === 'GNY'),
+  gnyTransfersPrettyCount: (state, getters) =>
+    getters.gnyTransfersPretty.length,
+
+  assetTransfersPretty: (state, getters) =>
+    getters.transfersPretty.filter(x => x.currency !== 'GNY'),
+  assetTransfersPrettyCount: (state, getters) =>
+    getters.assetTransfersPretty.length,
+
   prettyAssets: state => {
     const assets = state.assets.map(asset => {
       const prec = Math.pow(10, asset.precision);
