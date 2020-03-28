@@ -5,9 +5,13 @@
         All Assets (from all users)
       </div>
       <el-table :data="currentAssets" stripe style="width: 100%">
-        <el-table-column prop="name" label="Name"> </el-table-column>
-        <el-table-column prop="precision" label="Precision"> </el-table-column>
-        <el-table-column prop="maximumPretty" label="Maximum">
+        <el-table-column prop="name" label="Name" width="100"></el-table-column>
+        <el-table-column
+          prop="precision"
+          label="Precision"
+          width="120"
+        ></el-table-column>
+        <el-table-column prop="maximumPretty" label="Maximum" width="150">
         </el-table-column>
         <el-table-column prop="quantityPretty" label="Already Issued Quantity">
         </el-table-column>
