@@ -162,36 +162,44 @@
             label-position="left"
             ref="issueAssetsForm"
             :model="issueAssetsForm"
+            :rules="issueAssetsFormRules"
             label-width="80px"
           >
-            <el-form-item label="Asset">
-              <el-select
-                placeholder="select currency"
-                clearable
-                v-model="issueAssetsForm.currency"
-                style="float: left; width:80%"
+            <el-form-item label="Asset" prop="currency">
+              <el-tooltip
+                effect="light"
+                content="Select Asset to issue"
+                placement="top-start"
               >
-                <el-option
-                  v-for="item in ownAssets"
-                  :key="item.name"
-                  :label="item.name"
-                  :value="item.name"
+                <el-select
+                  placeholder="select currency"
+                  clearable
+                  v-model="issueAssetsForm.currency"
+                  style="float: left; width:80%"
                 >
-                  <span style="float: left">{{ item.name }}</span>
-                  <span style="float: right; margin-right: 2em">{{
-                    item.desc
-                  }}</span>
-                </el-option>
-              </el-select>
+                  <el-option
+                    v-for="item in ownAssets"
+                    :key="item.name"
+                    :label="item.name"
+                    :value="item.name"
+                  >
+                    <span style="float: left">{{ item.name }}</span>
+                    <span style="float: right; margin-right: 2em">{{
+                      item.desc
+                    }}</span>
+                  </el-option>
+                </el-select>
+              </el-tooltip>
             </el-form-item>
 
-            <el-form-item label="Amount">
-              <el-input-number
-                v-model="issueAssetsForm.amount"
-                style="float: left; width: 300px"
-                :min="0"
+            <el-form-item label="Amount" prop="amount">
+              <el-tooltip
+                effect="light"
+                content="Issue amount"
+                placement="top-start"
               >
-              </el-input-number>
+                <el-input v-model="issueAssetsForm.amount"></el-input>
+              </el-tooltip>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="issueAsset" style="float: left;"
@@ -337,9 +345,24 @@ export default {
           },
         ],
       },
+
       issueAssetsForm: {
         currency: '',
         amount: '',
+      },
+      issueAssetsFormRules: {
+        currency: [
+          {
+            required: true,
+            message: 'A currency is required',
+          },
+        ],
+        amount: [
+          {
+            required: true,
+            message: 'A amount is required',
+          },
+        ],
       },
     };
   },
@@ -404,6 +427,15 @@ export default {
     },
     async issueAsset() {
       try {
+        await this.$refs['issueAssetsForm'].validate();
+      } catch (err) {
+        console.log(
+          `validation for issueAssetsForm failed, error: ${err.message}`,
+        );
+        return;
+      }
+
+      try {
         const currency = this.issueAssetsForm.currency;
 
         const precision = Math.pow(10, this.issueAssetsForm.currency.precision);
@@ -415,7 +447,11 @@ export default {
           this.passphrase,
           this.secondPassphrase,
         );
-        this.$message(result.transactionId);
+
+        if (result.transactionId) {
+          this.$message(result.transactionId);
+          this.$refs['issueAssetsForm'].resetFields();
+        }
       } catch (err) {
         console.log(err.response && err.response.data);
       }
