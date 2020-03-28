@@ -198,12 +198,18 @@
                 content="Issue amount"
                 placement="top-start"
               >
-                <el-input v-model="issueAssetsForm.amount"></el-input>
+                <el-input
+                  v-model="issueAssetsForm.amount"
+                  :disabled="issueAssetsForm.currency === ''"
+                ></el-input>
               </el-tooltip>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="issueAsset" style="float: left;"
                 >Issue Asset</el-button
+              >
+              <el-button @click="resetIssueAsset" style="float: left"
+                >Reset</el-button
               >
             </el-form-item>
           </el-form>
@@ -245,6 +251,7 @@
 import { mapState, mapGetters } from 'vuex';
 import AssetsPaged from './AssetsPaged';
 import AssetTransfer from './AssetTransfer';
+import { BigNumber } from 'bignumber.js';
 
 import * as client from '@gny/client';
 const connection = new client.Connection(
@@ -259,6 +266,34 @@ export default {
     AssetTransfer,
   },
   data() {
+    const validateIssueAmount = (rule, value, callback) => {
+      try {
+        if (!value) {
+          callback(new Error('no value'));
+        }
+
+        const selectedCurrency = this.issueAssetsForm.currency;
+        if (!selectedCurrency) {
+          callback();
+        }
+
+        const leftToIssueRaw = this.ownAssets.filter(
+          x => x.name === selectedCurrency,
+        )[0].leftToIssuePretty;
+
+        const leftToIssue = new BigNumber(leftToIssueRaw);
+        const amount = new BigNumber(value);
+
+        if (amount.isGreaterThan(leftToIssue)) {
+          callback(`you can issue maximal ${leftToIssue}`);
+        } else {
+          callback();
+        }
+      } catch (err) {
+        callback(new Error('test'));
+      }
+    };
+
     return {
       alreayRegisteredIssuer: false,
 
@@ -362,6 +397,14 @@ export default {
             required: true,
             message: 'A amount is required',
           },
+          {
+            pattern: /^[1-9][0-9]*$/,
+            trigger: 'change',
+          },
+          {
+            validator: validateIssueAmount,
+            trigger: 'change',
+          },
         ],
       },
     };
@@ -437,24 +480,29 @@ export default {
 
       try {
         const currency = this.issueAssetsForm.currency;
+        const precisionRaw = this.ownAssets.filter(x => x.name === currency)[0]
+          .precision;
+        const precision = Math.pow(10, precisionRaw);
 
-        const precision = Math.pow(10, this.issueAssetsForm.currency.precision);
-        const amount = String(this.issueAssetsForm.amount * precision);
+        const amount = new BigNumber(this.issueAssetsForm.amount)
+          .times(precision)
+          .toFixed();
 
-        const result = connection.contract.Uia.issueAsset(
+        const result = await connection.contract.Uia.issueAsset(
           currency,
           amount,
           this.passphrase,
           this.secondPassphrase,
         );
 
-        if (result.transactionId) {
-          this.$message(result.transactionId);
-          this.$refs['issueAssetsForm'].resetFields();
-        }
+        this.$message(result.transactionId);
+        this.$refs['issueAssetsForm'].resetFields();
       } catch (err) {
         console.log(err.response && err.response.data);
       }
+    },
+    resetIssueAsset() {
+      this.$refs['issueAssetsForm'].resetFields();
     },
   },
   async mounted() {
