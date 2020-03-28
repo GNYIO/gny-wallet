@@ -9,7 +9,7 @@
         <el-card v-if="positiveBalance">
           <div slot="header">Register as Issuer</div>
           <el-form
-            :ref="registerIssuerForm"
+            ref="registerIssuerForm"
             :model="registerIssuerForm"
             :rules="registerIssuerFormRules"
             label-width="80px"
@@ -91,7 +91,7 @@
           </div>
 
           <el-form
-            :ref="createAssetsForm"
+            ref="createAssetsForm"
             :model="createAssetsForm"
             :rules="createAssetsFormRules"
             label-width="80px"
@@ -160,7 +160,7 @@
 
           <el-form
             label-position="left"
-            :ref="issueAssetsForm"
+            ref="issueAssetsForm"
             :model="issueAssetsForm"
             label-width="80px"
           >
@@ -293,7 +293,7 @@ export default {
       },
       createAssetsForm: {
         name: '',
-        description: '',
+        desc: '',
         precision: 8,
         maximum: 1000000 * 1e8,
       },
@@ -378,13 +378,13 @@ export default {
 
       try {
         const name = this.createAssetsForm.name;
-        const description = this.createAssetsForm.description;
+        const desc = this.createAssetsForm.desc;
         const maximum = String(this.createAssetsForm.maximum);
         const precision = Number(this.createAssetsForm.precision);
 
         const trs = await connection.contract.Uia.registerAsset(
           name,
-          description,
+          desc,
           maximum,
           precision,
           this.passphrase,
