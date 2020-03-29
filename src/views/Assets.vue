@@ -516,6 +516,8 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('refreshAccounts');
+    await this.$store.dispatch('getTransfers');
+
     await this.$store.dispatch('refreshIsIssuer');
     await this.$store.dispatch('getIssuer');
     await this.$store.dispatch('getAssets');

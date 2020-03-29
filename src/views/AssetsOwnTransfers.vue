@@ -1,20 +1,31 @@
 <template>
   <el-card>
     <div slot="header">
-      Past Own Asset Transfers
+      Past Own Asset Transfers ({{ assetTransfersPrettyCount }})
     </div>
 
     <el-table
-      stripe
-      :data="assetTransfersPretty"
+      :data="currentTransfers"
       style="width: 100%"
       :row-class-name="tableRowClassName"
     >
       <el-table-column prop="senderId" label="Sender"></el-table-column>
       <el-table-column prop="recipientId" label="Recipient"></el-table-column>
-      <el-table-column prop="currency" label="Currency"></el-table-column>
-      <el-table-column prop="amount" label="Amount"></el-table-column>
-      <el-table-column prop="height" label="Height"></el-table-column>
+      <el-table-column
+        prop="currency"
+        label="Currency"
+        width="150"
+      ></el-table-column>
+      <el-table-column
+        prop="amount"
+        label="Amount"
+        width="150"
+      ></el-table-column>
+      <el-table-column
+        prop="height"
+        label="Height"
+        width="150"
+      ></el-table-column>
       <el-table-column prop="message" label="message"></el-table-column>
     </el-table>
     <div class="block">

@@ -189,8 +189,8 @@ export default {
     },
   },
   async mounted() {
-    await this.$store.dispatch('getTransfers');
     await this.$store.dispatch('refreshAccounts');
+    await this.$store.dispatch('getTransfers');
 
     this.form.from = this.$store.state.user.address;
     this.amountPlaceholder = `You have ${this.user.balance /
