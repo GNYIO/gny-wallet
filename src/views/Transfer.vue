@@ -56,13 +56,23 @@
             </el-form-item>
 
             <el-form-item>
+              <div style="float: left">
+                <el-badge
+                  value="0.1 GNY"
+                  type="info"
+                  @mouseover.native="hideTransferBadge = false"
+                  @mouseleave.native="hideTransferBadge = true"
+                  :hidden="hideTransferBadge"
+                >
+                  <el-button type="primary" @click="sendTransaction"
+                    >Send</el-button
+                  >
+                </el-badge>
+              </div>
+
               <el-button
-                type="primary"
-                @click="sendTransaction"
-                style="float: left"
-                >Send</el-button
-              >
-              <el-button @click="resetForm" style="float: left"
+                @click="resetForm"
+                style="float: left; margin-left: 10px;"
                 >Cancel</el-button
               >
             </el-form-item>
@@ -124,6 +134,8 @@ export default {
     };
 
     return {
+      hideTransferBadge: true,
+
       balance: 0,
       amountPlaceholder: '',
       form: {
