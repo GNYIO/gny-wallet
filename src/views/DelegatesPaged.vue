@@ -1,11 +1,7 @@
 <template>
   <div>
     <el-table :data="currentDelegates" stripe style="width: 100%">
-      <el-table-column
-        prop="rate"
-        label="Rate"
-        width="100"
-      ></el-table-column>
+      <el-table-column prop="rate" label="Rank" width="100"></el-table-column>
       <el-table-column
         prop="username"
         label="Username"
@@ -26,10 +22,7 @@
         prop="productivity"
         label="Productivity"
       ></el-table-column>
-      <el-table-column
-        prop="approval"
-        label="Approval">
-      </el-table-column>
+      <el-table-column prop="approval" label="Approval"> </el-table-column>
     </el-table>
     <div class="block">
       <el-pagination
@@ -42,7 +35,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import { mapGetters } from 'vuex';
@@ -77,5 +69,5 @@ export default {
   async mounted() {
     this.handleCurrentChange(1);
   },
-}
+};
 </script>

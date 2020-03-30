@@ -1,37 +1,47 @@
 <template>
   <div>
-    <el-select v-model="value" placeholder="Please choose an algorithm">
-      <el-option
-        v-for="item in contracts"
-        :key="item.type"
-        :label="item.label"
-        :value="item.type"
-        :auto-upload="false"
-      ></el-option>
-    </el-select>
+    <el-row :gutter="20">
+      <el-col :span="12">
+        <el-card>
+          <div slot="header">
+            Upload ML Data
+          </div>
 
-    <el-upload
-      class="upload-demo"
-      ref="upload"
-      action="https://testnet.gny.io"
-      :auto-upload="false"
-      :on-change="readFile"
-      :file-list="fileList"
-    >
-      <el-button slot="trigger" size="small" type="primary"
-        >Select a file</el-button
-      >
-      <el-button
-        style="margin-left: 10px;"
-        size="small"
-        type="success"
-        @click="submitUpload"
-        >Upload</el-button
-      >
-      <div slot="tip" class="el-upload__tip">
-        Your file must follow the GNY format.
-      </div>
-    </el-upload>
+          <el-select v-model="value" placeholder="Please choose an algorithm">
+            <el-option
+              v-for="item in contracts"
+              :key="item.type"
+              :label="item.label"
+              :value="item.type"
+              :auto-upload="false"
+            ></el-option>
+          </el-select>
+
+          <el-upload
+            class="upload-demo"
+            ref="upload"
+            action="https://testnet.gny.io"
+            :auto-upload="false"
+            :on-change="readFile"
+            :file-list="fileList"
+          >
+            <el-button slot="trigger" size="small" type="primary"
+              >Select a file</el-button
+            >
+            <el-button
+              style="margin-left: 10px;"
+              size="small"
+              type="success"
+              @click="submitUpload"
+              >Upload</el-button
+            >
+            <div slot="tip" class="el-upload__tip">
+              Your file must follow the GNY format.
+            </div>
+          </el-upload>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -87,8 +97,16 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .el-select {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+}
+
+.el-row {
+  margin-bottom: 20px;
+}
+
+.el-row:last-child {
+  margin-bottom: 0;
 }
 </style>

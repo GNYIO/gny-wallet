@@ -11,7 +11,13 @@ export default {
 </script>
 
 <style>
+/* set font-family for whole project */
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* global background-color for .el-main */
+.el-main {
+  background-color: #f9fafb;
 }
 </style>

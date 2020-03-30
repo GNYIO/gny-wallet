@@ -1,6 +1,6 @@
-
 export const state = {
   passphrase: null,
+  secondPassphrase: null,
   user: null,
   delegate: null,
   isLoggedIn: false,
@@ -20,4 +20,3 @@ export const state = {
   transfers: [],
   balances: [],
 };
-

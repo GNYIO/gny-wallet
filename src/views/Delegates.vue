@@ -69,7 +69,10 @@
 
           <el-form ref="form" :model="form">
             <el-form-item>
-              <el-button type="primary" @click="registerAsDelegate"
+              <el-button
+                type="primary"
+                @click="registerAsDelegate"
+                :disabled="alreadyDelegate"
                 >Register as Delegate</el-button
               >
             </el-form-item>
@@ -77,9 +80,9 @@
         </el-card>
 
         <el-card v-if="user.isDelegate === 0 && user.username === null">
-          <h1>
-            You need to first set your username before registering as Delegate
-          </h1>
+          <h3>
+            Set your username before registering as Delegate
+          </h3>
           <p>Lock your account here:</p>
           <router-link to="/home">Home</router-link>
         </el-card>
@@ -93,7 +96,7 @@
             <span>Who voted for me</span>
           </div>
 
-          <el-table :data="myVoters" stripe style="width: 100%">
+          <el-table :data="myVoters" stripe style="width: 100%" :height="250">
             <el-table-column
               prop="lockAmount"
               label="Lock Amount"
@@ -115,8 +118,28 @@
             Who I voted for
           </div>
 
-          <el-table :data="whoIVotedFor" stripe style="width: 100%">
-            <el-table-column prop="username" label="Username"></el-table-column>
+          <el-table
+            :data="whoIVotedFor"
+            stripe
+            style="width: 100%"
+            :height="250"
+          >
+            <el-table-column
+              prop="username"
+              label="Username"
+              width="90"
+            ></el-table-column>
+            <el-table-column
+              prop="rate"
+              label="Rank"
+              width="80"
+            ></el-table-column>
+            <el-table-column prop="address" label="Address"></el-table-column>
+            <el-table-column prop="approval" label="Approval"></el-table-column>
+            <el-table-column
+              prop="productivity"
+              label="Productivity"
+            ></el-table-column>
           </el-table>
         </el-card>
       </el-col>
@@ -125,7 +148,7 @@
     <el-row :gutter="20">
       <el-col :span="12" v-if="user.lockHeight == 0">
         <el-card>
-          <h1>You can't vote, you need to first lock your account</h1>
+          <h3>You can't vote, you need to first lock your account</h3>
           <span>
             <p>Lock your account here:</p>
             <router-link to="/home">Home</router-link>
@@ -140,37 +163,51 @@
             <span>Vote for Delegates</span>
           </div>
 
-          <el-form ref="voteForm" :model="voteForm" :rules="voteFormRules" label-width="80">
-            <el-form-item label="Delegates" prop="delegates">
-              <el-select
-                placeholder="select multiple delegates"
-                clearable
-                multiple
-                v-model="voteForm.delegates"
-                style="float: left; width:80%"
+          <el-form
+            ref="voteForm"
+            :model="voteForm"
+            :rules="voteFormRules"
+            label-width="80px"
+          >
+            <el-form-item label="Del." prop="delegates">
+              <el-tooltip
+                effect="light"
+                content="Delegates to vote for"
+                placement="top-start"
               >
-                <el-option
-                  v-for="item in allDelegateNames"
-                  :key="item.username"
-                  :label="item.username"
-                  :value="item.username"
+                <el-select
+                  placeholder="select multiple delegates"
+                  clearable
+                  multiple
+                  v-model="voteForm.delegates"
+                  style="float: left; width:80%"
                 >
-                  <span style="float: left">{{ item.username }}</span>
-                  <span style="float: right; margin-right: 2em"
-                    >rank: {{ item.rate }}</span
+                  <el-option
+                    v-for="item in delegatesForWhichIHaveNotVotedYet"
+                    :key="item.username"
+                    :label="item.username"
+                    :value="item.username"
                   >
-                </el-option>
-              </el-select>
+                    <span style="float: left">{{ item.username }}</span>
+                    <span style="float: right; margin-right: 2em"
+                      >rank: {{ item.rate }}</span
+                    >
+                  </el-option>
+                </el-select>
+              </el-tooltip>
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="vote">Vote</el-button>
-              <el-button @click="resetVoteForm">Reset</el-button>
+              <el-button type="primary" @click="vote" style="float: left"
+                >Vote</el-button
+              >
+              <el-button @click="resetVoteForm" style="float: left"
+                >Reset</el-button
+              >
             </el-form-item>
           </el-form>
         </el-card>
       </el-col>
-
 
       <!-- unvote delegates -->
       <el-col :span="12" v-if="user.lockHeight > 0">
@@ -179,38 +216,51 @@
             <span>Unvote Delegates</span>
           </div>
 
-          <el-form ref="unvoteForm" :model="unvoteForm" :rules="unvoteFormRules" label-width="80">
-            <el-form-item label="Delegates" prop="delegates">
-              <el-select
-                placeholder="select multiple delegates"
-                clearable
-                multiple
-                v-model="unvoteForm.delegates"
-                style="float: left; width:80%"
+          <el-form
+            ref="unvoteForm"
+            :model="unvoteForm"
+            :rules="unvoteFormRules"
+            label-width="80px"
+          >
+            <el-form-item label="Del." prop="delegates">
+              <el-tooltip
+                effect="light"
+                content="Delegates to unvote"
+                placement="top-start"
               >
-                <el-option
-                  v-for="item in allDelegateNames"
-                  :key="item.username"
-                  :label="item.username"
-                  :value="item.username"
+                <el-select
+                  placeholder="select multiple delegates"
+                  clearable
+                  multiple
+                  v-model="unvoteForm.delegates"
+                  style="float: left; width:80%"
                 >
-                  <span style="float: left">{{ item.username }}</span>
-                  <span style="float: right; margin-right: 2em"
-                    >rank: {{ item.rate }}</span
+                  <el-option
+                    v-for="item in whoIVotedFor"
+                    :key="item.username"
+                    :label="item.username"
+                    :value="item.username"
                   >
-                </el-option>
-              </el-select>
+                    <span style="float: left">{{ item.username }}</span>
+                    <span style="float: right; margin-right: 2em"
+                      >rank: {{ item.rate }}</span
+                    >
+                  </el-option>
+                </el-select>
+              </el-tooltip>
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="unvote">Unvote</el-button>
-              <el-button @click="resetUnvoteForm">Unvote</el-button>
+              <el-button type="primary" @click="unvote" style="float: left"
+                >Unvote</el-button
+              >
+              <el-button @click="resetUnvoteForm" style="float: left"
+                >Unvote</el-button
+              >
             </el-form-item>
           </el-form>
-
         </el-card>
       </el-col>
-
     </el-row>
 
     <el-row :gutter="20">
@@ -241,15 +291,18 @@ export default {
     ...mapState([
       'user',
       'passphrase',
+      'secondPassphrase',
       'delegate',
       'myVoters',
       'allDelegateNames',
       'whoIVotedFor',
     ]),
-    ...mapGetters(['prettyDelegates']),
+    ...mapGetters(['prettyDelegates', 'delegatesForWhichIHaveNotVotedYet']),
   },
   data() {
     return {
+      alreadyDelegate: false,
+
       position: 0,
       form: {},
       voteForm: {
@@ -257,16 +310,24 @@ export default {
       },
       voteFormRules: {
         delegates: [
-          { required: true, message: 'Please selact at least one delegate', trigger: 'change' }
-        ]
+          {
+            required: true,
+            message: 'Please select at least one delegate',
+            trigger: 'change',
+          },
+        ],
       },
       unvoteForm: {
         delegates: [],
       },
       unvoteFormRules: {
         delegates: [
-          { required: true, message: 'Please selact at least one delegate', trigger: 'change' }
-        ]
+          {
+            required: true,
+            message: 'Please select at least one delegate',
+            trigger: 'change',
+          },
+        ],
       },
       delegates: [],
     };
@@ -276,13 +337,19 @@ export default {
       try {
         await this.$refs['voteForm'].validate();
       } catch (err) {
-        console.log(`validation for voteForm failed`)
+        console.log(`validation for voteForm failed`);
         return;
       }
 
       try {
-        const trs = client.basic.vote(this.voteForm.delegates, this.passphrase);
-        await connection.api.Transport.sendTransaction(trs);
+        const result = await connection.contract.Basic.vote(
+          this.voteForm.delegates,
+          this.passphrase,
+          this.secondPassphrase,
+        );
+        this.$message(result.transactionId);
+
+        this.$refs['voteForm'].resetFields();
       } catch (err) {
         console.log(err);
       }
@@ -299,9 +366,14 @@ export default {
       }
 
       try {
-        const trs = client.basic.unvote(this.unvoteForm.delegates, this.passphrase);
-        const result = await connection.api.Transport.sendTransaction(trs);
+        const result = await connection.contract.Basic.unvote(
+          this.unvoteForm.delegates,
+          this.passphrase,
+          this.secondPassphrase,
+        );
         this.$message(result.transactionId);
+
+        this.$refs['unvoteForm'].resetFields();
       } catch (err) {
         console.log(err);
       }
@@ -311,10 +383,16 @@ export default {
     },
     async registerAsDelegate() {
       try {
-        const trs = client.basic.registerDelegate(this.passphrase);
-        await connection.api.Transport.sendTransaction(trs);
+        const result = await connection.contract.Basic.registerDelegate(
+          this.passphrase,
+          this.secondPassphrase,
+        );
+        this.$message(result.transactionId);
+
+        this.alreadyDelegate = true;
       } catch (err) {
-        console.log(err);
+        console.log(err.message);
+        console.log(err.response && err.response.data);
       }
     },
   },
@@ -330,6 +408,10 @@ export default {
 </script>
 
 <style scoped>
+.item {
+  padding: 18px 18px;
+}
+
 .el-row {
   margin-bottom: 20px;
 }

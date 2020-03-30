@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container direction="vertical" class="page-container">
     <el-header>
       <el-row :gutter="20">
         <el-col :span="6">
@@ -14,49 +14,43 @@
         </el-col>
         <el-col :span="2">
           <div class="grid-content">
-            <el-button @click="logout" type="info" >Logout</el-button>
+            <el-button @click="logout" type="info">Logout</el-button>
           </div>
         </el-col>
       </el-row>
     </el-header>
 
-    <el-container>
-      <el-aside width="200px">
-        <el-menu
-          class="el-menu-vertical"
-          default-active="1"
-          background-color="#545c64"
-          text-color="#fff"
-          active-text-color="#ffd04b"
-          router
-        >
-          <el-menu-item index="1" route="/home">
-            <i class="el-icon-s-home"></i>
-            <span> Home</span>
-          </el-menu-item>
+    <el-container direction="horizontal">
+      <div>
+        <el-aside>
+          <el-menu class="el-menu-vertical" router>
+            <el-menu-item index="1" route="/home">
+              <i class="el-icon-s-home"></i>
+              <span> Home</span>
+            </el-menu-item>
 
-          <el-menu-item index="2" route="/transfer">
-            <i class="el-icon-s-promotion"></i>
-            <span> Transfer</span>
-            <router-link to="/transfer"></router-link>
-          </el-menu-item>
+            <el-menu-item index="2" route="/transfer">
+              <i class="el-icon-s-promotion"></i>
+              <span> Transfer</span>
+            </el-menu-item>
 
-          <el-menu-item index="3" route="/delegates">
-            <i class="el-icon-user-solid"></i>
-            <span> Delegates</span>
-          </el-menu-item>
+            <el-menu-item index="3" route="/delegates">
+              <i class="el-icon-user-solid"></i>
+              <span> Delegates</span>
+            </el-menu-item>
 
-          <el-menu-item index="4" route="/assets">
-            <i class="el-icon-s-order"></i>
-            <span> Assets</span>
-          </el-menu-item>
+            <el-menu-item index="4" route="/assets">
+              <i class="el-icon-s-order"></i>
+              <span> Assets</span>
+            </el-menu-item>
 
-          <el-menu-item index="5" route="/machinelearning">
-            <i class="el-icon-s-platform"></i>
-            <span> Machine Learning</span>
-          </el-menu-item>
-        </el-menu>
-      </el-aside>
+            <el-menu-item index="5" route="/machinelearning">
+              <i class="el-icon-s-platform"></i>
+              <span> Machine Learning</span>
+            </el-menu-item>
+          </el-menu>
+        </el-aside>
+      </div>
 
       <el-main>
         <router-view></router-view>
@@ -86,31 +80,31 @@ export default {
 </script>
 
 <style scoped>
+.page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
 .el-header {
   background-color: #5c89a8;
   color: #fff;
   text-align: justify;
   line-height: 60px;
-  font-family: 'Courier New', Courier, monospace;
 }
 
 .el-aside {
-  background-color: #d3dce6;
-  color: #333;
-  text-align: center;
-  line-height: 200px;
-  height: 100vh;
+  top: 60px;
+  height: 100%;
+  z-index: 100;
+  border-right: solid 1px #e6e6e6;
+  margin: 0px;
+}
+
+.el-aside > * {
+  border-right: solid 0px;
 }
 
 .el-main {
-  background-color: #e9eef3;
-  color: #333;
   text-align: center;
-  font-family: 'Courier New', Courier, monospace;
-}
-
-.el-menu {
-  background-color: #545c64;
-  color: #fff;
 }
 </style>

@@ -20,7 +20,7 @@ const mapping = {
   207: 'ml.fraudDetection',
   208: 'ml.locationPrediction',
   209: 'ml.nlp',
-}
+};
 
 export function contractMappingFilter(contractNumber) {
   if (mapping[contractNumber]) {

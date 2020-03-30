@@ -1,4 +1,3 @@
-
 export const mutations = {
   setToken(state, token) {
     state.token = token;
@@ -21,7 +20,10 @@ export const mutations = {
     state.myVoters = myVoters;
   },
   setPassphrase(state, passphrase) {
-    state.passphrase = passphrase
+    state.passphrase = passphrase;
+  },
+  setSecondPassphrase(state, secondPassphrase) {
+    state.secondPassphrase = secondPassphrase;
   },
   setAllDelegateNames(state, allDelegateNames) {
     state.allDelegateNames = allDelegateNames;
@@ -38,7 +40,7 @@ export const mutations = {
   setTransactions(state, transactions) {
     state.transactions = transactions;
   },
-  setWhoIVotedFor(state, whoIVotedFor) {
+  setOwnVotes(state, whoIVotedFor) {
     state.whoIVotedFor = whoIVotedFor;
   },
   setTransfers(state, transfers) {

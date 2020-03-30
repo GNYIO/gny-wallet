@@ -5,30 +5,19 @@
         All Assets (from all users)
       </div>
       <el-table :data="currentAssets" stripe style="width: 100%">
-        <el-table-column
-          prop="name"
-          label="Name">
-        </el-table-column>
+        <el-table-column prop="name" label="Name" width="100"></el-table-column>
         <el-table-column
           prop="precision"
-          label="Precision">
+          label="Precision"
+          width="120"
+        ></el-table-column>
+        <el-table-column prop="maximumPretty" label="Maximum" width="150">
         </el-table-column>
-        <el-table-column
-          prop="maximumPretty"
-          label="Maximum">
+        <el-table-column prop="quantityPretty" label="Already Issued Quantity">
         </el-table-column>
-        <el-table-column
-          prop="quantityPretty"
-          label="Already Issued Quantity">
+        <el-table-column prop="leftToIssuePretty" label="Left to Issue">
         </el-table-column>
-        <el-table-column
-          prop="leftToIssuePretty"
-          label="Left to Issue">
-        </el-table-column>
-        <el-table-column
-          prop="issuerId"
-          label="Issuer">
-        </el-table-column>
+        <el-table-column prop="issuerId" label="Issuer"> </el-table-column>
       </el-table>
 
       <div class="block">
@@ -43,7 +32,6 @@
     </el-card>
   </div>
 </template>
-
 
 <script>
 import { mapGetters } from 'vuex';
@@ -78,5 +66,5 @@ export default {
   mounted() {
     this.handleCurrentChange(1);
   },
-}
+};
 </script>

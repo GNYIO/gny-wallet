@@ -1,35 +1,70 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :span="24">
-        <el-card>
+      <el-col :span="18">
+        <el-card v-if="!positiveBalance">
+          <h3>You have currently no GNY to transfer</h3>
+        </el-card>
+
+        <el-card v-if="positiveBalance">
           <div slot="header">
             Transfer GNY
           </div>
           <el-form :model="form" ref="form" :rules="rules" label-width="80px">
             <el-form-item label="From">
-              <el-input v-model="form.from" :disabled="true"></el-input>
+              <el-tooltip
+                effect="light"
+                content="Own Address"
+                placement="top-start"
+              >
+                <el-input v-model="form.from" :disabled="true"></el-input>
+              </el-tooltip>
             </el-form-item>
 
             <el-form-item label="To" prop="to" required>
-              <el-input v-model="form.to"></el-input>
+              <el-tooltip
+                effect="light"
+                content="Address e.g.: GWrAxgXSiZxieGrLWungJqWe4Xws"
+                placement="top-start"
+              >
+                <el-input v-model="form.to"></el-input>
+              </el-tooltip>
             </el-form-item>
 
             <el-form-item label="Amount" prop="amount" required>
-              <el-input
-                type="text"
-                v-model="form.amount"
-                :placeholder="amountPlaceholder"
-              ></el-input>
+              <el-tooltip
+                effect="light"
+                :content="amountPlaceholder"
+                placement="top-start"
+              >
+                <el-input
+                  type="text"
+                  v-model="form.amount"
+                  :placeholder="amountPlaceholder"
+                ></el-input>
+              </el-tooltip>
             </el-form-item>
 
             <el-form-item label="Message" prop="message">
-              <el-input v-model="form.message"></el-input>
+              <el-tooltip
+                effect="light"
+                content="Optional message (unencrypted) e.g. 'test message'"
+                placement="top-start"
+              >
+                <el-input v-model="form.message"></el-input>
+              </el-tooltip>
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="sendTransaction">Send</el-button>
-              <el-button @click="resetForm">Cancel</el-button>
+              <el-button
+                type="primary"
+                @click="sendTransaction"
+                style="float: left"
+                >Send</el-button
+              >
+              <el-button @click="resetForm" style="float: left"
+                >Cancel</el-button
+              >
             </el-form-item>
           </el-form>
         </el-card>
@@ -45,7 +80,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
 import { isAddress } from '@gny/utils';
 import { BigNumber } from 'bignumber.js';
@@ -88,26 +123,6 @@ export default {
       }
     };
 
-    const validateMessage = (rule, value, callback) => {
-      if (value === '' || value === null) {
-        callback();
-      }
-
-      if (typeof value !== 'string') {
-        callback(new Error('message must be a string'));
-      }
-
-      if (value.length > 256) {
-        callback(new Error('max length is 256'));
-      }
-      const regex = /^$|(^[a-zA-Z0-9]{1}[a-zA-Z0-9 ]*[a-zA-Z0-9]{1}$)/;
-      if (regex.test(value)) {
-        callback();
-      } else {
-        callback('wrong message format');
-      }
-    };
-
     return {
       balance: 0,
       amountPlaceholder: '',
@@ -127,34 +142,44 @@ export default {
           { validator: validateAddress, trigger: 'blur' },
         ],
         amount: [{ validator: validateAmount, trigger: 'blur' }],
-        message: [{ validator: validateMessage, trigger: 'blur' }],
+        message: [
+          {
+            max: 256,
+            message: 'Length should not be longer than 256',
+            trigger: 'change',
+          },
+          {
+            type: 'string',
+            pattern: /^$|(^[a-zA-Z0-9]{1}[a-zA-Z0-9 ]*[a-zA-Z0-9]{1}$)/,
+            trigger: 'change',
+          },
+        ],
       },
     };
   },
   computed: {
-    ...mapState(['user', 'passphrase']),
+    ...mapState(['user', 'passphrase', 'secondPassphrase']),
+    ...mapGetters(['positiveBalance']),
   },
   methods: {
     async sendTransaction() {
       try {
-        const result = await this.$refs['form'].validate();
-        console.log(result);
+        await this.$refs['form'].validate();
       } catch (err) {
         console.log(`err: ${err}`);
         return; // remove TODOO
       }
 
       try {
-        const trs = client.basic.transfer(
+        const result = await connection.contract.Basic.send(
           this.form.to,
           this.form.amount * 1e8,
-          this.form.message,
           this.passphrase,
+          this.form.message,
+          this.secondPassphrase,
         );
-        console.log(trs);
-        const response = await connection.api.Transport.sendTransaction(trs);
-        console.log(response);
-        this.$message(`Transaction id: ${response.transactionId}`);
+        this.$message(result.transactionId);
+        this.$refs['form'].resetFields();
       } catch (error) {
         console.log(error);
       }
@@ -164,13 +189,12 @@ export default {
     },
   },
   async mounted() {
-    await this.$store.dispatch('getTransfers');
     await this.$store.dispatch('refreshAccounts');
+    await this.$store.dispatch('getTransfers');
 
     this.form.from = this.$store.state.user.address;
     this.amountPlaceholder = `You have ${this.user.balance /
       1e8} GNY in your account`;
-
   },
 };
 </script>

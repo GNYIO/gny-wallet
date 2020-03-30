@@ -3,42 +3,64 @@
     <div slot="header">
       Transfer Asset
     </div>
-    <el-form :ref="transferAssetForm" :model="transferAssetForm" label-width="80px">
-      <el-form-item label="Currency">
-        <el-select
-          placeholder="select currency"
-          clearable
-          v-model="transferAssetForm.currency"
-          style="float: left"
+    <el-form
+      ref="transferAssetForm"
+      :model="transferAssetForm"
+      :rules="transferAssetFormRules"
+      label-width="80px"
+    >
+      <el-form-item label="Curr." prop="currency">
+        <el-tooltip
+          effect="light"
+          content="Select currency"
+          placement="top-start"
         >
-          <el-option
-            v-for="item in ownAssets"
-            :key="item.name"
-            :label="item.name"
-            :value="item.name"
+          <el-select
+            placeholder="select currency"
+            clearable
+            v-model="transferAssetForm.currency"
+            style="float: left"
           >
-            <span style="float: left">{{ item.name }}</span>
-            <span style="float: right; margin-right: 2em"
-              >{{ item.desc }}</span
+            <el-option
+              v-for="item in ownAssets"
+              :key="item.name"
+              :label="item.name"
+              :value="item.name"
             >
-          </el-option>
-        </el-select>
+            </el-option>
+          </el-select>
+        </el-tooltip>
       </el-form-item>
-      <el-form-item label="Amount.">
-        <el-input-number
-          v-model="transferAssetForm.amount"
-          style="float: left; width: 300px"
-          :min="0">
-        </el-input-number>
+      <el-form-item label="Amount" prop="amount">
+        <el-tooltip effect="light" content="Add amount" placement="top-start">
+          <el-input v-model="transferAssetForm.amount" :min="0"> </el-input>
+        </el-tooltip>
       </el-form-item>
-      <el-form-item label="Recipient">
-        <el-input v-model="transferAssetForm.recipientId"></el-input>
+      <el-form-item label="Recip." prop="recipientId">
+        <el-tooltip
+          effect="light"
+          content="Add recipient. e.g. GWrAxgXSiZxieGrLWungJqWe4Xws"
+          placement="top-start"
+        >
+          <el-input v-model="transferAssetForm.recipientId"></el-input>
+        </el-tooltip>
       </el-form-item>
-      <el-form-item label="Message">
-        <el-input v-model="transferAssetForm.message"></el-input>
+      <el-form-item label="Message" prop="message">
+        <el-tooltip
+          effect="light"
+          content="Add optional message"
+          placement="top-start"
+        >
+          <el-input v-model="transferAssetForm.message"></el-input>
+        </el-tooltip>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="transferAsset" style="float: left;">Transfer Asset</el-button>
+        <el-button type="primary" @click="transferAsset" style="float: left;"
+          >Transfer Asset</el-button
+        >
+        <el-button @click="resetTransferAsset" style="float: left;"
+          >Reset</el-button
+        >
       </el-form-item>
     </el-form>
   </el-card>
@@ -46,59 +68,112 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import * as client from '@gny/client'
+import * as client from '@gny/client';
+import { isAddress, BigNumber } from '@gny/utils';
+
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
   process.env.VUE_APP_GNY_PORT,
   process.env.VUE_APP_GNY_NETWORK,
 );
-import {
-  Notification
-} from 'element-ui';
 
 export default {
   data() {
+    const validateAddress = (rule, value, callback) => {
+      if (isAddress(value)) {
+        callback();
+      } else {
+        callback(new Error('not a valid address'));
+      }
+    };
+
     return {
       transferAssetForm: {
         currency: '',
-        amount: 0,
+        amount: '',
         recipientId: '',
         message: '',
+      },
+      transferAssetFormRules: {
+        currency: [
+          {
+            required: true,
+            message: 'Currency is required',
+            trigger: 'blur',
+          },
+        ],
+        amount: [
+          {
+            required: true,
+            message: 'Amount is required',
+            trigger: 'blur',
+          },
+          {
+            pattern: /^[1-9][0-9]*$/,
+            trigger: 'change',
+          },
+        ],
+        recipientId: [
+          {
+            required: true,
+            message: 'Recipient is required',
+            trigger: 'blur',
+          },
+          { validator: validateAddress, trigger: 'blur' },
+        ],
       },
     };
   },
   computed: {
-    ...mapState(['user', 'passphrase']),
+    ...mapState(['user', 'passphrase', 'secondPassphrase']),
     ...mapGetters(['ownAssets']),
   },
   methods: {
     async transferAsset() {
       try {
+        await this.$refs['transferAssetForm'].validate();
+      } catch (err) {
+        console.log('validation for transferAssetForm failed');
+        return;
+      }
+
+      try {
         const currency = this.transferAssetForm.currency;
 
-        const precisionRaw = this.ownAssets[currency].precision;
+        const precisionRaw = this.ownAssets.filter(x => x.name === currency)[0]
+          .precision;
         const precision = Math.pow(10, precisionRaw);
 
-        const amount = String(this.transferAssetForm.amount * precision);
+        const amountRaw = this.transferAssetForm.amount;
+        const amount = new BigNumber(amountRaw).times(precision).toFixed();
+
         const recipientId = this.transferAssetForm.recipientId;
         const message = this.transferAssetForm.message;
 
-        const trs = client.uia.transfer(
+        console.log(
+          `currency: ${currency}, amount: ${amount}, recipientId: ${recipientId}, message: "${message}"`,
+        );
+        const result = await connection.contract.Uia.transfer(
           currency,
           amount,
           recipientId,
           message,
           this.passphrase,
+          this.secondPassphrase,
         );
-        await connection.api.Transport.sendTransaction(trs);
+        this.$message(result.transactionId);
+
+        this.$refs['transferAssetForm'].resetFields();
       } catch (err) {
-        const message = (err.response && err.response.data && err.response.data.error) || 'request failed';
-        Notification({
-          title: 'Error',
-          message: message,
-        });
+        const message =
+          (err.response && err.response.data && err.response.data.error) ||
+          'request failed';
+        this.$message(`Error: ${message}`);
       }
     },
+    resetTransferAsset() {
+      this.$refs['transferAssetForm'].resetFields();
+    },
   },
-}
+};
 </script>
