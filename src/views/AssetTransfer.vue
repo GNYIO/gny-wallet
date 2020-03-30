@@ -55,10 +55,22 @@
         </el-tooltip>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="transferAsset" style="float: left;"
-          >Transfer Asset</el-button
-        >
-        <el-button @click="resetTransferAsset" style="float: left;"
+        <div style="float: left;">
+          <el-badge
+            value="0.1 GNY"
+            type="info"
+            @mouseover.native="hideTransferAssetBadge = false"
+            @mouseleave.native="hideTransferAssetBadge = true"
+            :hidden="hideTransferAssetBadge"
+          >
+            <el-button type="primary" @click="transferAsset"
+              >Transfer Asset</el-button
+            >
+          </el-badge>
+        </div>
+        <el-button
+          @click="resetTransferAsset"
+          style="float: left; margin-left: 10px"
           >Reset</el-button
         >
       </el-form-item>
@@ -88,6 +100,8 @@ export default {
     };
 
     return {
+      hideTransferAssetBadge: true,
+
       transferAssetForm: {
         currency: '',
         amount: '',
