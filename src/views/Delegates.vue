@@ -69,12 +69,20 @@
 
           <el-form ref="form" :model="form">
             <el-form-item>
-              <el-button
-                type="primary"
-                @click="registerAsDelegate"
-                :disabled="alreadyDelegate"
-                >Register as Delegate</el-button
+              <el-badge
+                value="100 GNY"
+                type="info"
+                @mouseover.native="hideRegisterDelegateBadge = false"
+                @mouseleave.native="hideRegisterDelegateBadge = true"
+                :hidden="hideRegisterDelegateBadge"
               >
+                <el-button
+                  type="primary"
+                  @click="registerAsDelegate"
+                  :disabled="alreadyDelegate"
+                  >Register as Delegate</el-button
+                >
+              </el-badge>
             </el-form-item>
           </el-form>
         </el-card>
@@ -198,10 +206,20 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="vote" style="float: left"
-                >Vote</el-button
-              >
-              <el-button @click="resetVoteForm" style="float: left"
+              <div style="float: left">
+                <el-badge
+                  value="0.1 GNY"
+                  type="info"
+                  @mouseover.native="hideVoteBadge = false"
+                  @mouseleave.native="hideVoteBadge = true"
+                  :hidden="hideVoteBadge"
+                >
+                  <el-button type="primary" @click="vote">Vote</el-button>
+                </el-badge>
+              </div>
+              <el-button
+                @click="resetVoteForm"
+                style="float: left; margin-left: 10px;"
                 >Reset</el-button
               >
             </el-form-item>
@@ -251,10 +269,20 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="unvote" style="float: left"
-                >Unvote</el-button
-              >
-              <el-button @click="resetUnvoteForm" style="float: left"
+              <div style="float: left">
+                <el-badge
+                  value="0.1 GNY"
+                  type="info"
+                  @mouseover.native="hideUnvoteBadge = false"
+                  @mouseleave.native="hideUnvoteBadge = true"
+                  :hidden="hideUnvoteBadge"
+                >
+                  <el-button type="primary" @click="unvote">Unvote</el-button>
+                </el-badge>
+              </div>
+              <el-button
+                @click="resetUnvoteForm"
+                style="float: left; margin-left: 10px;"
                 >Unvote</el-button
               >
             </el-form-item>
@@ -301,6 +329,10 @@ export default {
   },
   data() {
     return {
+      hideRegisterDelegateBadge: true,
+      hideUnvoteBadge: true,
+      hideVoteBadge: true,
+
       alreadyDelegate: false,
 
       position: 0,

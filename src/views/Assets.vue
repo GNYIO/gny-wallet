@@ -39,13 +39,22 @@
               </el-tooltip>
             </el-form-item>
             <el-form-item>
-              <el-button
-                type="primary"
-                @click="registerIssuer"
-                style="float: left;"
-                :disabled="alreayRegisteredIssuer"
-                >Register Issuer</el-button
-              >
+              <div style="float: left;">
+                <el-badge
+                  value="100 GNY"
+                  type="info"
+                  @mouseover.native="hideRegisterIssuerBadge = false"
+                  @mouseleave.native="hideRegisterIssuerBadge = true"
+                  :hidden="hideRegisterIssuerBadge"
+                >
+                  <el-button
+                    type="primary"
+                    @click="registerIssuer"
+                    :disabled="alreayRegisteredIssuer"
+                    >Register Issuer</el-button
+                  >
+                </el-badge>
+              </div>
             </el-form-item>
           </el-form>
         </el-card>
@@ -138,13 +147,23 @@
               </el-tooltip>
             </el-form-item>
             <el-form-item>
+              <div style="float: left;">
+                <el-badge
+                  value="500 GNY"
+                  type="info"
+                  @mouseover.native="hideCreateAssetBadge = false"
+                  @mouseleave.native="hideCreateAssetBadge = true"
+                  :hidden="hideCreateAssetBadge"
+                >
+                  <el-button @click="createAsset" type="primary"
+                    >Create Asset</el-button
+                  >
+                </el-badge>
+              </div>
+
               <el-button
-                @click="createAsset"
-                style="float: left;"
-                type="primary"
-                >Create Asset</el-button
-              >
-              <el-button @click="resetCreateAssetsForm" style="float: left;"
+                @click="resetCreateAssetsForm"
+                style="float: left; margin-left: 10px;"
                 >Reset</el-button
               >
             </el-form-item>
@@ -205,10 +224,22 @@
               </el-tooltip>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="issueAsset" style="float: left;"
-                >Issue Asset</el-button
-              >
-              <el-button @click="resetIssueAsset" style="float: left"
+              <div style="float: left;">
+                <el-badge
+                  value="0.1 GNY"
+                  type="info"
+                  @mouseover.native="hideIssueAssetBadge = false"
+                  @mouseleave.native="hideIssueAssetBadge = true"
+                  :hidden="hideIssueAssetBadge"
+                >
+                  <el-button type="primary" @click="issueAsset"
+                    >Issue Asset</el-button
+                  >
+                </el-badge>
+              </div>
+              <el-button
+                @click="resetIssueAsset"
+                style="float: left; margin-left: 10px"
                 >Reset</el-button
               >
             </el-form-item>
@@ -304,6 +335,10 @@ export default {
     };
 
     return {
+      hideRegisterIssuerBadge: true,
+      hideCreateAssetBadge: true,
+      hideIssueAssetBadge: true,
+
       alreayRegisteredIssuer: false,
 
       registerIssuerForm: {

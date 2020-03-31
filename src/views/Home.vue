@@ -57,13 +57,22 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button
-                type="primary"
-                @click="setUsername"
-                style="float: left"
-                :disabled="hasUsername"
-                >Set Username</el-button
-              >
+              <div style="float: left">
+                <el-badge
+                  value="5 GNY"
+                  type="info"
+                  @mouseover.native="hideSetUsernameBadge = false"
+                  @mouseleave.native="hideSetUsernameBadge = true"
+                  :hidden="hideSetUsernameBadge"
+                >
+                  <el-button
+                    type="primary"
+                    @click="setUsername"
+                    :disabled="hasUsername"
+                    >Set Username</el-button
+                  >
+                </el-badge>
+              </div>
             </el-form-item>
           </el-form>
         </el-card>
@@ -103,13 +112,22 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button
-                type="primary"
-                @click="setSecondPassphrase"
-                style="float: left"
-                :disabled="isSecondPassphrase"
-                >Set Second Passphrase</el-button
-              >
+              <div style="float: left">
+                <el-badge
+                  value="5 GNY"
+                  type="info"
+                  @mouseover.native="hideSetSecondPassphraseBadge = false"
+                  @mouseleave.native="hideSetSecondPassphraseBadge = true"
+                  :hidden="hideSetSecondPassphraseBadge"
+                >
+                  <el-button
+                    type="primary"
+                    @click="setSecondPassphrase"
+                    :disabled="isSecondPassphrase"
+                    >Set Second Passphrase</el-button
+                  >
+                </el-badge>
+              </div>
             </el-form-item>
           </el-form>
         </el-card>
@@ -158,13 +176,22 @@
               </el-tooltip>
             </el-form-item>
             <el-form-item>
-              <el-button
-                type="primary"
-                @click="lockAccount"
-                style="float: left;"
-                :disabled="isLocked"
-                >Lock Account</el-button
-              >
+              <div style="float: left;">
+                <el-badge
+                  value="0.1 GNY"
+                  type="info"
+                  @mouseover.native="hideLockBadge = false"
+                  @mouseleave.native="hideLockBadge = true"
+                  :hidden="hideLockBadge"
+                >
+                  <el-button
+                    type="primary"
+                    @click="lockAccount"
+                    :disabled="isLocked"
+                    >Lock Account</el-button
+                  >
+                </el-badge>
+              </div>
             </el-form-item>
           </el-form>
         </el-card>
@@ -215,6 +242,10 @@ export default {
     };
 
     return {
+      hideLockBadge: true,
+      hideSetUsernameBadge: true,
+      hideSetSecondPassphraseBadge: true,
+
       hasUsername: false,
       isSecondPassphrase: false,
       isLocked: false,

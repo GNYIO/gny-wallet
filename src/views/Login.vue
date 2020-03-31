@@ -10,9 +10,6 @@
         effect="dark"
         :closable="false"
       ></el-alert>
-      <!-- <el-button @click="copyPassword" style="display:inline">
-        Copy <i class="el-icon-document-copy"></i>
-      </el-button> -->
     </div>
 
     <el-alert
