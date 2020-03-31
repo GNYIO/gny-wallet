@@ -289,7 +289,6 @@ export default {
   },
   computed: {
     ...mapState([
-      'user',
       'passphrase',
       'secondPassphrase',
       'delegate',
@@ -297,7 +296,11 @@ export default {
       'allDelegateNames',
       'whoIVotedFor',
     ]),
-    ...mapGetters(['prettyDelegates', 'delegatesForWhichIHaveNotVotedYet']),
+    ...mapGetters([
+      'userPretty',
+      'prettyDelegates',
+      'delegatesForWhichIHaveNotVotedYet',
+    ]),
   },
   data() {
     return {
