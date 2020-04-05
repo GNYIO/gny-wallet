@@ -28,7 +28,7 @@ export const actions = {
     try {
       const keys = getKeys(state.passphrase);
       const response = await connection.api.Account.openAccount(keys.publicKey);
-      console.log(`accounts: ${JSON.stringify(response, null, 2)}`);
+      console.log(`accounts: ${JSON.stringify(response.account, null, 2)}`);
       commit('setUser', response.account);
       commit('setLatestBlock', response.latestBlock);
     } catch (err) {
@@ -40,14 +40,14 @@ export const actions = {
   },
   async refreshDelegateInfo({ commit, state }) {
     try {
-      if (state.user.username) {
+      if (state.user.username && state.user.isDelegate === 1) {
         const result = await connection.api.Delegate.getDelegateByUsername(
           state.user.username,
         );
         if (result.success) {
           commit('setDelegateInfo', result.delegate);
         } else {
-          throw new Error(result.error);
+          commit('setDelegateInfo', result.delegate);
         }
       }
     } catch (err) {

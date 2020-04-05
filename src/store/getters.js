@@ -2,7 +2,24 @@ import { BigNumber } from 'bignumber.js';
 
 export const getters = {
   passphrase: state => state.passphrase,
-  user: state => state.user,
+  user: state => ({
+    address: state.user.address ? state.user.address : undefined,
+    balance: state.user.balance ? state.user.balance : undefined,
+    balancePretty: state.user.balance
+      ? new BigNumber(state.user.balance).dividedBy(1e8).toFixed()
+      : undefined,
+    secondPublicKey: state.user.secondPublicKey
+      ? state.user.secondPublicKey
+      : null,
+    lockHeight: state.user.lockHeight ? state.user.lockHeight : String(0),
+    lockAmount: state.user.lockAmount ? state.user.lockAmount : String(0),
+    lockAmountPretty: state.user.lockAmount
+      ? new BigNumber(state.user.lockAmount).dividedBy(1e8).toFixed()
+      : String(0),
+    isDelegate: state.user.isDelegate ? state.user.isDelegate : 0,
+    username: state.user.username ? state.user.username : null,
+    publicKey: state.user.publicKey ? state.user.publicKey : null,
+  }),
   hasSecondPassphrase: state => !!state.user.secondPublicKey,
   secondPublicKey: state => state.user.secondPublicKey,
   isLoggedIn: state => state.isLoggedIn,
