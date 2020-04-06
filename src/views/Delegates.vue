@@ -325,7 +325,7 @@ export default {
       'whoIVotedFor',
     ]),
     ...mapGetters([
-      'userPretty',
+      'user',
       'prettyDelegates',
       'delegatesForWhichIHaveNotVotedYet',
     ]),
