@@ -489,7 +489,11 @@ export default {
       try {
         const name = this.createAssetsForm.name;
         const desc = this.createAssetsForm.desc;
-        const maximum = String(this.createAssetsForm.maximum);
+
+        const precRaw = Math.pow(10, Number(this.createAssetsForm.precision));
+        const maximum = new BigNumber(this.createAssetsForm.maximum)
+          .multipliedBy(precRaw)
+          .toFixed();
         const precision = Number(this.createAssetsForm.precision);
 
         const trs = await connection.contract.Uia.registerAsset(

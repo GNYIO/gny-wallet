@@ -185,7 +185,7 @@ export default {
       try {
         const result = await connection.contract.Basic.send(
           this.form.to,
-          this.form.amount * 1e8,
+          new BigNumber(this.form.amount).multipliedBy(1e8).toFixed(),
           this.passphrase,
           this.form.message,
           this.secondPassphrase,

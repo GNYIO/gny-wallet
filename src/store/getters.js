@@ -30,7 +30,7 @@ export const getters = {
       username: delegate.username,
       producedBlocks: delegate.producedBlocks,
       rate: delegate.rate,
-      rewards: Number(delegate.rewards) / 1e8,
+      rewards: new BigNumber(delegate.rewards).dividedBy(1e8).toFixed(),
       productivity: delegate.productivity + '%',
       approval: delegate.approval,
     }));
@@ -60,7 +60,7 @@ export const getters = {
       recipientId: transfer.recipientId,
       recipientName: transfer.recipientName,
       currency: transfer.currency,
-      amount: Number(transfer.amount) / 1e8,
+      amount: new BigNumber(transfer.amount).dividedBy(1e8).toFixed(),
       timestamp: transfer.timestamp,
       height: transfer.height,
     }));
@@ -89,11 +89,11 @@ export const getters = {
         name: asset.name,
         precision: asset.precision,
         maximum: asset.maximum,
-        maximumPretty: asset.maximum / prec,
+        maximumPretty: new BigNumber(asset.maximum).dividedBy(prec).toFixed(),
         quantity: asset.quantity,
-        quantityPretty: asset.quantity / prec,
+        quantityPretty: new BigNumber(asset.quantity).dividedBy(prec).toFixed(),
         leftToIssue: difference,
-        leftToIssuePretty: difference / prec,
+        leftToIssuePretty: new BigNumber(difference).dividedBy(prec).toFixed(),
         desc: asset.desc,
         issuerId: asset.issuerId,
       };
@@ -117,7 +117,9 @@ export const getters = {
         currency: balance.currency,
         flat: balance.flag,
         balance: balance.balance,
-        balancePretty: balance.balance / precision,
+        balancePretty: new BigNumber(balance.balance)
+          .dividedBy(precision)
+          .toFixed(),
       };
       return one;
     });

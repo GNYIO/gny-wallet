@@ -394,7 +394,9 @@ export default {
 
       try {
         const height = this.lockAccountForm.lockHeight;
-        const amount = this.lockAccountForm.lockAmount * 1e8;
+        const amount = new BigNumber(this.lockAccountForm.lockAmount)
+          .multipliedBy(1e8)
+          .toFixed();
 
         const result = await connection.contract.Basic.lockAccount(
           height,
