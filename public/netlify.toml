@@ -1,5 +1,5 @@
 [[redirects]]
   from = "/api/*"
-  to = "http://45.76.215.117:4096/api/*"
+  to = "https://pumpupthejamstack.com/api/*"
   status = 200
   force = false
