@@ -1,5 +1,0 @@
-[[redirects]]
-  from = "/api/*"
-  to = "https://pumpupthejamstack.com/api/*"
-  status = 200
-  force = false
