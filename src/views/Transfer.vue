@@ -98,8 +98,9 @@ import TransfersPaged from './TransfersPaged';
 
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
-  process.env.VUE_APP_GNY_PORT,
+  Number(process.env.VUE_APP_GNY_PORT),
   process.env.VUE_APP_GNY_NETWORK,
+  process.env.VUE_APP_HTTPS || false,
 );
 
 export default {
@@ -185,7 +186,7 @@ export default {
       try {
         const result = await connection.contract.Basic.send(
           this.form.to,
-          this.form.amount * 1e8,
+          new BigNumber(this.form.amount).multipliedBy(1e8).toFixed(),
           this.passphrase,
           this.form.message,
           this.secondPassphrase,
