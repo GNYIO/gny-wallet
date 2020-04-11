@@ -85,8 +85,9 @@ import { isAddress, BigNumber } from '@gny/utils';
 
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
-  process.env.VUE_APP_GNY_PORT,
+  Number(process.env.VUE_APP_GNY_PORT),
   process.env.VUE_APP_GNY_NETWORK,
+  process.env.VUE_APP_HTTPS || false,
 );
 
 export default {
