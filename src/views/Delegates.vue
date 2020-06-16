@@ -53,7 +53,7 @@
               </p>
               <p>
                 <span
-                  >Productivity <b>{{ delegate.productivity }}</b></span
+                  >Productivity: <b>{{ delegate.productivity }}</b></span
                 >
               </p>
             </el-col>
