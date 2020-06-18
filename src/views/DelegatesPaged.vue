@@ -14,6 +14,11 @@
         width="180"
       ></el-table-column>
       <el-table-column
+        prop="missedBlocks"
+        label="Missed Blocks"
+        width="*"
+      ></el-table-column>
+      <el-table-column
         prop="rewards"
         label="Rewards"
         width="180"

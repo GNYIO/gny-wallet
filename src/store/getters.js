@@ -29,6 +29,7 @@ export const getters = {
       address: delegate.address,
       username: delegate.username,
       producedBlocks: delegate.producedBlocks,
+      missedBlocks: delegate.missedBlocks,
       rate: delegate.rate,
       rewards: new BigNumber(delegate.rewards).dividedBy(1e8).toFixed(),
       productivity: delegate.productivity + '%',
