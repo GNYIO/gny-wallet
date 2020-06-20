@@ -217,7 +217,6 @@
 </template>
 
 <script>
-import * as Cookie from 'tiny-cookie';
 import { mapState, mapGetters } from 'vuex';
 import TransactionsPaged from './TransactionsPaged';
 import { BigNumber } from 'bignumber.js';
@@ -376,8 +375,6 @@ export default {
         // disable button and input
         this.isSecondPassphrase = true;
 
-        // set cookie
-        Cookie.set('bip39Second', secondPassphrase);
         await this.$store.dispatch('setSecondPassphrase', secondPassphrase);
         await this.$store.dispatch('refreshAccounts');
       } catch (err) {

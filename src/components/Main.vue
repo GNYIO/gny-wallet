@@ -60,8 +60,6 @@
 </template>
 
 <script>
-import * as Cookie from 'tiny-cookie';
-
 export default {
   data() {
     return {
@@ -70,9 +68,7 @@ export default {
   },
   methods: {
     logout() {
-      Cookie.remove('bip39');
-      this.$store.dispatch('setToken', null);
-      this.$store.dispatch('setUser', null);
+      this.$store.dispatch('resetState', null);
       this.$router.push('/login');
     },
   },

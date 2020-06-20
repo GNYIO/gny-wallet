@@ -1,4 +1,4 @@
-export const state = {
+export const getDefaultState = () => ({
   passphrase: null,
   secondPassphrase: null,
   user: null,
@@ -19,4 +19,4 @@ export const state = {
 
   transfers: [],
   balances: [],
-};
+});

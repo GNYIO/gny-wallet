@@ -1,11 +1,8 @@
+import { getDefaultState } from './state';
+
 export const mutations = {
-  setToken(state, token) {
-    state.token = token;
-    if (token) {
-      state.isLoggedIn = true;
-    } else {
-      state.isLoggedIn = false;
-    }
+  setLogin(state, loggedIn) {
+    state.isLoggedIn = loggedIn;
   },
   setUser(state, user) {
     state.user = user;
@@ -48,5 +45,9 @@ export const mutations = {
   },
   setBalances(state, balances) {
     state.balances = balances;
+  },
+  resetState(state) {
+    const newState = getDefaultState();
+    Object.assign(state, newState);
   },
 };
