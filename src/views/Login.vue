@@ -188,7 +188,6 @@ export default {
 
           this.$store.dispatch('setPassphrase', passphrase);
           this.$store.dispatch('setLogin', true);
-          await this.$store.dispatch('refreshAccounts');
 
           this.$router.push('/home');
         }
