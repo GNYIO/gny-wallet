@@ -89,7 +89,7 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="20" v-if="user.lockHeight === '0'">
+    <el-row :gutter="20">
       <el-col :span="12">
         <el-card v-if="!positiveBalance">
           <div>
@@ -143,7 +143,7 @@
         </el-card>
       </el-col>
 
-      <el-col :span="12">
+      <el-col :span="12" v-if="user.lockHeight === '0'">
         <el-card v-if="!positiveBalance">
           <div>
             <h3>You need 0.1 GNY to lock your account</h3>
