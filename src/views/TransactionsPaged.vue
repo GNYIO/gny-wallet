@@ -73,6 +73,7 @@ export default {
     },
   },
   async mounted() {
+    await this.$store.dispatch('getTransactions');
     this.handleCurrentChange(1);
   },
 };

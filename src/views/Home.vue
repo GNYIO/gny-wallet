@@ -411,7 +411,6 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('refreshAccounts');
-    await this.$store.dispatch('getTransactions');
   },
 };
 </script>
