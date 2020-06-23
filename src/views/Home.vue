@@ -206,6 +206,40 @@
           </el-form>
         </el-card>
       </el-col>
+
+      <el-col :span="12" v-if="user.lockHeight !== '0'">
+        <el-card v-if="!positiveBalance">
+          <div>
+            <h3>You need 0.1 GNY to unlock your account</h3>
+          </div>
+        </el-card>
+
+        <el-card v-if="positiveBalance">
+          <div slot="header">
+            Unlock your account
+          </div>
+
+          <el-form ref="unlockAccountForm" :model="unlockAccountForm">
+            <el-form-item>
+              <!--
+
+              -->
+              <el-badge
+                value="0.1 GNY"
+                type="info"
+                @mouseover.native="hideUnlockAccountBadge = false"
+                @mouseleave.native="hideUnlockAccountBadge = true"
+                :hidden="hideUnlockAccountBadge"
+              >
+                <!-- :disabled="alreadyDelegate"-->
+                <el-button type="primary" @click="unlockAccount"
+                  >Unlock Account</el-button
+                >
+              </el-badge>
+            </el-form-item>
+          </el-form>
+        </el-card>
+      </el-col>
     </el-row>
 
     <el-row :gutter="20">
@@ -324,6 +358,9 @@ export default {
           },
         ],
       },
+
+      unlockAccountForm: {},
+      hideUnlockAccountBadge: true,
     };
   },
   computed: {
@@ -407,6 +444,9 @@ export default {
       } catch (err) {
         console.log(err.message);
       }
+    },
+    async unlockAccount() {
+      console.log('unlock');
     },
   },
   async mounted() {

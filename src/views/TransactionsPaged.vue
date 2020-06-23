@@ -82,7 +82,7 @@ export default {
       await this.$store.dispatch('getTransactions');
       this.handleCurrentChange(1);
 
-      console.log('Finished rendering the complete view')
+      console.log('Finished rendering the complete view');
     });
   },
 };
