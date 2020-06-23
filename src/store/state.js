@@ -2,7 +2,7 @@ export const getDefaultState = () => ({
   passphrase: null,
   secondPassphrase: null,
   user: {},
-  delegate: null,
+  delegate: {},
   isLoggedIn: false,
   token: '',
   latestBlock: {},
