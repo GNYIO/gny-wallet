@@ -87,7 +87,9 @@ export default {
       return '';
     },
   },
-  mounted() {
+  async mounted() {
+    await this.$store.dispatch('getTransfers');
+
     this.handleCurrentChange(1);
   },
 };

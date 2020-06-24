@@ -53,7 +53,7 @@
               </p>
               <p>
                 <span
-                  >Productivity <b>{{ delegate.productivity }}</b></span
+                  >Productivity: <b>{{ delegate.productivity }}</b></span
                 >
               </p>
             </el-col>
@@ -322,7 +322,6 @@ export default {
       'secondPassphrase',
       'delegate',
       'myVoters',
-      'allDelegateNames',
       'whoIVotedFor',
     ]),
     ...mapGetters([
@@ -436,7 +435,6 @@ export default {
     await this.$store.dispatch('refreshAccounts');
     await this.$store.dispatch('getWhoIVotedFor');
 
-    await this.$store.dispatch('getAllDelegateNames');
     await this.$store.dispatch('getMyVoters');
     await this.$store.dispatch('refreshDelegateInfo');
   },

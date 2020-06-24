@@ -383,7 +383,7 @@ export default {
         name: '',
         desc: '',
         precision: 8,
-        maximum: 1000000 * 1e8,
+        maximum: 1 * 1e8,
       },
       createAssetsFormRules: {
         name: [

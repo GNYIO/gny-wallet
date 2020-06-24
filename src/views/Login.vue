@@ -74,7 +74,6 @@
 
 <script>
 import * as Mnemonic from 'bitcore-mnemonic';
-import * as Cookie from 'tiny-cookie';
 import { mapGetters } from 'vuex';
 import * as client from '@gny/client';
 
@@ -185,14 +184,10 @@ export default {
           this.secondPublicKey = secondPublicKey;
           return;
         } else {
-          Cookie.set('bip39', passphrase);
-          Cookie.set('bip39Second', null);
+          this.$store.dispatch('setSecondPassphrase', null);
 
-          await this.$store.dispatch('setSecondPassphrase', null);
-
-          await this.$store.dispatch('setPassphrase', passphrase);
-          await this.$store.dispatch('setToken', passphrase);
-          await this.$store.dispatch('refreshAccounts');
+          this.$store.dispatch('setPassphrase', passphrase);
+          this.$store.dispatch('setLogin', true);
 
           this.$router.push('/home');
         }
@@ -211,13 +206,10 @@ export default {
       const secondPassphrase = this.secondLoginForm.secondPassphrase;
       const passphrase = this.loginForm.passphrase;
 
-      Cookie.set('bip39', passphrase);
-      Cookie.set('bip39Second', secondPassphrase);
-
       await this.$store.dispatch('setSecondPassphrase', secondPassphrase);
 
       await this.$store.dispatch('setPassphrase', passphrase);
-      await this.$store.dispatch('setToken', passphrase);
+      await this.$store.dispatch('setLogin', true);
       await this.$store.dispatch('refreshAccounts');
 
       this.$router.push('/home');

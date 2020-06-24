@@ -10,8 +10,8 @@ const connection = new client.Connection(
 const getKeys = client.crypto.getKeys;
 
 export const actions = {
-  setToken({ commit }, token) {
-    commit('setToken', token);
+  setLogin({ commit }, loggedIn) {
+    commit('setLogin', loggedIn);
   },
   setUser({ commit }, user) {
     commit('setUser', user);
@@ -29,7 +29,6 @@ export const actions = {
     try {
       const keys = getKeys(state.passphrase);
       const response = await connection.api.Account.openAccount(keys.publicKey);
-      console.log(`accounts: ${JSON.stringify(response.account, null, 2)}`);
       commit('setUser', response.account);
       commit('setLatestBlock', response.latestBlock);
     } catch (err) {
@@ -251,5 +250,8 @@ export const actions = {
         message: err.message,
       });
     }
+  },
+  resetState({ commit }) {
+    commit('resetState');
   },
 };

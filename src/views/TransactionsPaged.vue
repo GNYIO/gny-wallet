@@ -72,8 +72,18 @@ export default {
       }
     },
   },
-  async mounted() {
-    this.handleCurrentChange(1);
+  mounted() {
+    // this component is a child component of Home.vue
+    // this component must load after the parent component Home.vue
+    // therefore this.$nextTick
+    this.$nextTick(async () => {
+      console.log('starting TransactionsPaged');
+
+      await this.$store.dispatch('getTransactions');
+      this.handleCurrentChange(1);
+
+      console.log('Finished rendering the complete view');
+    });
   },
 };
 </script>

@@ -89,7 +89,7 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="20" v-if="user.lockHeight === '0'">
+    <el-row :gutter="20">
       <el-col :span="12">
         <el-card v-if="!positiveBalance">
           <div>
@@ -143,7 +143,7 @@
         </el-card>
       </el-col>
 
-      <el-col :span="12">
+      <el-col :span="12" v-if="user.lockHeight === '0'">
         <el-card v-if="!positiveBalance">
           <div>
             <h3>You need 0.1 GNY to lock your account</h3>
@@ -206,6 +206,40 @@
           </el-form>
         </el-card>
       </el-col>
+
+      <el-col :span="12" v-if="user.lockHeight !== '0'">
+        <el-card v-if="!positiveBalance">
+          <div>
+            <h3>You need 0.1 GNY to unlock your account</h3>
+          </div>
+        </el-card>
+
+        <el-card v-if="positiveBalance">
+          <div slot="header">
+            Unlock your account
+          </div>
+
+          <el-form ref="unlockAccountForm" :model="unlockAccountForm">
+            <el-form-item>
+              <!--
+
+              -->
+              <el-badge
+                value="0.1 GNY"
+                type="info"
+                @mouseover.native="hideUnlockAccountBadge = false"
+                @mouseleave.native="hideUnlockAccountBadge = true"
+                :hidden="hideUnlockAccountBadge"
+              >
+                <!-- :disabled="alreadyDelegate"-->
+                <el-button type="primary" @click="unlockAccount"
+                  >Unlock Account</el-button
+                >
+              </el-badge>
+            </el-form-item>
+          </el-form>
+        </el-card>
+      </el-col>
     </el-row>
 
     <el-row :gutter="20">
@@ -217,7 +251,6 @@
 </template>
 
 <script>
-import * as Cookie from 'tiny-cookie';
 import { mapState, mapGetters } from 'vuex';
 import TransactionsPaged from './TransactionsPaged';
 import { BigNumber } from 'bignumber.js';
@@ -325,6 +358,9 @@ export default {
           },
         ],
       },
+
+      unlockAccountForm: {},
+      hideUnlockAccountBadge: true,
     };
   },
   computed: {
@@ -376,8 +412,6 @@ export default {
         // disable button and input
         this.isSecondPassphrase = true;
 
-        // set cookie
-        Cookie.set('bip39Second', secondPassphrase);
         await this.$store.dispatch('setSecondPassphrase', secondPassphrase);
         await this.$store.dispatch('refreshAccounts');
       } catch (err) {
@@ -411,10 +445,12 @@ export default {
         console.log(err.message);
       }
     },
+    async unlockAccount() {
+      console.log('unlock');
+    },
   },
   async mounted() {
     await this.$store.dispatch('refreshAccounts');
-    await this.$store.dispatch('getTransactions');
   },
 };
 </script>

@@ -72,6 +72,8 @@ export default {
     },
   },
   async mounted() {
+    await this.$store.dispatch('getAllDelegateNames');
+
     this.handleCurrentChange(1);
   },
 };

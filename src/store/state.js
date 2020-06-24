@@ -1,8 +1,8 @@
-export const state = {
+export const getDefaultState = () => ({
   passphrase: null,
   secondPassphrase: null,
-  user: null,
-  delegate: null,
+  user: {},
+  delegate: {},
   isLoggedIn: false,
   token: '',
   latestBlock: {},
@@ -19,4 +19,4 @@ export const state = {
 
   transfers: [],
   balances: [],
-};
+});
