@@ -364,7 +364,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['passphrase', 'secondPassphrase']),
+    ...mapState(['passphrase', 'secondPassphrase', 'latestBlock']),
     ...mapGetters([
       'user',
       'positiveBalance',
@@ -446,7 +446,31 @@ export default {
       }
     },
     async unlockAccount() {
-      console.log('unlock');
+      const currentHeight = new BigNumber(this.latestBlock.height);
+      const lockHeight = new BigNumber(this.user.lockHeight);
+
+      if (currentHeight.isLessThan(lockHeight)) {
+        this.$message({
+          message: `You need to wait until height "${lockHeight.toFixed()}" to unlock your account`,
+          type: 'error',
+        });
+        return;
+      }
+
+      try {
+        const result = await connection.contract.Basic.unlockAccount(
+          this.passphrase,
+          this.secondPassphrase,
+        );
+        this.$message(result.transactionId);
+      } catch (err) {
+        const message =
+          err && err.response && err.response.data && err.response.data.error;
+        this.$message({
+          message: message,
+          type: 'error',
+        });
+      }
     },
   },
   async mounted() {
