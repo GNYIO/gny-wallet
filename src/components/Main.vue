@@ -9,7 +9,7 @@
         </el-col>
         <el-col :span="16">
           <div class="grid-content">
-            <span>Latest Block Height: {{ blockHeight }}</span>
+            <span>Latest Block Height: {{ latestBlock.height }}</span>
           </div>
         </el-col>
         <el-col :span="2">
@@ -60,11 +60,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
-  data() {
-    return {
-      blockHeight: this.$store.getters.latestBlock.height,
-    };
+  computed: {
+    ...mapGetters(['latestBlock']),
   },
   methods: {
     logout() {
