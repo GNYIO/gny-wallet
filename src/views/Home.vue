@@ -11,58 +11,12 @@
     </el-row>
 
     <el-row :gutter="20">
-      <el-col :span="12">
-        <el-card v-if="!positiveBalance">
-          <div>
-            <h3>You need 5 GNY to set a second password</h3>
-          </div>
-        </el-card>
-
-        <el-card v-if="!hasSecondPassphrase && positiveBalance">
-          <div slot="header">
-            <span>Set Second password</span>
-          </div>
-
-          <el-form
-            ref="secondPassphraseForm"
-            :model="secondPassphraseForm"
-            label-width="80px"
-            :rules="secondPassphraseFormRules"
-          >
-            <el-form-item label="2nd P." prop="secondPassphrase">
-              <el-tooltip
-                effect="light"
-                content="Second Passphrase"
-                placement="top-start"
-              >
-                <el-input
-                  :disabled="isSecondPassphrase"
-                  v-model="secondPassphraseForm.secondPassphrase"
-                ></el-input>
-              </el-tooltip>
-            </el-form-item>
-
-            <el-form-item>
-              <div style="float: left">
-                <el-badge
-                  value="5 GNY"
-                  type="info"
-                  @mouseover.native="hideSetSecondPassphraseBadge = false"
-                  @mouseleave.native="hideSetSecondPassphraseBadge = true"
-                  :hidden="hideSetSecondPassphraseBadge"
-                >
-                  <el-button
-                    type="primary"
-                    @click="setSecondPassphrase"
-                    :disabled="isSecondPassphrase"
-                    >Set Second Passphrase</el-button
-                  >
-                </el-badge>
-              </div>
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
+      <Set2ndPasswordComponent
+        v-bind:user="user"
+        v-bind:positiveBalance="positiveBalance"
+        v-bind:passphrase="passphrase"
+        v-bind:hasSecondPassphrase="hasSecondPassphrase"
+      ></Set2ndPasswordComponent>
 
       <el-col :span="12" v-if="user.lockHeight === '0'">
         <el-card v-if="!positiveBalance">
@@ -176,6 +130,7 @@ import { mapState, mapGetters } from 'vuex';
 import TransactionsPaged from './TransactionsPaged';
 import AccountInfoComponent from './Home/AccountInfoComponent';
 import SetUsernameComponent from './Home/SetUsernameComponent';
+import Set2ndPasswordComponent from './Home/Set2ndPasswordComponent';
 
 import { BigNumber } from 'bignumber.js';
 
@@ -192,6 +147,7 @@ export default {
     TransactionsPaged,
     AccountInfoComponent,
     SetUsernameComponent,
+    Set2ndPasswordComponent,
   },
   data() {
     const validateBlockHeight = (rule, value, callback) => {
@@ -213,25 +169,10 @@ export default {
 
     return {
       hideLockBadge: true,
-      hideSetSecondPassphraseBadge: true,
 
-      isSecondPassphrase: false,
       isLocked: false,
 
       placeholder: '',
-
-      secondPassphraseForm: {
-        secondPassphrase: '',
-      },
-      secondPassphraseFormRules: {
-        secondPassphrase: [
-          {
-            required: true,
-            message: 'Please add a second passphrase',
-            trigger: 'blur',
-          },
-        ],
-      },
 
       lockAccountForm: {
         lockHeight: '',
@@ -280,31 +221,6 @@ export default {
     ]),
   },
   methods: {
-    async setSecondPassphrase() {
-      try {
-        await this.$refs['secondPassphraseForm'].validate();
-      } catch (err) {
-        console.log('Validation for secondPassphraseForm failed');
-        return;
-      }
-
-      try {
-        const secondPassphrase = this.secondPassphraseForm.secondPassphrase;
-        const result = await connection.contract.Basic.setSecondPassphrase(
-          this.passphrase,
-          secondPassphrase,
-        );
-        this.$message(result.transactionId);
-
-        // disable button and input
-        this.isSecondPassphrase = true;
-
-        await this.$store.dispatch('setSecondPassphrase', secondPassphrase);
-        await this.$store.dispatch('refreshAccounts');
-      } catch (err) {
-        console.log(err);
-      }
-    },
     async lockAccount() {
       try {
         await this.$refs['lockAccountForm'].validate();
