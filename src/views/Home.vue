@@ -61,11 +61,6 @@ export default {
     LockAccountComponent,
     UnlockAccountComponent,
   },
-  data() {
-    return {
-      placeholder: '',
-    };
-  },
   computed: {
     ...mapState(['passphrase', 'secondPassphrase', 'latestBlock']),
     ...mapGetters([
