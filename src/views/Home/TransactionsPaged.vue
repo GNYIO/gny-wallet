@@ -40,7 +40,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { contractMappingFilter } from '../filters/index';
+import { contractMappingFilter } from '../../filters/index';
 
 export default {
   computed: {
