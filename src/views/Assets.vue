@@ -57,20 +57,9 @@
         <AssetTransfer></AssetTransfer>
       </el-col>
 
-      <el-col :span="12">
-        <el-card>
-          <div slot="header">
-            Balances
-          </div>
-          <el-table stripe :data="prettyBalances" style="width: 100%">
-            <el-table-column prop="currency" label="Currency"></el-table-column>
-            <el-table-column
-              prop="balancePretty"
-              label="Balance"
-            ></el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
+      <AssetBalancesComponent
+        v-bind:prettyBalances="prettyBalances"
+      ></AssetBalancesComponent>
     </el-row>
 
     <!-- own asset transfers -->
@@ -97,6 +86,7 @@ import AssetsOwnTransfers from './AssetsOwnTransfers';
 import IssueAssetsComponent from './Assets/IssueAssetsComponent';
 import RegisterIssuerComponent from './Assets/RegisterIssuerComponent';
 import CreateAssetsComponent from './Assets/CreateAssetsComponent';
+import AssetBalancesComponent from './Assets/AssetBalancesComponent';
 
 export default {
   components: {
@@ -106,6 +96,7 @@ export default {
     AssetsOwnTransfers,
     IssueAssetsComponent,
     CreateAssetsComponent,
+    AssetBalancesComponent,
   },
   computed: {
     ...mapState(['isIssuer', 'issuer', 'passphrase', 'secondPassphrase']),
