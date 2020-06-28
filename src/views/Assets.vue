@@ -60,11 +60,8 @@
       ></AssetBalancesComponent>
     </el-row>
 
-    <!-- own asset transfers -->
     <el-row :gutter="20">
-      <el-col :span="24">
-        <AssetsOwnTransfers></AssetsOwnTransfers>
-      </el-col>
+      <AssetsOwnTransfers></AssetsOwnTransfers>
     </el-row>
 
     <!-- all assets -->
