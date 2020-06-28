@@ -9,20 +9,7 @@
     </el-row>
 
     <el-row :gutter="20" v-if="isIssuer">
-      <el-col :span="12">
-        <el-card>
-          <div slot="header">
-            Issuer
-          </div>
-
-          <p>
-            Name: <b>{{ issuer.name }}</b>
-          </p>
-          <p>
-            Description: <b>{{ issuer.desc }}</b>
-          </p>
-        </el-card>
-      </el-col>
+      <IssuerInfoComponent v-bind:issuer="issuer"></IssuerInfoComponent>
 
       <OwnAssetsComponent v-bind:ownAssets="ownAssets"></OwnAssetsComponent>
     </el-row>
@@ -68,6 +55,7 @@ import RegisterIssuerComponent from './Assets/RegisterIssuerComponent';
 import CreateAssetsComponent from './Assets/CreateAssetsComponent';
 import AssetBalancesComponent from './Assets/AssetBalancesComponent';
 import OwnAssetsComponent from './Assets/OwnAssetsComponent';
+import IssuerInfoComponent from './Assets/IssuerInfoComponent';
 
 export default {
   components: {
@@ -79,6 +67,7 @@ export default {
     CreateAssetsComponent,
     AssetBalancesComponent,
     OwnAssetsComponent,
+    IssuerInfoComponent,
   },
   computed: {
     ...mapState(['isIssuer', 'issuer', 'passphrase', 'secondPassphrase']),
