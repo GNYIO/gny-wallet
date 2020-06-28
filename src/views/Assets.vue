@@ -1,64 +1,7 @@
 <template>
   <div>
     <el-row :gutter="20" v-if="!isIssuer">
-      <el-col :span="12">
-        <el-card v-if="!positiveBalance">
-          <h3>You need 100 GNY to register as issuer</h3>
-        </el-card>
-
-        <el-card v-if="positiveBalance">
-          <div slot="header">Register as Issuer</div>
-          <el-form
-            ref="registerIssuerForm"
-            :model="registerIssuerForm"
-            :rules="registerIssuerFormRules"
-            label-width="80px"
-          >
-            <el-form-item label="Name" prop="name">
-              <el-tooltip
-                effect="light"
-                content="Example: AAA"
-                placement="top-start"
-              >
-                <el-input
-                  v-model="registerIssuerForm.name"
-                  :disabled="alreayRegisteredIssuer"
-                ></el-input>
-              </el-tooltip>
-            </el-form-item>
-            <el-form-item label="Desc." prop="description">
-              <el-tooltip
-                effect="light"
-                content="Description"
-                placement="top-start"
-              >
-                <el-input
-                  v-model="registerIssuerForm.description"
-                  :disabled="alreayRegisteredIssuer"
-                ></el-input>
-              </el-tooltip>
-            </el-form-item>
-            <el-form-item>
-              <div style="float: left;">
-                <el-badge
-                  value="100 GNY"
-                  type="info"
-                  @mouseover.native="hideRegisterIssuerBadge = false"
-                  @mouseleave.native="hideRegisterIssuerBadge = true"
-                  :hidden="hideRegisterIssuerBadge"
-                >
-                  <el-button
-                    type="primary"
-                    @click="registerIssuer"
-                    :disabled="alreayRegisteredIssuer"
-                    >Register Issuer</el-button
-                  >
-                </el-badge>
-              </div>
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
+      <RegisterIssuerComponent></RegisterIssuerComponent>
     </el-row>
 
     <el-row :gutter="20" v-if="isIssuer">
@@ -221,6 +164,7 @@ import AssetsPaged from './AssetsPaged';
 import AssetTransfer from './AssetTransfer';
 import AssetsOwnTransfers from './AssetsOwnTransfers';
 import IssueAssetsComponent from './Assets/IssueAssetsComponent';
+import RegisterIssuerComponent from './Assets/RegisterIssuerComponent';
 import { BigNumber } from 'bignumber.js';
 
 import * as client from '@gny/client';
@@ -233,6 +177,7 @@ const connection = new client.Connection(
 
 export default {
   components: {
+    RegisterIssuerComponent,
     AssetsPaged,
     AssetTransfer,
     AssetsOwnTransfers,
@@ -240,48 +185,8 @@ export default {
   },
   data() {
     return {
-      hideRegisterIssuerBadge: true,
       hideCreateAssetBadge: true,
 
-      alreayRegisteredIssuer: false,
-
-      registerIssuerForm: {
-        name: '',
-        description: '',
-      },
-      registerIssuerFormRules: {
-        name: [
-          {
-            required: true,
-            message: 'Please add a name',
-            trigger: 'blur',
-          },
-          {
-            type: 'string',
-            pattern: /^[A-Za-z]{1,16}$/,
-            trigger: 'change',
-          },
-        ],
-        description: [
-          {
-            required: true,
-            message: 'Please add a description',
-            trigger: 'blur',
-          },
-          {
-            max: 4096,
-            message: 'Length should not be longer than 4096',
-            trigger: 'blur',
-          },
-        ],
-        maximum: [
-          {
-            required: true,
-            message: 'Please add a maximum',
-            trigger: 'blur',
-          },
-        ],
-      },
       createAssetsForm: {
         name: '',
         desc: '',
@@ -335,24 +240,6 @@ export default {
     ...mapGetters(['ownAssets', 'prettyBalances', 'positiveBalance']),
   },
   methods: {
-    async registerIssuer() {
-      try {
-        const name = this.registerIssuerForm.name;
-        const description = this.registerIssuerForm.description;
-
-        const trs = await connection.contract.Uia.registerIssuer(
-          name,
-          description,
-          this.passphrase,
-          this.secondPassphrase,
-        );
-
-        this.$message(trs.transactionId);
-        this.alreayRegisteredIssuer = true;
-      } catch (err) {
-        console.log(err.message);
-      }
-    },
     async createAsset() {
       try {
         await this.$refs['createAssetsForm'].validate();
