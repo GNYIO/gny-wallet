@@ -24,19 +24,7 @@
         </el-card>
       </el-col>
 
-      <el-col :span="12">
-        <el-card>
-          <div slot="header">
-            My Created Assets
-          </div>
-          <el-table stripe :data="ownAssets" style="width: 100%">
-            <el-table-column prop="name" label="Asset Name"> </el-table-column>
-            <el-table-column prop="desc" label="Description"> </el-table-column>
-            <el-table-column prop="leftToIssuePretty" label="Left to Issue">
-            </el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
+      <OwnAssetsComponent v-bind:ownAssets="ownAssets"></OwnAssetsComponent>
     </el-row>
 
     <el-row :gutter="20" v-if="isIssuer">
@@ -79,6 +67,7 @@ import IssueAssetsComponent from './Assets/IssueAssetsComponent';
 import RegisterIssuerComponent from './Assets/RegisterIssuerComponent';
 import CreateAssetsComponent from './Assets/CreateAssetsComponent';
 import AssetBalancesComponent from './Assets/AssetBalancesComponent';
+import OwnAssetsComponent from './Assets/OwnAssetsComponent';
 
 export default {
   components: {
@@ -89,6 +78,7 @@ export default {
     IssueAssetsComponent,
     CreateAssetsComponent,
     AssetBalancesComponent,
+    OwnAssetsComponent,
   },
   computed: {
     ...mapState(['isIssuer', 'issuer', 'passphrase', 'secondPassphrase']),
