@@ -4,7 +4,7 @@ import store from '../store/store';
 
 import Login from '../views/Login.vue';
 import Main from '../components/Main.vue';
-import Home from '../views/Home.vue';
+import Home from '../views/Home/Index';
 import Transfer from '../views/Transfer.vue';
 import Delegates from '../views/Delegates.vue';
 import Assets from '../views/Assets.vue';

@@ -45,12 +45,12 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import AccountInfoComponent from './Home/AccountInfoComponent';
-import SetUsernameComponent from './Home/SetUsernameComponent';
-import Set2ndPasswordComponent from './Home/Set2ndPasswordComponent';
-import LockAccountComponent from './Home/LockAccountComponent';
-import UnlockAccountComponent from './Home/UnlockAccountComponent';
-import TransactionsPaged from './Home/TransactionsPaged';
+import AccountInfoComponent from './AccountInfoComponent';
+import SetUsernameComponent from './SetUsernameComponent';
+import Set2ndPasswordComponent from './Set2ndPasswordComponent';
+import LockAccountComponent from './LockAccountComponent';
+import UnlockAccountComponent from './UnlockAccountComponent';
+import TransactionsPaged from './TransactionsPaged';
 
 export default {
   components: {
