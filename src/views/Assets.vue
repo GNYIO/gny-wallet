@@ -64,11 +64,8 @@
       <AssetsOwnTransfers></AssetsOwnTransfers>
     </el-row>
 
-    <!-- all assets -->
     <el-row :gutter="20">
-      <el-col :span="24">
-        <AssetsPaged></AssetsPaged>
-      </el-col>
+      <AssetsPaged></AssetsPaged>
     </el-row>
   </div>
 </template>
