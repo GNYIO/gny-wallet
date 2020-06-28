@@ -53,9 +53,7 @@
     </el-row>
 
     <el-row :gutter="20">
-      <el-col :span="12">
-        <AssetTransfer></AssetTransfer>
-      </el-col>
+      <AssetTransfer></AssetTransfer>
 
       <AssetBalancesComponent
         v-bind:prettyBalances="prettyBalances"
