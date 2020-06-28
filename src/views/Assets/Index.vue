@@ -47,15 +47,15 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import AssetsPagedComponent from './Assets/AssetsPagedComponent';
-import AssetTransferComponent from './Assets/AssetTransferComponent';
-import AssetsOwnTransfersComponent from './Assets/AssetsOwnTransfersComponent';
-import IssueAssetsComponent from './Assets/IssueAssetsComponent';
-import RegisterIssuerComponent from './Assets/RegisterIssuerComponent';
-import CreateAssetsComponent from './Assets/CreateAssetsComponent';
-import AssetBalancesComponent from './Assets/AssetBalancesComponent';
-import OwnAssetsComponent from './Assets/OwnAssetsComponent';
-import IssuerInfoComponent from './Assets/IssuerInfoComponent';
+import AssetsPagedComponent from './AssetsPagedComponent';
+import AssetTransferComponent from './AssetTransferComponent';
+import AssetsOwnTransfersComponent from './AssetsOwnTransfersComponent';
+import IssueAssetsComponent from './IssueAssetsComponent';
+import RegisterIssuerComponent from './RegisterIssuerComponent';
+import CreateAssetsComponent from './CreateAssetsComponent';
+import AssetBalancesComponent from './AssetBalancesComponent';
+import OwnAssetsComponent from './OwnAssetsComponent';
+import IssuerInfoComponent from './IssuerInfoComponent';
 
 export default {
   components: {
