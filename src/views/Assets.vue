@@ -1,7 +1,11 @@
 <template>
   <div>
     <el-row :gutter="20" v-if="!isIssuer">
-      <RegisterIssuerComponent></RegisterIssuerComponent>
+      <RegisterIssuerComponent
+        v-bind:passphrase="passphrase"
+        v-bind:secondPassphrase="secondPassphrase"
+        v-bind:positiveBalance="positiveBalance"
+      ></RegisterIssuerComponent>
     </el-row>
 
     <el-row :gutter="20" v-if="isIssuer">

@@ -70,6 +70,7 @@ const connection = new client.Connection(
 
 export default {
   props: {
+    positiveBalance: Boolean,
     passphrase: String,
     secondPassphrase: String,
   },
