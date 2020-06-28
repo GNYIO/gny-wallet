@@ -47,9 +47,9 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import AssetsPaged from './AssetsPaged';
-import AssetTransfer from './AssetTransfer';
-import AssetsOwnTransfers from './AssetsOwnTransfers';
+import AssetsPaged from './Assets/AssetsPaged';
+import AssetTransfer from './Assets/AssetTransfer';
+import AssetsOwnTransfers from './Assets/AssetsOwnTransfers';
 import IssueAssetsComponent from './Assets/IssueAssetsComponent';
 import RegisterIssuerComponent from './Assets/RegisterIssuerComponent';
 import CreateAssetsComponent from './Assets/CreateAssetsComponent';
