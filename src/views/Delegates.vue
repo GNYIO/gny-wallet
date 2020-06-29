@@ -294,7 +294,7 @@
     <el-row :gutter="20">
       <el-col :span="24">
         <el-card>
-          <DelegatePaged></DelegatePaged>
+          <DelegatesPagedComponent></DelegatesPagedComponent>
         </el-card>
       </el-col>
     </el-row>
@@ -302,7 +302,8 @@
 </template>
 
 <script>
-import DelegatePaged from './DelegatesPaged';
+import DelegatesPagedComponent from './Delegates/DelegatesPagedComponent';
+
 import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
 const connection = new client.Connection(
@@ -314,7 +315,7 @@ const connection = new client.Connection(
 
 export default {
   components: {
-    DelegatePaged,
+    DelegatesPagedComponent,
   },
   computed: {
     ...mapState([
