@@ -86,13 +86,7 @@ export default {
       'delegatesForWhichIHaveNotVotedYet',
     ]),
   },
-  data() {
-    return {
-      position: 0,
 
-      delegates: [],
-    };
-  },
   async mounted() {
     await this.$store.dispatch('refreshAccounts');
     await this.$store.dispatch('getWhoIVotedFor');
