@@ -6,40 +6,11 @@
         v-bind:delegate="delegate"
       ></DelegateInfoComponent>
 
-      <el-col :span="12">
-        <el-card v-if="user.isDelegate === 0 && user.username !== null">
-          <div slot="header">
-            <span>Register Delegate</span>
-          </div>
-
-          <el-form ref="form" :model="form">
-            <el-form-item>
-              <el-badge
-                value="100 GNY"
-                type="info"
-                @mouseover.native="hideRegisterDelegateBadge = false"
-                @mouseleave.native="hideRegisterDelegateBadge = true"
-                :hidden="hideRegisterDelegateBadge"
-              >
-                <el-button
-                  type="primary"
-                  @click="registerAsDelegate"
-                  :disabled="alreadyDelegate"
-                  >Register as Delegate</el-button
-                >
-              </el-badge>
-            </el-form-item>
-          </el-form>
-        </el-card>
-
-        <el-card v-if="user.isDelegate === 0 && user.username === null">
-          <h3>
-            Set your username before registering as Delegate
-          </h3>
-          <p>Lock your account here:</p>
-          <router-link to="/home">Home</router-link>
-        </el-card>
-      </el-col>
+      <RegisterDelegateComponent
+        v-bind:user="user"
+        v-bind:passphrase="passphrase"
+        v-bind:secondPassphrase="secondPassphrase"
+      ></RegisterDelegateComponent>
     </el-row>
 
     <el-row :gutter="20">
@@ -248,6 +219,7 @@
 
 <script>
 import DelegateInfoComponent from './DelegateInfoComponent';
+import RegisterDelegateComponent from './RegisterDelegateComponent';
 import DelegatesPagedComponent from './DelegatesPagedComponent';
 
 import { mapState, mapGetters } from 'vuex';
@@ -262,6 +234,7 @@ const connection = new client.Connection(
 export default {
   components: {
     DelegateInfoComponent,
+    RegisterDelegateComponent,
     DelegatesPagedComponent,
   },
   computed: {
@@ -280,14 +253,10 @@ export default {
   },
   data() {
     return {
-      hideRegisterDelegateBadge: true,
       hideUnvoteBadge: true,
       hideVoteBadge: true,
 
-      alreadyDelegate: false,
-
       position: 0,
-      form: {},
       voteForm: {
         delegates: [],
       },
@@ -363,20 +332,6 @@ export default {
     },
     resetUnvoteForm() {
       this.$refs['unvoteForm'].resetFields();
-    },
-    async registerAsDelegate() {
-      try {
-        const result = await connection.contract.Basic.registerDelegate(
-          this.passphrase,
-          this.secondPassphrase,
-        );
-        this.$message(result.transactionId);
-
-        this.alreadyDelegate = true;
-      } catch (err) {
-        console.log(err.message);
-        console.log(err.response && err.response.data);
-      }
     },
   },
   async mounted() {
