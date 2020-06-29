@@ -18,37 +18,9 @@
         v-bind:myVoters="myVoters"
       ></WhoVotedForMeComponent>
 
-      <el-col :span="12">
-        <el-card>
-          <div slot="header">
-            Who I voted for
-          </div>
-
-          <el-table
-            :data="whoIVotedFor"
-            stripe
-            style="width: 100%"
-            :height="250"
-          >
-            <el-table-column
-              prop="username"
-              label="Username"
-              width="90"
-            ></el-table-column>
-            <el-table-column
-              prop="rate"
-              label="Rank"
-              width="80"
-            ></el-table-column>
-            <el-table-column prop="address" label="Address"></el-table-column>
-            <el-table-column prop="approval" label="Approval"></el-table-column>
-            <el-table-column
-              prop="productivity"
-              label="Productivity"
-            ></el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
+      <WhoIVotedForComponent
+        v-bind:whoIVotedFor="whoIVotedFor"
+      ></WhoIVotedForComponent>
     </el-row>
 
     <el-row :gutter="20">
@@ -203,6 +175,7 @@
 import DelegateInfoComponent from './DelegateInfoComponent';
 import RegisterDelegateComponent from './RegisterDelegateComponent';
 import WhoVotedForMeComponent from './WhoVotedForMeComponent';
+import WhoIVotedForComponent from './WhoIVotedForComponent';
 import DelegatesPagedComponent from './DelegatesPagedComponent';
 
 import { mapState, mapGetters } from 'vuex';
@@ -219,6 +192,7 @@ export default {
     DelegateInfoComponent,
     RegisterDelegateComponent,
     WhoVotedForMeComponent,
+    WhoIVotedForComponent,
     DelegatesPagedComponent,
   },
   computed: {
