@@ -44,7 +44,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { prettyPrintMyAddressFilter } from '../filters/index';
+import { prettyPrintMyAddressFilter } from '../../filters/index';
 
 export default {
   filters: {

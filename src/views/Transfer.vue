@@ -83,7 +83,7 @@
 
     <el-row :gutter="20">
       <el-col :span="24">
-        <TransfersPaged></TransfersPaged>
+        <TransfersPagedComponent></TransfersPagedComponent>
       </el-col>
     </el-row>
   </div>
@@ -94,7 +94,7 @@ import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
 import { isAddress } from '@gny/utils';
 import { BigNumber } from 'bignumber.js';
-import TransfersPaged from './TransfersPaged';
+import TransfersPagedComponent from './Transfers/TransfersPagedComponent';
 
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
@@ -105,7 +105,7 @@ const connection = new client.Connection(
 
 export default {
   components: {
-    TransfersPaged,
+    TransfersPagedComponent,
   },
   data() {
     const validateAddress = (rule, value, callback) => {
