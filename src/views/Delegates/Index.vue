@@ -302,7 +302,7 @@
 </template>
 
 <script>
-import DelegatesPagedComponent from './Delegates/DelegatesPagedComponent';
+import DelegatesPagedComponent from './DelegatesPagedComponent';
 
 import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
