@@ -25,7 +25,9 @@
         v-bind:passphrase="passphrase"
         v-bind:secondPassphrase="secondPassphrase"
       ></LockAccountComponent>
+    </el-row>
 
+    <el-row :gutter="20">
       <UnlockAccountComponent
         v-bind:user="user"
         v-bind:positiveBalance="positiveBalance"

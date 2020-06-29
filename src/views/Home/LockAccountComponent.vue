@@ -1,5 +1,5 @@
 <template>
-  <el-col :span="12" v-if="user.lockHeight === '0'">
+  <el-col :span="12">
     <el-card v-if="!positiveBalance">
       <div>
         <h3>You need 0.1 GNY to lock your account</h3>
@@ -7,8 +7,11 @@
     </el-card>
 
     <el-card v-if="positiveBalance">
-      <div slot="header">
+      <div slot="header" v-if="user.lockHeight === '0'">
         Lock your account
+      </div>
+      <div slot="header" v-else>
+        Increase your lock amount
       </div>
 
       <el-form
@@ -87,16 +90,20 @@ export default {
     const validateBlockHeight = (rule, value, callback) => {
       try {
         const minLockHeight = new BigNumber(this.minLockHeight);
-        if (minLockHeight.isLessThan(value)) {
+        if (minLockHeight.isLessThanOrEqualTo(value)) {
           callback();
         } else {
           callback(
-            new Error(`Lock height must be greater than ${this.minLockHeight}`),
+            new Error(
+              `Lock height must be greater or equal to ${this.minLockHeight}`,
+            ),
           );
         }
       } catch (err) {
         callback(
-          new Error(`Lock height must be greater than ${this.minLockHeight}`),
+          new Error(
+            `Lock height must be greater or equal to ${this.minLockHeight}`,
+          ),
         );
       }
     };
@@ -167,7 +174,9 @@ export default {
         this.$message(result.transactionId);
         this.isLocked = true;
       } catch (err) {
-        console.log(err.message);
+        this.$message(
+          err && err.response && err.response.data && err.response.data.error,
+        );
       }
     },
   },

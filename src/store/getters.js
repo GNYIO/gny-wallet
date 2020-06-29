@@ -127,9 +127,10 @@ export const getters = {
     return balances;
   },
   positiveBalance: state => new BigNumber(state.user.balance).isGreaterThan(0),
-  minLockHeight: (state, getters) =>
-    new BigNumber(getters.latestBlock.height)
+  // lockHeight normally 0, if locked than highter (muliple locks possible)
+  minLockHeight: (state, getters) => {
+    return BigNumber.max(getters.latestBlock.height, getters.user.lockHeight)
       .plus(172800)
-      .plus(10)
-      .toFixed(),
+      .toFixed();
+  },
 };
