@@ -14,27 +14,9 @@
     </el-row>
 
     <el-row :gutter="20">
-      <el-col :span="12">
-        <el-card>
-          <div slot="header">
-            <span>Who voted for me</span>
-          </div>
-
-          <el-table :data="myVoters" stripe style="width: 100%" :height="250">
-            <el-table-column
-              prop="lockAmount"
-              label="Lock Amount"
-            ></el-table-column>
-            <el-table-column
-              prop="weightRatio"
-              label="weightRatio"
-            ></el-table-column>
-            <el-table-column prop="address" label="Address"></el-table-column>
-            <el-table-column prop="username" label="Username">
-            </el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
+      <WhoVotedForMeComponent
+        v-bind:myVoters="myVoters"
+      ></WhoVotedForMeComponent>
 
       <el-col :span="12">
         <el-card>
@@ -220,6 +202,7 @@
 <script>
 import DelegateInfoComponent from './DelegateInfoComponent';
 import RegisterDelegateComponent from './RegisterDelegateComponent';
+import WhoVotedForMeComponent from './WhoVotedForMeComponent';
 import DelegatesPagedComponent from './DelegatesPagedComponent';
 
 import { mapState, mapGetters } from 'vuex';
@@ -235,6 +218,7 @@ export default {
   components: {
     DelegateInfoComponent,
     RegisterDelegateComponent,
+    WhoVotedForMeComponent,
     DelegatesPagedComponent,
   },
   computed: {
