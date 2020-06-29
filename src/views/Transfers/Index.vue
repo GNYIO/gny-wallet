@@ -94,7 +94,7 @@ import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
 import { isAddress } from '@gny/utils';
 import { BigNumber } from 'bignumber.js';
-import TransfersPagedComponent from './Transfers/TransfersPagedComponent';
+import TransfersPagedComponent from './TransfersPagedComponent';
 
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,

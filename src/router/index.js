@@ -5,7 +5,7 @@ import store from '../store/store';
 import Login from '../views/Login.vue';
 import Main from '../components/Main.vue';
 import Home from '../views/Home/Index';
-import Transfer from '../views/Transfer.vue';
+import Transfer from '../views/Transfers/Index.vue';
 import Delegates from '../views/Delegates/Index.vue';
 import Assets from '../views/Assets/Index.vue';
 import MachineLearning from '../views/MachineLearning.vue';
