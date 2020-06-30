@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import { showErrorPopup } from '../../helpers/errorDisplay';
 import { BigNumber } from 'bignumber.js';
 import * as client from '@gny/client';
 
@@ -185,7 +186,7 @@ export default {
         this.$message(result.transactionId);
         this.$refs['issueAssetsForm'].resetFields();
       } catch (err) {
-        console.log(err.response && err.response.data);
+        showErrorPopup.apply(this, [err]);
       }
     },
 

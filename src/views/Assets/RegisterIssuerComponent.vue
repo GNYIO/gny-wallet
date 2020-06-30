@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { showErrorPopup } from '../../helpers/errorDisplay';
 import * as client from '@gny/client';
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
@@ -136,7 +137,7 @@ export default {
         this.$message(trs.transactionId);
         this.alreayRegisteredIssuer = true;
       } catch (err) {
-        console.log(err.message);
+        showErrorPopup.apply(this, [err]);
       }
     },
   },

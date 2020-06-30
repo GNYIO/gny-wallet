@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import { showErrorPopup } from '../../helpers/errorDisplay';
 import * as client from '@gny/client';
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
@@ -173,7 +174,7 @@ export default {
           this.$refs['createAssetsForm'].resetFields();
         }
       } catch (err) {
-        console.log(err.response && err.response.data);
+        showErrorPopup.apply(this, [err]);
       }
     },
     resetCreateAssetsForm() {

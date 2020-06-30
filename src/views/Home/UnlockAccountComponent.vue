@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { showErrorPopup } from '../../helpers/errorDisplay';
 import { BigNumber } from 'bignumber.js';
 import * as client from '@gny/client';
 const connection = new client.Connection(
@@ -75,12 +76,7 @@ export default {
         );
         this.$message(result.transactionId);
       } catch (err) {
-        const message =
-          err && err.response && err.response.data && err.response.data.error;
-        this.$message({
-          message: message,
-          type: 'error',
-        });
+        showErrorPopup.apply(this, [err]);
       }
     },
   },

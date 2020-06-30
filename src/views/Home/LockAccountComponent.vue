@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import { showErrorPopup } from '../../helpers/errorDisplay';
 import { BigNumber } from 'bignumber.js';
 
 import * as client from '@gny/client';
@@ -174,9 +175,7 @@ export default {
         this.$message(result.transactionId);
         this.isLocked = true;
       } catch (err) {
-        this.$message(
-          err && err.response && err.response.data && err.response.data.error,
-        );
+        showErrorPopup.apply(this, [err]);
       }
     },
   },

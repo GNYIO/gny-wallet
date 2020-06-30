@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import { showErrorPopup } from '../../helpers/errorDisplay';
 import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
 import { isAddress, BigNumber } from '@gny/utils';
@@ -182,10 +183,7 @@ export default {
 
         this.$refs['transferAssetForm'].resetFields();
       } catch (err) {
-        const message =
-          (err.response && err.response.data && err.response.data.error) ||
-          'request failed';
-        this.$message(`Error: ${message}`);
+        showErrorPopup.apply(this, [err]);
       }
     },
     resetTransferAsset() {

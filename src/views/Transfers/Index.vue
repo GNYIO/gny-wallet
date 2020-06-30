@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import { showErrorPopup } from '../../helpers/errorDisplay';
 import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
 import { isAddress } from '@gny/utils';
@@ -193,8 +194,8 @@ export default {
         );
         this.$message(result.transactionId);
         this.$refs['form'].resetFields();
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        showErrorPopup.apply(this, [err]);
       }
     },
     resetForm() {

@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import { showErrorPopup } from '../../helpers/errorDisplay';
 import * as client from '@gny/client';
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
@@ -111,7 +112,7 @@ export default {
         await this.$store.dispatch('setSecondPassphrase', secondPassphrase);
         await this.$store.dispatch('refreshAccounts');
       } catch (err) {
-        console.log(err);
+        showErrorPopup.apply(this, [err]);
       }
     },
   },
