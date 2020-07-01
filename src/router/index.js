@@ -4,10 +4,10 @@ import store from '../store/store';
 
 import Login from '../views/Login.vue';
 import Main from '../components/Main.vue';
-import Home from '../views/Home.vue';
-import Transfer from '../views/Transfer.vue';
-import Delegates from '../views/Delegates.vue';
-import Assets from '../views/Assets.vue';
+import Home from '../views/Home/Index';
+import Transfer from '../views/Transfers/Index.vue';
+import Delegates from '../views/Delegates/Index.vue';
+import Assets from '../views/Assets/Index.vue';
 import MachineLearning from '../views/MachineLearning.vue';
 import Error404 from '../views/Error404.vue';
 

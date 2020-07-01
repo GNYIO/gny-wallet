@@ -83,18 +83,19 @@
 
     <el-row :gutter="20">
       <el-col :span="24">
-        <TransfersPaged></TransfersPaged>
+        <TransfersPagedComponent></TransfersPagedComponent>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+import { showErrorPopup } from '../../helpers/errorDisplay';
 import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
 import { isAddress } from '@gny/utils';
 import { BigNumber } from 'bignumber.js';
-import TransfersPaged from './TransfersPaged';
+import TransfersPagedComponent from './TransfersPagedComponent';
 
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
@@ -105,7 +106,7 @@ const connection = new client.Connection(
 
 export default {
   components: {
-    TransfersPaged,
+    TransfersPagedComponent,
   },
   data() {
     const validateAddress = (rule, value, callback) => {
@@ -193,8 +194,8 @@ export default {
         );
         this.$message(result.transactionId);
         this.$refs['form'].resetFields();
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        showErrorPopup.apply(this, [err]);
       }
     },
     resetForm() {

@@ -1,33 +1,33 @@
 <template>
-  <div>
+  <el-col :span="24">
     <el-card>
       <div slot="header">
-        Past GNY Transfers
+        Past Own Asset Transfers ({{ assetTransfersPrettyCount }})
       </div>
+
       <el-table
         :data="currentTransfers"
         style="width: 100%"
         :row-class-name="tableRowClassName"
       >
-        <el-table-column label="Sender" width="300">
-          <template slot-scope="scope">
-            <div slot="reference">
-              {{ scope.row.senderId | prettyPrintMyAddress(user.address) }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="Recipient" width="300">
-          <template slot-scope="scope">
-            <div slot="reference">
-              {{ scope.row.recipientId | prettyPrintMyAddress(user.address) }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="currency" label="Currency"></el-table-column>
-        <el-table-column prop="amount" label="Amount"></el-table-column>
-        <el-table-column prop="height" label="Height"> </el-table-column>
-        <el-table-column prop="transactions.message" label="Message">
-        </el-table-column>
+        <el-table-column prop="senderId" label="Sender"></el-table-column>
+        <el-table-column prop="recipientId" label="Recipient"></el-table-column>
+        <el-table-column
+          prop="currency"
+          label="Currency"
+          width="150"
+        ></el-table-column>
+        <el-table-column
+          prop="amount"
+          label="Amount"
+          width="150"
+        ></el-table-column>
+        <el-table-column
+          prop="height"
+          label="Height"
+          width="150"
+        ></el-table-column>
+        <el-table-column prop="message" label="message"></el-table-column>
       </el-table>
       <div class="block">
         <el-pagination
@@ -35,24 +35,20 @@
           :current-page="currentPage"
           :page-size="10"
           layout="prev, pager, next"
-          :total="gnyTransfersPrettyCount"
+          :total="assetTransfersPrettyCount"
         ></el-pagination>
       </div>
     </el-card>
-  </div>
+  </el-col>
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
-import { prettyPrintMyAddressFilter } from '../filters/index';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
-  filters: {
-    prettyPrintMyAddress: prettyPrintMyAddressFilter,
-  },
   computed: {
     ...mapState(['user']),
-    ...mapGetters(['gnyTransfersPretty', 'gnyTransfersPrettyCount']),
+    ...mapGetters(['assetTransfersPretty', 'assetTransfersPrettyCount']),
   },
   data() {
     return {
@@ -64,7 +60,7 @@ export default {
   methods: {
     handleCurrentChange(currentPage) {
       this.currentPage = currentPage;
-      this.changePage(this.gnyTransfersPretty, currentPage);
+      this.changePage(this.assetTransfersPretty, currentPage);
     },
     changePage(list, currentPage) {
       let from = (currentPage - 1) * this.pageSize;
@@ -87,9 +83,7 @@ export default {
       return '';
     },
   },
-  async mounted() {
-    await this.$store.dispatch('getTransfers');
-
+  mounted() {
     this.handleCurrentChange(1);
   },
 };

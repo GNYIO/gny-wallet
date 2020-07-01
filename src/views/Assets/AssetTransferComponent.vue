@@ -1,84 +1,87 @@
 <template>
-  <el-card>
-    <div slot="header">
-      Transfer Asset
-    </div>
-    <el-form
-      ref="transferAssetForm"
-      :model="transferAssetForm"
-      :rules="transferAssetFormRules"
-      label-width="80px"
-    >
-      <el-form-item label="Curr." prop="currency">
-        <el-tooltip
-          effect="light"
-          content="Select currency"
-          placement="top-start"
-        >
-          <el-select
-            placeholder="select currency"
-            clearable
-            v-model="transferAssetForm.currency"
-            style="float: left"
+  <el-col :span="12">
+    <el-card>
+      <div slot="header">
+        Transfer Asset
+      </div>
+      <el-form
+        ref="transferAssetForm"
+        :model="transferAssetForm"
+        :rules="transferAssetFormRules"
+        label-width="80px"
+      >
+        <el-form-item label="Curr." prop="currency">
+          <el-tooltip
+            effect="light"
+            content="Select currency"
+            placement="top-start"
           >
-            <el-option
-              v-for="item in ownAssets"
-              :key="item.name"
-              :label="item.name"
-              :value="item.name"
+            <el-select
+              placeholder="select currency"
+              clearable
+              v-model="transferAssetForm.currency"
+              style="float: left"
             >
-            </el-option>
-          </el-select>
-        </el-tooltip>
-      </el-form-item>
-      <el-form-item label="Amount" prop="amount">
-        <el-tooltip effect="light" content="Add amount" placement="top-start">
-          <el-input v-model="transferAssetForm.amount" :min="0"> </el-input>
-        </el-tooltip>
-      </el-form-item>
-      <el-form-item label="Recip." prop="recipientId">
-        <el-tooltip
-          effect="light"
-          content="Add recipient. e.g. GWrAxgXSiZxieGrLWungJqWe4Xws"
-          placement="top-start"
-        >
-          <el-input v-model="transferAssetForm.recipientId"></el-input>
-        </el-tooltip>
-      </el-form-item>
-      <el-form-item label="Message" prop="message">
-        <el-tooltip
-          effect="light"
-          content="Add optional message"
-          placement="top-start"
-        >
-          <el-input v-model="transferAssetForm.message"></el-input>
-        </el-tooltip>
-      </el-form-item>
-      <el-form-item>
-        <div style="float: left;">
-          <el-badge
-            value="0.1 GNY"
-            type="info"
-            @mouseover.native="hideTransferAssetBadge = false"
-            @mouseleave.native="hideTransferAssetBadge = true"
-            :hidden="hideTransferAssetBadge"
+              <el-option
+                v-for="item in ownAssets"
+                :key="item.name"
+                :label="item.name"
+                :value="item.name"
+              >
+              </el-option>
+            </el-select>
+          </el-tooltip>
+        </el-form-item>
+        <el-form-item label="Amount" prop="amount">
+          <el-tooltip effect="light" content="Add amount" placement="top-start">
+            <el-input v-model="transferAssetForm.amount" :min="0"> </el-input>
+          </el-tooltip>
+        </el-form-item>
+        <el-form-item label="Recip." prop="recipientId">
+          <el-tooltip
+            effect="light"
+            content="Add recipient. e.g. GWrAxgXSiZxieGrLWungJqWe4Xws"
+            placement="top-start"
           >
-            <el-button type="primary" @click="transferAsset"
-              >Transfer Asset</el-button
+            <el-input v-model="transferAssetForm.recipientId"></el-input>
+          </el-tooltip>
+        </el-form-item>
+        <el-form-item label="Message" prop="message">
+          <el-tooltip
+            effect="light"
+            content="Add optional message"
+            placement="top-start"
+          >
+            <el-input v-model="transferAssetForm.message"></el-input>
+          </el-tooltip>
+        </el-form-item>
+        <el-form-item>
+          <div style="float: left;">
+            <el-badge
+              value="0.1 GNY"
+              type="info"
+              @mouseover.native="hideTransferAssetBadge = false"
+              @mouseleave.native="hideTransferAssetBadge = true"
+              :hidden="hideTransferAssetBadge"
             >
-          </el-badge>
-        </div>
-        <el-button
-          @click="resetTransferAsset"
-          style="float: left; margin-left: 10px"
-          >Reset</el-button
-        >
-      </el-form-item>
-    </el-form>
-  </el-card>
+              <el-button type="primary" @click="transferAsset"
+                >Transfer Asset</el-button
+              >
+            </el-badge>
+          </div>
+          <el-button
+            @click="resetTransferAsset"
+            style="float: left; margin-left: 10px"
+            >Reset</el-button
+          >
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </el-col>
 </template>
 
 <script>
+import { showErrorPopup } from '../../helpers/errorDisplay';
 import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
 import { isAddress, BigNumber } from '@gny/utils';
@@ -180,10 +183,7 @@ export default {
 
         this.$refs['transferAssetForm'].resetFields();
       } catch (err) {
-        const message =
-          (err.response && err.response.data && err.response.data.error) ||
-          'request failed';
-        this.$message(`Error: ${message}`);
+        showErrorPopup.apply(this, [err]);
       }
     },
     resetTransferAsset() {
