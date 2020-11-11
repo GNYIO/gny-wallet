@@ -23,28 +23,32 @@ Feature ‘Class’ is the response variable and it takes value 1 in case of fra
     <br />
     <h1>Step 2 : Upload CSV DATA File</h1>
 
-    <el-upload
-      class="upload-demo"
-      ref="upload"
-      action="http://3.23.20.59:5000/myupfiles_fraud2"
-      :auto-upload="false"
-      :file-list="fileList"
-    >
-      <el-button slot="trigger" size="small" type="primary" @click="handleSelect"
-        >Select a file</el-button
+    <el-form>
+      <el-upload
+        action="http://3.23.20.59:5000/myupfiles_fraud2"
+        :multiple="false"
+        :on-change="handleChange"
+        :limit="1"
+        :auto-upload="true"
+        :file-list="fileList"
+        :http-request="uploadFiles"
       >
-      <el-button
+        <el-button slot="trigger" size="small" type="primary"
+          >Click to upload</el-button
+        >
+              <!-- <el-button
         style="margin-left: 10px;"
         size="small"
         type="success"
         :plain="true"
-        @click="handleSubmit"
+        @click="onSubmit"
         >Upload</el-button
-      >
-      <div slot="tip" class="el-upload__tip">
-        Your file must follow the GNY format.
-      </div>
-    </el-upload>
+      > -->
+        <div slot="tip" class="el-upload__tip">
+          Your file must follow the GNY format.
+        </div>
+      </el-upload>
+    </el-form>
 
     <br />
     <br />
@@ -76,33 +80,44 @@ Feature ‘Class’ is the response variable and it takes value 1 in case of fra
 </template>
 
 <script>
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
+import axios from 'axios';
+
 export default {
   data() {
     return {
       fileList: [],
-      isFileSelected: false,
+      isFileSelected: true,
       isRunPredictionClicked: false,
     };
   },
   methods: {
-    handleSelect() {
-      this.isFileSelected = true;
+    handleChange(file, fileList) {
+      console.log('changed', fileList);
     },
-    async handleSubmit() {
+    uploadFiles(fileList) {
       if (this.isFileSelected) {
-        this.fileList = [];
+        const formData = new FormData();
+        // console.log('fileList', fileList.file);
 
-        await sleep(2000);
+        formData.append('file', fileList.file);
 
-        this.$message({
-          message: 'Congratulations! You have uploaded your file successfully',
-          type: 'success',
-        });
+        axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+        axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+        axios({
+          method: 'post',
+          url: 'http://3.23.20.59:5000/myupfiles_fraud2',
+          data: formData,
+        })
+          .then(response => {
+            this.$message({
+              message: 'Congratulations! You have uploaded your file successfully',
+              type: 'success',
+            });
+            console.log(response);
+          })
+          .catch(error => {
+            console.log(error);
+          });
       } else {
         this.$message({
           message: 'You have to choose one file!',
@@ -112,11 +127,21 @@ export default {
     },
     runPrediction() {
       this.isRunPredictionClicked = true;
-      this.$message({
-        message: 'You can download your predictions now.',
-        type: 'success',
-      });
-    }
+      axios({
+        method: 'get',
+        url: 'http://3.23.20.59:5000/run_pred_batch_2_fraud',
+      })
+        .then(response => {
+          this.$message({
+            message: 'You can download your predictions now.',
+            type: 'success',
+          });
+          console.log(response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
   },
 };
 </script>
