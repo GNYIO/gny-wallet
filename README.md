@@ -27,7 +27,7 @@ Install one of the following:
 
 - 1. Set Breakpoints in your code
 - 2. Run `npm run serve` in your console
-  - 2.1. this starts a local webserver on `http://localhost:8080`
+  - 2.1. this starts a local webserver on `http://127.0.0.1:8080`
 - 3. Start the green button in VS Code to launch the configuration `launch firefox` (from `launch.json`)
   - 3.1 This opens the `firefox` browser and let you debug the app in VS Code
 
@@ -37,20 +37,21 @@ Install one of the following:
 Create a `.env.development` file with:
 
 ```bash
-echo $'GNY_ENDPOINT=localhost\nGNY_PORT=4096\nGNY_NETWORK=localnet' > .env.development
+echo $'VUE_APP_GNY_ENDPOINT=127.0.0.1\nVUE_APP_GNY_PORT=4096\nVUE_APP_GNY_NETWORK=localnet\nVUE_APP_HTTPS=false' > .env.development
 ```
 
 Which will create the following `.env.development` file:
 
 ```env
-GNY_ENDPOINT=localhost
-GNY_PORT=4096
-GNY_NETWORK=localnet
+VUE_APP_GNY_ENDPOINT=127.0.0.1
+VUE_APP_GNY_PORT=4096
+VUE_APP_GNY_NETWORK=localnet
+VUE_APP_HTTPS=false
 ```
 
 ### Serve files
 
-Will serve files on [http://localhost:8080/](http://localhost:8080/)
+Will serve files on [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
 ```bash
 npm run serve
 ```
@@ -62,15 +63,16 @@ npm run serve
 Create a `.env.production` file with:
 
 ```bash
-echo $'GNY_ENDPOINT=45.76.215.117\nGNY_PORT=4096\nGNY_NETWORK=mainnet' > .env.production
+echo $'VUE_APP_GNY_ENDPOINT=testnet.gny.io\nVUE_APP_GNY_PORT=80\nVUE_APP_GNY_NETWORK=localnet\nVUE_APP_HTTPS=true' > .env.production
 ```
 
 Which will create the following `.env.production` file:
 
 ```env
-GNY_ENDPOINT=45.76.215.117
-GNY_PORT=4096
-GNY_NETWORK=mainnet
+VUE_APP_GNY_ENDPOINT=testnet.gny.io
+VUE_APP_GNY_PORT=80
+VUE_APP_GNY_NETWORK=localnet
+VUE_APP_HTTPS=true
 ```
 
 
