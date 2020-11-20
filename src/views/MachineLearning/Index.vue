@@ -40,7 +40,7 @@ export default {
     },
     runJupyter() {
       this.$router.push('/run_jupyter');
-    }
+    },
   },
 };
 </script>
