@@ -117,7 +117,7 @@ export default {
           url: 'https://mlapi.gny.io/myupfiles_run_demo_data_location',
           data: formData,
         })
-          .then((response) => {
+          .then(response => {
             this.$message({
               message:
                 'Congratulations! You have uploaded your file successfully',
@@ -125,7 +125,7 @@ export default {
             });
             console.log(response);
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
           });
       } else {
@@ -141,14 +141,14 @@ export default {
         method: 'get',
         url: 'https://mlapi.gny.io/run_pred_batch_2_loc',
       })
-        .then((response) => {
+        .then(response => {
           this.$message({
             message: 'You can download your predictions now.',
             type: 'success',
           });
           console.log(response);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },

@@ -71,7 +71,7 @@ const Router = new VueRouter({
         {
           path: '/run_jupyter',
           component: Jupyter,
-        }
+        },
       ],
     },
     {

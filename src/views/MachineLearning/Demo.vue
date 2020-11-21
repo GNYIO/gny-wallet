@@ -1,8 +1,10 @@
 <template>
   <el-main>
     <h2>
-      Learn how to run ML contracts using your own data by practicing with our Demos.
-      <br />Each Demo shows the kind of data required, and the steps taken to successfully implement 3 different retail focused ML contracts.
+      Learn how to run ML contracts using your own data by practicing with our
+      Demos.
+      <br />Each Demo shows the kind of data required, and the steps taken to
+      successfully implement 3 different retail focused ML contracts.
     </h2>
     <br />
     <br />
@@ -14,7 +16,9 @@
     <br />
     <h1>LOCATION DEMO</h1>
     <h2>Predict what locations will sell the most inventory next month</h2>
-    <el-button type="success" @click="runLocationDemo">Run Location Demo</el-button>
+    <el-button type="success" @click="runLocationDemo"
+      >Run Location Demo</el-button
+    >
     <br />
     <br />
     <h1>FRAUD DEMO</h1>
