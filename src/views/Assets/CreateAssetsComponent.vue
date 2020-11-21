@@ -33,7 +33,7 @@
           <el-tooltip effect="light" content="Precision" placement="top-start">
             <el-input-number
               v-model="createAssetsForm.precision"
-              :min="1"
+              :min="0"
               :max="16"
               style="float: left;"
             ></el-input-number>
@@ -42,6 +42,19 @@
         <el-form-item label="Maximum" prop="maximum">
           <el-tooltip effect="light" content="Maximum" placement="top-start">
             <el-input v-model="createAssetsForm.maximum"></el-input>
+          </el-tooltip>
+        </el-form-item>
+        <el-form-item label="Full" prop="fullMaximum">
+          <el-tooltip
+            effect="light"
+            content="Precision and Maximum combined"
+            placement="top-start"
+          >
+            <el-input
+              v-model="fullMaximum"
+              :disabled="true"
+              :readonly="true"
+            ></el-input>
           </el-tooltip>
         </el-form-item>
         <el-form-item>
@@ -88,6 +101,44 @@ export default {
     secondPassphrase: String,
   },
   data() {
+    const validatePrecision = (rule, value, callback) => {
+      const highestPossibleMaximum = '9000000000000000000';
+
+      const precRaw = Math.pow(10, Number(value));
+      const maximum = new BigNumber(this.createAssetsForm.maximum)
+        .multipliedBy(precRaw)
+        .toFixed();
+
+      const errorMsg = `Precision too high for this maximum`;
+      try {
+        if (new BigNumber(maximum).isGreaterThan(highestPossibleMaximum)) {
+          callback(new Error(errorMsg));
+        } else {
+          callback();
+        }
+      } catch (err) {
+        callback(new Error(errorMsg));
+      }
+    };
+
+    const validateMaximum = (rule, value, callback) => {
+      const highestPossibleMaximum = '9000000000000000000';
+
+      const precRaw = Math.pow(10, Number(this.createAssetsForm.precision));
+      const maximum = new BigNumber(value).multipliedBy(precRaw).toFixed();
+
+      const errorMsg = `Maximum can be maximum "${highestPossibleMaximum}"`;
+      try {
+        if (new BigNumber(maximum).isGreaterThan(highestPossibleMaximum)) {
+          callback(new Error(errorMsg));
+        } else {
+          callback();
+        }
+      } catch (err) {
+        callback(new Error(errorMsg));
+      }
+    };
+
     return {
       hideCreateAssetBadge: true,
 
@@ -128,16 +179,39 @@ export default {
             message: 'Please add a precision',
             trigger: 'blur',
           },
+          {
+            validator: validatePrecision,
+            trigger: 'change',
+          },
         ],
         maximum: [
           {
             required: true,
             message: 'Please add a maximum',
-            trigger: 'blur',
+            trigger: 'change',
+          },
+          {
+            pattern: /^[1-9][0-9]*$/,
+            trigger: 'change',
+          },
+          {
+            validator: validateMaximum,
+            trigger: 'change',
           },
         ],
       },
     };
+  },
+  computed: {
+    fullMaximum: function() {
+      const precision = this.createAssetsForm.precision;
+
+      const maximum = this.createAssetsForm.maximum;
+      const prec = precision > 0 ? `.${'0'.repeat(precision)}` : '';
+      const result = `${maximum}${prec}`;
+
+      return result;
+    },
   },
   methods: {
     async createAsset() {
