@@ -11,7 +11,7 @@
     "@gny/client": "^1.0.42",
     "@gny/utils": "^1.0.42",
     "@gny/web-base": "^1.0.42",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bignumber.js": "^8.1.1",
     "bitcore-mnemonic": "^8.13.2",
     "core-js": "^3.4.3",
