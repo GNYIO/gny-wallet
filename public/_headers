@@ -3,6 +3,4 @@
   X-Frame-Options: DENY
   X-XSS-Protection: 1; mode=block
   X-Content-Type-Options: nosniff
-  Content-Security-Policy: default-src 'self' *.gny.io;
-
-
+  Content-Security-Policy: default-src 'self' GNY_API_ENDPOINT_PLACEHOLDER;
