@@ -110,6 +110,11 @@ export default {
             message: 'Length should not be longer than 4096',
             trigger: 'blur',
           },
+          {
+            type: 'string',
+            pattern: /^([A-Za-z]+ )+[A-Za-z]+$|^[A-Za-z]+$/,
+            trigger: 'change',
+          },
         ],
         maximum: [
           {
