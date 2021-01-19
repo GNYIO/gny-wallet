@@ -1,5 +1,5 @@
 /*
-  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Origin: GNY_API_ENDPOINT_PLACEHOLDER
   X-Frame-Options: DENY
   X-XSS-Protection: 1; mode=block
   X-Content-Type-Options: nosniff
