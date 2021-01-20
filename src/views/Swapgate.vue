@@ -53,7 +53,7 @@ export default {
 
       const CONTRACT_ADDRESS = "0x2F26dAFbA58E9700cF3E8D4048ba16c55ba24cB9";
       const contract = new web3.eth.Contract(FundABI, CONTRACT_ADDRESS);
-      console.log(this.gnyAddress);
+      console.log(contract);
       const res = await contract.methods.bind(this.gnyAddress).send({from: this.ethAddress});
       return res;
     }
