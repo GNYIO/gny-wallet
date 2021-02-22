@@ -1,74 +1,78 @@
 <template>
   <el-main>
-    <img alt="GNY logo" src="../assets/logo.png" />
-
-    <div v-if="newAccount">
-      <el-alert
-        :title="newAccount"
-        type="success"
-        center
-        effect="dark"
-        :closable="false"
-      ></el-alert>
-    </div>
-
-    <el-alert
-      title="Please save your passphrase to a safe place!"
-      type="error"
-      :closable="false"
-      center
-      v-if="newAccount"
-    ></el-alert>
-
     <el-row>
-      <el-form
-        ref="loginForm"
-        :model="loginForm"
-        :rules="loginFormRules"
-        v-show="secondPublicKey === null"
-      >
-        <el-form-item prop="passphrase">
-          <el-tooltip effect="light" content="Passphrase" placement="top-start">
-            <el-input
-              placeholder="Enter your passphrase"
-              v-model="loginForm.passphrase"
-              show-password
-            ></el-input>
-          </el-tooltip>
-        </el-form-item>
-
-        <div class="button-container">
-          <el-button type="primary" @click="login">Login</el-button>
-          <el-button @click="register">New Account</el-button>
-        </div>
-      </el-form>
-
-      <el-form
-        ref="secondLoginForm"
-        :model="secondLoginForm"
-        :rules="secondLoginFormRules"
-        v-show="secondPublicKey !== null"
-      >
-        <el-form-item prop="secondPassphrase">
-          <el-tooltip
-            effect="light"
-            content="Second Passphrase"
-            placement="top-start"
-          >
-            <el-input
-              placeholder="Second passphrase"
-              v-model="secondLoginForm.secondPassphrase"
-            ></el-input>
-          </el-tooltip>
-        </el-form-item>
-
-        <div class="button-container">
-          <el-button type="primary" @click="secondLogin"
-            >Login with second Passphrase</el-button
-          >
-        </div>
-      </el-form>
+      <el-col :span="4" :offset="20"><span>{{network}}</span></el-col>
     </el-row>
+    <div class="login">
+      <img alt="GNY logo" src="../assets/logo.png" />
+      <div v-if="newAccount">
+        <el-alert
+          :title="newAccount"
+          type="success"
+          center
+          effect="dark"
+          :closable="false"
+        ></el-alert>
+      </div>
+
+      <el-alert
+        title="Please save your passphrase to a safe place!"
+        type="error"
+        :closable="false"
+        center
+        v-if="newAccount"
+      ></el-alert>
+
+      <el-row>
+        <el-form
+          ref="loginForm"
+          :model="loginForm"
+          :rules="loginFormRules"
+          v-show="secondPublicKey === null"
+        >
+          <el-form-item prop="passphrase">
+            <el-tooltip effect="light" content="Passphrase" placement="top-start">
+              <el-input
+                placeholder="Enter your passphrase"
+                v-model="loginForm.passphrase"
+                show-password
+              ></el-input>
+            </el-tooltip>
+          </el-form-item>
+
+          <div class="button-container">
+            <el-button type="primary" @click="login">Login</el-button>
+            <el-button @click="register">New Account</el-button>
+          </div>
+        </el-form>
+
+        <el-form
+          ref="secondLoginForm"
+          :model="secondLoginForm"
+          :rules="secondLoginFormRules"
+          v-show="secondPublicKey !== null"
+        >
+          <el-form-item prop="secondPassphrase">
+            <el-tooltip
+              effect="light"
+              content="Second Passphrase"
+              placement="top-start"
+            >
+              <el-input
+                placeholder="Second passphrase"
+                v-model="secondLoginForm.secondPassphrase"
+              ></el-input>
+            </el-tooltip>
+          </el-form-item>
+
+          <div class="button-container">
+            <el-button type="primary" @click="secondLogin"
+              >Login with second Passphrase</el-button
+            >
+          </div>
+        </el-form>
+      </el-row>
+    </div>
   </el-main>
 </template>
 
@@ -155,6 +159,7 @@ export default {
           { validator: validateSecondPassphrase, trigger: 'change' },
         ],
       },
+      network: '',
     };
   },
   computed: {
@@ -215,11 +220,16 @@ export default {
       this.$router.push('/home');
     },
   },
+
+  mounted() {
+    const networkEnv = process.env['VUE_APP_GNY_NETWORK'];
+    this.network = networkEnv.charAt(0).toUpperCase() + networkEnv.slice(1);
+  },
 };
 </script>
 
 <style scoped>
-.el-main {
+.login{
   display: flex;
   flex-direction: column;
   align-items: center;
