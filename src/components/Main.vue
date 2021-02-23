@@ -53,6 +53,11 @@
               <i class="el-icon-s-platform"></i>
               <span> Machine Learning</span>
             </el-menu-item>
+
+            <el-menu-item index="6" route="/swapgate">
+              <i class="el-icon-s-platform"></i>
+              <span> Swap gate</span>
+            </el-menu-item>
           </el-menu>
         </el-aside>
       </div>

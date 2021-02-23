@@ -15,6 +15,7 @@ import RetailDemo from '../views/MachineLearning/RetailDemo.vue';
 import LocationDemo from '../views/MachineLearning/LocationDemo.vue';
 import FraudDemo from '../views/MachineLearning/FraudDemo.vue';
 import Jupyter from '../views/MachineLearning/Jupyter.vue';
+import Swapgate from '../views/Swapgate.vue';
 
 Vue.use(VueRouter);
 
@@ -35,6 +36,10 @@ const Router = new VueRouter({
         {
           path: '/home',
           component: Home,
+        },
+        {
+          path: '/swapgate',
+          component: Swapgate,
         },
         {
           path: '/transfer',
