@@ -7,9 +7,14 @@
             <span>GNY Web Wallet</span>
           </div>
         </el-col>
-        <el-col :span="16">
+        <el-col :span="10">
           <div class="grid-content">
             <span>Latest Block Height: {{ latestBlock.height }}</span>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="grid-content">
+            <span>Current Network: {{ network }}</span>
           </div>
         </el-col>
         <el-col :span="2">
@@ -67,6 +72,11 @@
 <script>
 import { mapGetters } from 'vuex';
 export default {
+  data() {
+    return {
+      network: '',
+    }
+  },
   computed: {
     ...mapGetters(['latestBlock']),
   },
@@ -75,6 +85,10 @@ export default {
       this.$store.dispatch('resetState', null);
       this.$router.push('/login');
     },
+  },
+  mounted() {
+    const networkEnv = process.env['VUE_APP_GNY_NETWORK'];
+    this.network = networkEnv.charAt(0).toUpperCase() + networkEnv.slice(1);
   },
 };
 </script>
