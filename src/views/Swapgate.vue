@@ -91,7 +91,7 @@ export default {
     async approve() {
       const web3 = new Web3(window.web3.currentProvider);
       const contract = new web3.eth.Contract(IERC20, TOKEN_ADDRESS);
-      const res = await contract.methods.approve(SWAPGATE_ADDRESS,new BigNumber(1e27)).send({from: this.ethAddress});
+      const res = await contract.methods.approve(SWAPGATE_ADDRESS, new BigNumber(1e27).toFixed()).send({from: this.ethAddress});
       console.log(res);
       return res;
     },
