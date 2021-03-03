@@ -8,9 +8,9 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@gny/client": "^1.0.66",
-    "@gny/utils": "^1.0.66",
-    "@gny/web-base": "^1.0.66",
+    "@gny/client": "^1.0.69",
+    "@gny/utils": "^1.0.68",
+    "@gny/web-base": "^1.0.68",
     "axios": "^0.21.1",
     "bignumber.js": "^8.1.1",
     "bitcore-mnemonic": "^8.13.2",
