@@ -15,7 +15,8 @@ import RetailDemo from '../views/MachineLearning/RetailDemo.vue';
 import LocationDemo from '../views/MachineLearning/LocationDemo.vue';
 import FraudDemo from '../views/MachineLearning/FraudDemo.vue';
 import Jupyter from '../views/MachineLearning/Jupyter.vue';
-import Swapgate from '../views/Swapgate.vue';
+import SwapgateETH from '../views/Swapgate-eth.vue';
+import SwapgateBSC from '../views/Swapgate-bsc.vue';
 
 Vue.use(VueRouter);
 
@@ -38,8 +39,12 @@ const Router = new VueRouter({
           component: Home,
         },
         {
-          path: '/swapgate',
-          component: Swapgate,
+          path: '/swapgate_eth',
+          component: SwapgateETH,
+        },
+        {
+          path: '/swapgate_bsc',
+          component: SwapgateBSC,
         },
         {
           path: '/transfer',

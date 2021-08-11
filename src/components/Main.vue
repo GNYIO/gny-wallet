@@ -54,9 +54,13 @@
               <span> Machine Learning</span>
             </el-menu-item>
 
-            <el-menu-item index="6" route="/swapgate">
+            <el-menu-item index="6" route="/swapgate_eth">
               <i class="el-icon-s-platform"></i>
-              <span> Swap gate</span>
+              <span> Ethereum Swapgate</span>
+            </el-menu-item>
+            <el-menu-item index="7" route="/swapgate_bsc">
+              <i class="el-icon-s-platform"></i>
+              <span> BSC Swapgate</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
