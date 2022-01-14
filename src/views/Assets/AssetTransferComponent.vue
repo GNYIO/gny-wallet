@@ -148,8 +148,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(['user', 'passphrase', 'secondPassphrase']),
-    ...mapGetters(['prettyBalances']),
+    ...mapState(['passphrase', 'secondPassphrase']),
+    ...mapGetters(['user', 'prettyBalances']),
   },
   methods: {
     async transferAsset() {
@@ -157,6 +157,16 @@ export default {
         await this.$refs['transferAssetForm'].validate();
       } catch (err) {
         console.log('validation for transferAssetForm failed');
+        return;
+      }
+
+      const gnyBalance = new BigNumber(this.user.balancePretty);
+      if (gnyBalance.isLessThan('0.1')) {
+        const msg = `at least 0.1 GNY is needed for a transfer. Your current GNY balance is ${gnyBalance.toFixed()}`;
+        this.$message({
+          message: msg,
+          type: 'error',
+        });
         return;
       }
 
