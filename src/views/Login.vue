@@ -1,7 +1,9 @@
 <template>
   <el-main>
     <el-row>
-      <el-col :span="4" :offset="20"><span>{{network}}</span></el-col>
+      <el-col :span="4" :offset="20"
+        ><span>{{ network }}</span></el-col
+      >
     </el-row>
     <div class="login">
       <img alt="GNY logo" src="../assets/logo.png" />
@@ -31,7 +33,11 @@
           v-show="secondPublicKey === null"
         >
           <el-form-item prop="passphrase">
-            <el-tooltip effect="light" content="Passphrase" placement="top-start">
+            <el-tooltip
+              effect="light"
+              content="Passphrase"
+              placement="top-start"
+            >
               <el-input
                 placeholder="Enter your passphrase"
                 v-model="loginForm.passphrase"
@@ -229,7 +235,7 @@ export default {
 </script>
 
 <style scoped>
-.login{
+.login {
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -49,12 +49,9 @@ import IERC20 from '../assets/ierc20_abi';
 import { mapState } from 'vuex';
 import { BigNumber } from 'bignumber.js';
 
-// const SWAPGATE_ADDRESS = "0x085706189B8B130561130De4624bd3e6e85bFDa3";
-// const TOKEN_ADDRESS = "0xC728F293ca6c27F735Bd9A1e5cAe981df97FB802";
-
 // mainnet
-const SWAPGATE_ADDRESS = '0x1CFFd630Fa935dB21481b73BF8d327849844b132';
-const TOKEN_ADDRESS = '0xb1f871Ae9462F1b2C6826E88A7827e76f86751d4';
+const SWAPGATE_ADDRESS = '0xc514B6f44b93Fc6f42F6c800937dA0eeB394C393';
+const TOKEN_ADDRESS = '0xe4A4Ad6E0B773f47D28f548742a23eFD73798332';
 
 export default {
   computed: {
