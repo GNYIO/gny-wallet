@@ -4,12 +4,18 @@
     <el-input v-model="gnyAddress" :disabled="true"></el-input>
     <br />
     <p>Ethereum Address</p>
-    <el-input v-model="ethAddress" placeholder="ethereum address" :disabled="true"></el-input>
+    <el-input
+      v-model="ethAddress"
+      placeholder="ethereum address"
+      :disabled="true"
+    ></el-input>
     <br />
     <br />
     <br />
 
-    <el-button type="primary" @click="connect">1. Connect to metamask </el-button>
+    <el-button type="primary" @click="connect"
+      >1. Connect to metamask
+    </el-button>
 
     <br />
     <br />
@@ -33,7 +39,6 @@
     <br />
 
     <el-button type="primary" @click="deposit">4. Deposit</el-button>
-
   </el-main>
 </template>
 
@@ -45,8 +50,8 @@ import { mapState } from 'vuex';
 import { BigNumber } from 'bignumber.js';
 
 // mainnet
-const SWAPGATE_ADDRESS = "0xc514B6f44b93Fc6f42F6c800937dA0eeB394C393";
-const TOKEN_ADDRESS = "0xe4A4Ad6E0B773f47D28f548742a23eFD73798332";
+const SWAPGATE_ADDRESS = '0xc514B6f44b93Fc6f42F6c800937dA0eeB394C393';
+const TOKEN_ADDRESS = '0xe4A4Ad6E0B773f47D28f548742a23eFD73798332';
 
 export default {
   computed: {
@@ -57,7 +62,7 @@ export default {
       gnyAddress: '',
       ethAddress: '',
       amount: '',
-    }
+    };
   },
   methods: {
     async connect() {
@@ -76,19 +81,25 @@ export default {
     async bind() {
       const web3 = new Web3(window.web3.currentProvider);
       const contract = new web3.eth.Contract(Swapgate, SWAPGATE_ADDRESS);
-      const res = await contract.methods.bind(this.gnyAddress).send({from: this.ethAddress});
+      const res = await contract.methods
+        .bind(this.gnyAddress)
+        .send({ from: this.ethAddress });
       return res;
     },
     async isAllowed() {
       const web3 = new Web3(window.web3.currentProvider);
       const contract = new web3.eth.Contract(IERC20, TOKEN_ADDRESS);
-      const res = await contract.methods.allowance(this.ethAddress, SWAPGATE_ADDRESS).call();
+      const res = await contract.methods
+        .allowance(this.ethAddress, SWAPGATE_ADDRESS)
+        .call();
       return res === 0 ? false : true;
     },
     async approve() {
       const web3 = new Web3(window.web3.currentProvider);
       const contract = new web3.eth.Contract(IERC20, TOKEN_ADDRESS);
-      const res = await contract.methods.approve(SWAPGATE_ADDRESS, new BigNumber(1e27).toFixed()).send({from: this.ethAddress});
+      const res = await contract.methods
+        .approve(SWAPGATE_ADDRESS, new BigNumber(1e27).toFixed())
+        .send({ from: this.ethAddress });
       console.log(res);
       return res;
     },
@@ -97,9 +108,11 @@ export default {
       const contract = new web3.eth.Contract(Swapgate, SWAPGATE_ADDRESS);
       if (this.amount <= 0) return false;
       let balance = new BigNumber(this.amount).multipliedBy(1e18).toFixed();
-      const res = await contract.methods.deposit(balance).send({from: this.ethAddress});
+      const res = await contract.methods
+        .deposit(balance)
+        .send({ from: this.ethAddress });
       return res;
-    }
+    },
   },
   async mounted() {
     await this.$store.dispatch('refreshAccounts');
