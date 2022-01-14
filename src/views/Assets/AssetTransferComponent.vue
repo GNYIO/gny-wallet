@@ -165,7 +165,7 @@ export default {
 
         const precisionRaw = this.prettyBalances.filter(
           x => x.currency === currency,
-        )[0].precision;
+        )[0].currency_precision;
         const precision = Math.pow(10, precisionRaw);
 
         const amountRaw = this.transferAssetForm.amount;
