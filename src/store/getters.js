@@ -116,6 +116,7 @@ export const getters = {
       const one = {
         address: balance.address,
         currency: balance.currency,
+        currency_precision: asset.precision,
         flat: balance.flag,
         balance: balance.balance,
         balancePretty: new BigNumber(balance.balance)

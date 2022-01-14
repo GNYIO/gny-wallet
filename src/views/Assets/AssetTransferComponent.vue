@@ -23,10 +23,10 @@
               style="float: left"
             >
               <el-option
-                v-for="item in ownAssets"
-                :key="item.name"
-                :label="item.name"
-                :value="item.name"
+                v-for="item in prettyBalances"
+                :key="item.currency"
+                :label="item.currency"
+                :value="item.currency"
               >
               </el-option>
             </el-select>
@@ -34,7 +34,12 @@
         </el-form-item>
         <el-form-item label="Amount" prop="amount">
           <el-tooltip effect="light" content="Add amount" placement="top-start">
-            <el-input v-model="transferAssetForm.amount" :min="0"> </el-input>
+            <el-input
+              v-model="transferAssetForm.amount"
+              :min="0"
+              :disabled="!transferAssetForm.currency"
+            >
+            </el-input>
           </el-tooltip>
         </el-form-item>
         <el-form-item label="Recip." prop="recipientId">
@@ -143,8 +148,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(['user', 'passphrase', 'secondPassphrase']),
-    ...mapGetters(['ownAssets']),
+    ...mapState(['passphrase', 'secondPassphrase']),
+    ...mapGetters(['user', 'prettyBalances']),
   },
   methods: {
     async transferAsset() {
@@ -155,11 +160,22 @@ export default {
         return;
       }
 
+      const gnyBalance = new BigNumber(this.user.balancePretty);
+      if (gnyBalance.isLessThan('0.1')) {
+        const msg = `at least 0.1 GNY is needed for a transfer. Your current GNY balance is ${gnyBalance.toFixed()}`;
+        this.$message({
+          message: msg,
+          type: 'error',
+        });
+        return;
+      }
+
       try {
         const currency = this.transferAssetForm.currency;
 
-        const precisionRaw = this.ownAssets.filter(x => x.name === currency)[0]
-          .precision;
+        const precisionRaw = this.prettyBalances.filter(
+          x => x.currency === currency,
+        )[0].currency_precision;
         const precision = Math.pow(10, precisionRaw);
 
         const amountRaw = this.transferAssetForm.amount;

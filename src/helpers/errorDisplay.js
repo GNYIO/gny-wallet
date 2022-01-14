@@ -3,9 +3,6 @@ export function showErrorPopup(err) {
   const contractError =
     err && err.response && err.response.data && err.response.data.error;
 
-  console.log(`serverDown: ${serverDown}`);
-  console.log(`contractError: ${contractError}`);
-
   this.$message({
     message: contractError || serverDown,
     type: 'error',
