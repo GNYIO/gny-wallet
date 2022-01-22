@@ -67,6 +67,7 @@
               <el-input
                 placeholder="Second passphrase"
                 v-model="secondLoginForm.secondPassphrase"
+                show-password
               ></el-input>
             </el-tooltip>
           </el-form-item>
@@ -155,14 +156,14 @@ export default {
         passphrase: '',
       },
       loginFormRules: {
-        passphrase: [{ validator: validatePassphrase, trigger: 'change' }],
+        passphrase: [{ validator: validatePassphrase, trigger: 'blur' }],
       },
       secondLoginForm: {
         secondPassphrase: '',
       },
       secondLoginFormRules: {
         secondPassphrase: [
-          { validator: validateSecondPassphrase, trigger: 'change' },
+          { validator: validateSecondPassphrase, trigger: 'blur' },
         ],
       },
       network: '',
