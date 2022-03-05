@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <el-row :gutter="20">
+  <div class="display: flex; flex-wrap: wrap">
       <AccountInfoComponent v-bind:user="user"></AccountInfoComponent>
       <SetUsernameComponent
         v-bind:user="user"
@@ -8,7 +7,6 @@
         v-bind:passphrase="passphrase"
         v-bind:secondPassphrase="secondPassphrase"
       ></SetUsernameComponent>
-    </el-row>
 
     <el-row :gutter="20">
       <Set2ndPasswordComponent
