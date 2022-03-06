@@ -1,6 +1,6 @@
 <template>
   <el-col :span="12">
-    <el-card v-if="user.isDelegate === 0 && user.username !== null">
+    <el-card v-if="user.isDelegate === 0 && user.username !== null" shadow="hover">
       <div slot="header">
         <span>Register Delegate</span>
       </div>
@@ -25,7 +25,7 @@
       </el-form>
     </el-card>
 
-    <el-card v-if="user.isDelegate === 0 && user.username === null">
+    <el-card v-if="user.isDelegate === 0 && user.username === null" shadow="hover">
       <h3>
         Set your username before registering as Delegate
       </h3>

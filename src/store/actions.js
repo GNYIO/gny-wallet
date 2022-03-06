@@ -254,4 +254,7 @@ export const actions = {
   resetState({ commit }) {
     commit('resetState');
   },
+  toggleMenu({ commit }) {
+    commit('toggleMenu');
+  },
 };

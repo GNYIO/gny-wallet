@@ -1,7 +1,7 @@
 <template>
   <el-col :span="24">
     <div>
-      <el-card>
+      <el-card shadow="hover">
         <div slot="header">
           All Assets (from all users)
         </div>

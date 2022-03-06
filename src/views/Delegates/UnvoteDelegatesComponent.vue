@@ -1,7 +1,7 @@
 <template>
   <!-- unvote delegates -->
   <el-col :span="12" v-if="user.lockHeight > 0">
-    <el-card>
+    <el-card shadow="hover">
       <div slot="header">
         <span>Unvote Delegates</span>
       </div>

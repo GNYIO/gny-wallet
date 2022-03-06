@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card shadow="hover">
     <div slot="header">
       <span>Transaction History</span>
     </div>
@@ -87,3 +87,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.el-card {
+  margin-top: 20px;
+}
+</style>

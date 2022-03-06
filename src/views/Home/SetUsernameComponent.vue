@@ -1,12 +1,10 @@
 <template>
-  <el-col :span="12">
-    <el-card v-if="!positiveBalance">
-      <div>
-        <h3>You need 5 GNY to set your username</h3>
-      </div>
+  <div class="top">
+    <el-card v-if="!positiveBalance" shadow="hover">
+      <div slot="header">You need 5 GNY to set your username</div>
     </el-card>
 
-    <el-card v-if="!user.username && positiveBalance">
+    <el-card v-if="!user.username && positiveBalance" shadow="hover">
       <div slot="header">
         <span>Set Username</span>
       </div>
@@ -44,7 +42,7 @@
         </el-form-item>
       </el-form>
     </el-card>
-  </el-col>
+  </div>
 </template>
 
 <script>
@@ -114,3 +112,16 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.top {
+  text-align: left;
+  width: 500px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.top {
+  margin-top: 20px;
+}
+</style>

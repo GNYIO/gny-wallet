@@ -19,4 +19,5 @@ export const getDefaultState = () => ({
 
   transfers: [],
   balances: [],
+  isMenuToggled: false,
 });

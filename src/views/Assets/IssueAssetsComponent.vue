@@ -1,6 +1,6 @@
 <template>
   <el-col :span="12">
-    <el-card>
+    <el-card shadow="hover">
       <div slot="header">
         Issue Assets
       </div>

@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="20">
       <el-col :span="12">
-        <el-card>
+        <el-card shadow="hover">
           <div slot="header">
             Upload ML Data
           </div>

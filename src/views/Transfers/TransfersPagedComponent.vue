@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card>
+    <el-card shadow="hover">
       <div slot="header">
         Past GNY Transfers
       </div>

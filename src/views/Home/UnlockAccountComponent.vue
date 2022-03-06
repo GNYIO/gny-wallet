@@ -1,6 +1,6 @@
 <template>
-  <el-col :span="12" v-if="user && user.lockHeight !== '0'">
-    <el-card v-if="!positiveBalance">
+  <div class="top" v-if="user && user.lockHeight !== '0'">
+    <el-card v-if="!positiveBalance" shadow="hover">
       <div>
         <h3>You need 0.1 GNY to unlock your account</h3>
       </div>
@@ -28,7 +28,7 @@
         </el-form-item>
       </el-form>
     </el-card>
-  </el-col>
+  </div>
 </template>
 
 <script>
@@ -82,3 +82,16 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.top {
+  text-align: left;
+  width: 500px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.top {
+  margin-top: 20px;
+}
+</style>

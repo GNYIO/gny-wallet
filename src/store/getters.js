@@ -1,4 +1,13 @@
 import { BigNumber } from 'bignumber.js';
+import Vue from 'vue';
+
+const state = Vue.observable({
+  width: window.innerWidth,
+});
+
+window.addEventListener('resize', () => {
+  state.width = window.innerWidth;
+});
 
 export const getters = {
   passphrase: state => state.passphrase,
@@ -134,4 +143,6 @@ export const getters = {
       .plus(172800)
       .toFixed();
   },
+  isMenuToggled: state => state.isMenuToggled,
+  width: () => state.width,
 };

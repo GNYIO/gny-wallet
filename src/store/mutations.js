@@ -50,4 +50,7 @@ export const mutations = {
     const newState = getDefaultState();
     Object.assign(state, newState);
   },
+  toggleMenu(state) {
+    state.isMenuToggled = !state.isMenuToggled;
+  },
 };

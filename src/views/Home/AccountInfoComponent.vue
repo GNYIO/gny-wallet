@@ -1,33 +1,33 @@
 <template>
-  <el-card class="box-card" shadow="hover">
+  <el-card shadow="hover">
     <div slot="header">
       <span>Account Info</span>
     </div>
 
     <p v-if="user.username">
-      Username: <b>{{ user.username }}</b>
+      Username: {{ user.username }}
     </p>
     <p>
-      Address: <b>{{ user.address }}</b>
+      Address: {{ user.address }}
     </p>
     <p>
-      Balance: <b>{{ user.balancePretty }} GNY</b>
+      Balance: {{ user.balancePretty }} GNY
     </p>
     <p>
-      Is Locked: <b>{{ user.lockHeight === '0' ? 'No' : 'Yes' }}</b>
+      Is Locked: {{ user.lockHeight === '0' ? 'No' : 'Yes' }}
     </p>
     <p v-if="user.lockHeight !== '0'">
-      Lock Height: <b>{{ user.lockHeight }}</b>
+      Lock Height: {{ user.lockHeight }}
     </p>
     <p v-if="user.lockHeight !== '0'">
-      Lock Amount: <b>{{ user.lockAmountPretty }} GNY</b>
+      Lock Amount: {{ user.lockAmountPretty }} GNY
     </p>
     <p v-if="user.secondPublicKey">
       Has Second Secret:
-      <b>{{ user.secondPublicKey === null ? 'No' : 'Yes' }}</b>
+      {{ user.secondPublicKey === null ? 'No' : 'Yes' }}
     </p>
     <p v-if="user.secondPublicKey">
-      Second PublicKey: <b>{{ user.secondPublicKey }}</b>
+      Second PublicKey: {{ user.secondPublicKey }}
     </p>
   </el-card>
 </template>
@@ -41,8 +41,10 @@ export default {
 </script>
 
 <style scoped>
-.box-card {
+.el-card {
   text-align: left;
-  max-width: 420px;
+  width: 500px;
+  max-width: 500px;
+  margin: 0 auto;
 }
 </style>

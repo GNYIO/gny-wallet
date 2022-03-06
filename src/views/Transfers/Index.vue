@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="20">
       <el-col :span="18">
-        <el-card v-if="!positiveBalance">
+        <el-card v-if="!positiveBalance" shadow="hover">
           <h3>You have currently no GNY to transfer</h3>
         </el-card>
 

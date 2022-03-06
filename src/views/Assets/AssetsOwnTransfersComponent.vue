@@ -1,6 +1,6 @@
 <template>
   <el-col :span="24">
-    <el-card>
+    <el-card shadow="hover">
       <div slot="header">
         Past Own Asset Transfers ({{ assetTransfersPrettyCount }})
       </div>

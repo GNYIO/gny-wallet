@@ -1,10 +1,10 @@
 <template>
   <el-col :span="12">
-    <el-card v-if="!positiveBalance">
+    <el-card v-if="!positiveBalance" shadow="hover">
       <h3>You need 100 GNY to register as issuer</h3>
     </el-card>
 
-    <el-card v-if="positiveBalance">
+    <el-card v-if="positiveBalance" shadow="hover">
       <div slot="header">Register as Issuer</div>
       <el-form
         ref="registerIssuerForm"

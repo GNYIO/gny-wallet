@@ -1,12 +1,10 @@
 <template>
-  <el-col :span="12">
-    <el-card v-if="!positiveBalance">
-      <div>
-        <h3>You need 5 GNY to set a second password</h3>
-      </div>
+  <div class="top">
+    <el-card v-if="!positiveBalance" shadow="hover">
+      <div slot="header">You need 5 GNY to set a second password</div>
     </el-card>
 
-    <el-card v-if="!hasSecondPassphrase && positiveBalance">
+    <el-card v-if="!hasSecondPassphrase && positiveBalance" shadow="hover">
       <div slot="header">
         <span>Set Second password</span>
       </div>
@@ -50,7 +48,7 @@
         </el-form-item>
       </el-form>
     </el-card>
-  </el-col>
+  </div>
 </template>
 
 <script>
@@ -118,3 +116,16 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.top {
+  text-align: left;
+  width: 500px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.top {
+  margin-top: 20px;
+}
+</style>

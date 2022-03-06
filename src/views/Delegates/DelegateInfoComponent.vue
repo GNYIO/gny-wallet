@@ -1,6 +1,6 @@
 <template>
   <el-col :span="12">
-    <el-card v-if="user.isDelegate === 1">
+    <el-card v-if="user.isDelegate === 1" shadow="hover">
       <div slot="header">
         <span>Delegate Info</span>
       </div>

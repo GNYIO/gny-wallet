@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-col :span="12" v-if="user.lockHeight == 0">
-      <el-card>
+      <el-card shadow="hover">
         <h3>You can't vote, you need to first lock your account</h3>
         <span>
           <p>Lock your account here:</p>
@@ -12,7 +12,7 @@
 
     <!-- vote for delegates -->
     <el-col :span="12" v-if="user.lockHeight > 0">
-      <el-card>
+      <el-card shadow="hover">
         <div slot="header">
           <span>Vote for Delegates</span>
         </div>

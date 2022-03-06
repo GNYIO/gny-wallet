@@ -43,7 +43,7 @@
 
     <el-row :gutter="20">
       <el-col :span="24">
-        <el-card>
+        <el-card shadow="hover">
           <DelegatesPagedComponent></DelegatesPagedComponent>
         </el-card>
       </el-col>

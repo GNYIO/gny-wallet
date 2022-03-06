@@ -1,45 +1,37 @@
 <template>
-  <div class="display: flex; flex-wrap: wrap">
-      <AccountInfoComponent v-bind:user="user"></AccountInfoComponent>
-      <SetUsernameComponent
-        v-bind:user="user"
-        v-bind:positiveBalance="positiveBalance"
-        v-bind:passphrase="passphrase"
-        v-bind:secondPassphrase="secondPassphrase"
-      ></SetUsernameComponent>
+  <div>
+    <AccountInfoComponent v-bind:user="user"></AccountInfoComponent>
+    <SetUsernameComponent
+      v-bind:user="user"
+      v-bind:positiveBalance="positiveBalance"
+      v-bind:passphrase="passphrase"
+      v-bind:secondPassphrase="secondPassphrase"
+    ></SetUsernameComponent>
 
-    <el-row :gutter="20">
-      <Set2ndPasswordComponent
-        v-bind:user="user"
-        v-bind:positiveBalance="positiveBalance"
-        v-bind:passphrase="passphrase"
-        v-bind:hasSecondPassphrase="hasSecondPassphrase"
-      ></Set2ndPasswordComponent>
+    <Set2ndPasswordComponent
+      v-bind:user="user"
+      v-bind:positiveBalance="positiveBalance"
+      v-bind:passphrase="passphrase"
+      v-bind:hasSecondPassphrase="hasSecondPassphrase"
+    ></Set2ndPasswordComponent>
 
-      <LockAccountComponent
-        v-bind:user="user"
-        v-bind:positiveBalance="positiveBalance"
-        v-bind:minLockHeight="minLockHeight"
-        v-bind:passphrase="passphrase"
-        v-bind:secondPassphrase="secondPassphrase"
-      ></LockAccountComponent>
-    </el-row>
+    <LockAccountComponent
+      v-bind:user="user"
+      v-bind:positiveBalance="positiveBalance"
+      v-bind:minLockHeight="minLockHeight"
+      v-bind:passphrase="passphrase"
+      v-bind:secondPassphrase="secondPassphrase"
+    ></LockAccountComponent>
 
-    <el-row :gutter="20">
-      <UnlockAccountComponent
-        v-bind:user="user"
-        v-bind:positiveBalance="positiveBalance"
-        v-bind:latestBlock="latestBlock"
-        v-bind:passphrase="passphrase"
-        v-bind:secondPassphrase="secondPassphrase"
-      ></UnlockAccountComponent>
-    </el-row>
+    <UnlockAccountComponent
+      v-bind:user="user"
+      v-bind:positiveBalance="positiveBalance"
+      v-bind:latestBlock="latestBlock"
+      v-bind:passphrase="passphrase"
+      v-bind:secondPassphrase="secondPassphrase"
+    ></UnlockAccountComponent>
 
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <TransactionsPaged></TransactionsPaged>
-      </el-col>
-    </el-row>
+    <TransactionsPaged></TransactionsPaged>
   </div>
 </template>
 

@@ -1,75 +1,63 @@
 <template>
   <el-container direction="vertical" class="page-container">
     <el-header>
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <div class="grid-content">
-            <span>GNY Web Wallet</span>
-          </div>
-        </el-col>
-        <el-col :span="10">
-          <div class="grid-content">
-            <span>Latest Block Height: {{ latestBlock.height }}</span>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="grid-content">
-            <span>Current Network: {{ network }}</span>
-          </div>
-        </el-col>
-        <el-col :span="2">
-          <div class="grid-content">
-            <el-button @click="logout" type="info">Logout</el-button>
-          </div>
-        </el-col>
-      </el-row>
+      <div><b>GNY Web Wallet</b></div>
+      <div v-if="width > 1000" class="left-margin">
+        <span>Latest Block Height: {{ latestBlock.height }}</span>
+      </div>
+      <div v-if="width > 1000" class="left-margin">
+        <span>Current Network: {{ network }}</span>
+      </div>
+      <div class="right">
+        <el-button @click="toggleMenu">Show Menu</el-button>
+        <!--<el-button @click="logout" icon="el-icon-menu"></el-button>-->
+      </div>
     </el-header>
 
-    <el-container direction="horizontal">
-      <div>
-        <el-aside>
-          <el-menu class="el-menu-vertical" router>
-            <el-menu-item index="1" route="/home">
-              <i class="el-icon-s-home"></i>
-              <span> Home</span>
-            </el-menu-item>
+    <el-main>
+      <router-view class="router"></router-view>
+    </el-main>
 
-            <el-menu-item index="2" route="/transfer">
-              <i class="el-icon-s-promotion"></i>
-              <span> Transfer</span>
-            </el-menu-item>
+    <el-menu router v-if="isMenuToggled">
+      <el-menu-item index="1" route="/home">
+        <i class="el-icon-s-home"></i>
+        <span> Home</span>
+      </el-menu-item>
 
-            <el-menu-item index="3" route="/delegates">
-              <i class="el-icon-user-solid"></i>
-              <span> Delegates</span>
-            </el-menu-item>
+      <el-menu-item index="2" route="/transfer">
+        <i class="el-icon-s-promotion"></i>
+        <span> Transfer</span>
+      </el-menu-item>
 
-            <el-menu-item index="4" route="/assets">
-              <i class="el-icon-s-order"></i>
-              <span> Assets</span>
-            </el-menu-item>
+      <el-menu-item index="3" route="/delegates">
+        <i class="el-icon-user-solid"></i>
+        <span> Delegates</span>
+      </el-menu-item>
 
-            <el-menu-item index="5" route="/machinelearning">
-              <i class="el-icon-s-platform"></i>
-              <span> Machine Learning</span>
-            </el-menu-item>
+      <el-menu-item index="4" route="/assets">
+        <i class="el-icon-s-order"></i>
+        <span> Assets</span>
+      </el-menu-item>
 
-            <el-menu-item index="6" route="/swapgate_eth">
-              <i class="el-icon-s-platform"></i>
-              <span> Ethereum Swapgate</span>
-            </el-menu-item>
-            <el-menu-item index="7" route="/swapgate_bsc">
-              <i class="el-icon-s-platform"></i>
-              <span> BSC Swapgate</span>
-            </el-menu-item>
-          </el-menu>
-        </el-aside>
-      </div>
+      <el-menu-item index="5" route="/machinelearning">
+        <i class="el-icon-s-platform"></i>
+        <span> Machine Learning</span>
+      </el-menu-item>
 
-      <el-main>
-        <router-view></router-view>
-      </el-main>
-    </el-container>
+      <el-menu-item index="6" route="/swapgate_eth">
+        <i class="el-icon-s-platform"></i>
+        <span> Ethereum Swapgate</span>
+      </el-menu-item>
+      <el-menu-item index="7" route="/swapgate_bsc">
+        <i class="el-icon-s-platform"></i>
+        <span> BSC Swapgate</span>
+      </el-menu-item>
+
+      <el-menu-item index="8">
+        <i class="el-icon-s-home"></i>
+        <el-button @click="logout" type="info">Logout</el-button>
+      </el-menu-item>
+    </el-menu>
   </el-container>
 </template>
 
@@ -82,9 +70,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['latestBlock']),
+    ...mapGetters(['latestBlock', 'isMenuToggled', 'width']),
   },
   methods: {
+    toggleMenu() {
+      this.$store.dispatch('toggleMenu');
+    },
     logout() {
       this.$store.dispatch('resetState', null);
       this.$router.push('/login');
@@ -97,7 +88,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .page-container {
   position: relative;
   min-height: 100vh;
@@ -108,21 +99,27 @@ export default {
   color: #fff;
   text-align: justify;
   line-height: 60px;
+  display: flex;
+}
+.el-header .left-margin {
+  margin-left: 30px;
+}
+.el-header .right {
+  margin-left: auto;
 }
 
-.el-aside {
-  top: 60px;
+.el-menu {
+  position: absolute;
+  z-index: 10;
   height: 100%;
-  z-index: 100;
-  border-right: solid 1px #e6e6e6;
-  margin: 0px;
+  width: 300px;
+  top: 60px;
+  right: 0px;
+  border-left: 1px solid darkgray;
 }
 
-.el-aside > * {
-  border-right: solid 0px;
-}
-
-.el-main {
-  text-align: center;
+.router {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
