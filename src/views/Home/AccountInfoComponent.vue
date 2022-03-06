@@ -44,7 +44,6 @@ export default {
 .el-card {
   text-align: left;
   width: 500px;
-  max-width: 500px;
   margin: 0 auto;
 }
 </style>

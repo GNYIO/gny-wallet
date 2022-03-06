@@ -10,7 +10,6 @@
       </div>
       <div class="right">
         <el-button @click="toggleMenu">Show Menu</el-button>
-        <!--<el-button @click="logout" icon="el-icon-menu"></el-button>-->
       </div>
     </el-header>
 
@@ -54,8 +53,7 @@
       </el-menu-item>
 
       <el-menu-item index="8">
-        <i class="el-icon-s-home"></i>
-        <el-button @click="logout" type="info">Logout</el-button>
+        <el-button style="width: 100%" @click="logout" type="info">Logout</el-button>
       </el-menu-item>
     </el-menu>
   </el-container>
@@ -106,11 +104,6 @@ export default {
 }
 .el-header .right {
   margin-left: auto;
-}
-
-.el-main {
-  width: 540px;
-  margin: 0 auto;
 }
 
 @media screen and (min-width: 1040px) {

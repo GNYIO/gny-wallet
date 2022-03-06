@@ -1,13 +1,11 @@
 <template>
   <el-card shadow="hover">
-    <div slot="header">
-      <span>Transaction History</span>
-    </div>
+    <div class="header" slot="header">Transaction History</div>
     <el-table stripe :data="currentTransactions">
       <el-table-column width="100" prop="id" label="ID" :formatter="subID"></el-table-column>
       <el-table-column
         prop="type"
-        label="Contract Number"
+        label="Contract Nr"
       ></el-table-column>
       <el-table-column label="Contract Name">
         <template slot-scope="scope">
@@ -107,7 +105,7 @@ export default {
   }
 }
 
-.el-card__header {
+.header {
   text-align: left;
 }
 </style>
