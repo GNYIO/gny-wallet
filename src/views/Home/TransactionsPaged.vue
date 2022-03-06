@@ -3,12 +3,11 @@
     <div slot="header">
       <span>Transaction History</span>
     </div>
-    <el-table stripe :data="currentTransactions" style="width: 100%">
-      <el-table-column prop="id" label="ID"></el-table-column>
+    <el-table stripe :data="currentTransactions">
+      <el-table-column width="100" prop="id" label="ID" :formatter="subID"></el-table-column>
       <el-table-column
         prop="type"
         label="Contract Number"
-        width="150"
       ></el-table-column>
       <el-table-column label="Contract Name">
         <template slot-scope="scope">
@@ -17,12 +16,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="args" label="Contract Arguments"></el-table-column>
-      <el-table-column prop="height" label="height"></el-table-column>
+      <el-table-column v-if="width >= 1040" prop="args" label="Contract Arguments"></el-table-column>
+      <el-table-column v-if="width >= 1040" prop="height" label="height"></el-table-column>
       <el-table-column
         prop="message"
         label="Message"
-        width="120"
+        v-if="width >= 1040"
       ></el-table-column>
     </el-table>
 
@@ -44,7 +43,7 @@ import { contractMappingFilter } from '../../filters/index';
 
 export default {
   computed: {
-    ...mapGetters(['transactionsNewestFirst', 'transactionsCount']),
+    ...mapGetters(['transactionsNewestFirst', 'transactionsCount', 'width']),
   },
   filters: {
     contractMapping: contractMappingFilter,
@@ -71,6 +70,9 @@ export default {
         }
       }
     },
+    subID: function (row) {
+      return row.id.slice(0,8);
+    },
   },
   mounted() {
     // this component is a child component of Home.vue
@@ -90,6 +92,22 @@ export default {
 
 <style scoped>
 .el-card {
+  text-align: center;
+}
+
+.el-card {
+  margin: 0 auto;
   margin-top: 20px;
+  width: 500px;
+}
+
+@media screen and (min-width: 1040px) {
+  .el-card {
+    width: 1000px;
+  }
+}
+
+.el-card__header {
+  text-align: left;
 }
 </style>

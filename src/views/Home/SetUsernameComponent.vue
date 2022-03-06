@@ -1,10 +1,13 @@
 <template>
-  <div class="top">
+  <!-- no username -->
+  <div v-if="!user.username" class="top">
+    <!-- no username and no positive balance -->
     <el-card v-if="!positiveBalance" shadow="hover">
       <div slot="header">You need 5 GNY to set your username</div>
     </el-card>
 
-    <el-card v-if="!user.username && positiveBalance" shadow="hover">
+    <!-- no username and positive balance -->
+    <el-card v-if="positiveBalance" shadow="hover">
       <div slot="header">
         <span>Set Username</span>
       </div>
@@ -14,6 +17,7 @@
         :model="usernameForm"
         label-width="80px"
         :rules="usernameFormRules"
+        :label-position="width <= 1040 ? 'top' : 'left'"
       >
         <el-form-item label="Usern." prop="username">
           <el-input
@@ -46,6 +50,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { showErrorPopup } from '../../helpers/errorDisplay';
 
 import * as client from '@gny/client';
@@ -57,6 +62,9 @@ const connection = new client.Connection(
 );
 
 export default {
+  computed: {
+    ...mapGetters(['width']),
+  },
   props: {
     user: Object,
     positiveBalance: Boolean,

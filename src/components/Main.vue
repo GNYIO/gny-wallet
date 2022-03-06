@@ -108,6 +108,17 @@ export default {
   margin-left: auto;
 }
 
+.el-main {
+  width: 540px;
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 1040px) {
+  .el-main {
+    width: 1040px;
+  }
+}
+
 .el-menu {
   position: absolute;
   z-index: 10;

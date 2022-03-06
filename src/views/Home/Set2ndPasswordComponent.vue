@@ -14,6 +14,7 @@
         :model="secondPassphraseForm"
         label-width="80px"
         :rules="secondPassphraseFormRules"
+        :label-position="width <= 1040 ? 'top' : 'left'"
       >
         <el-form-item label="2nd P." prop="secondPassphrase">
           <el-tooltip
@@ -52,6 +53,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { showErrorPopup } from '../../helpers/errorDisplay';
 import * as client from '@gny/client';
 const connection = new client.Connection(
@@ -62,6 +64,9 @@ const connection = new client.Connection(
 );
 
 export default {
+  computed: {
+    ...mapGetters(['width']),
+  },
   props: {
     user: Object,
     positiveBalance: Boolean,

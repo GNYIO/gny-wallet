@@ -17,6 +17,7 @@
         :model="lockAccountForm"
         label-width="80px"
         :rules="lockAccountFormRules"
+        :label-position="width <= 1040 ? 'top' : 'left'"
       >
         <el-form-item label="height" prop="lockHeight">
           <el-tooltip
@@ -66,6 +67,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { showErrorPopup } from '../../helpers/errorDisplay';
 import { BigNumber } from 'bignumber.js';
 
@@ -78,6 +80,9 @@ const connection = new client.Connection(
 );
 
 export default {
+  computed: {
+    ...mapGetters(['width']),
+  },
   props: {
     user: Object,
     positiveBalance: Boolean,
