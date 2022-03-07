@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="top">
     <el-card shadow="hover">
       <div slot="header">
         Past GNY Transfers
@@ -9,24 +9,31 @@
         style="width: 100%"
         :row-class-name="tableRowClassName"
       >
-        <el-table-column label="Sender" width="300">
+        <el-table-column label="Sender">
           <template slot-scope="scope">
             <div slot="reference">
-              {{ scope.row.senderId | prettyPrintMyAddress(user.address) }}
+              {{ scope.row.senderId | prettyPrintMyAddress(user.address, 8) }}
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="Recipient" width="300">
+        <el-table-column label="Recipient">
           <template slot-scope="scope">
             <div slot="reference">
-              {{ scope.row.recipientId | prettyPrintMyAddress(user.address) }}
+              {{
+                scope.row.recipientId | prettyPrintMyAddress(user.address, 8)
+              }}
             </div>
           </template>
         </el-table-column>
         <el-table-column prop="currency" label="Currency"></el-table-column>
         <el-table-column prop="amount" label="Amount"></el-table-column>
-        <el-table-column prop="height" label="Height"> </el-table-column>
-        <el-table-column prop="transactions.message" label="Message">
+        <el-table-column v-if="width >= 1040" prop="height" label="Height">
+        </el-table-column>
+        <el-table-column
+          v-if="width >= 1040"
+          prop="transactions.message"
+          label="Message"
+        >
         </el-table-column>
       </el-table>
       <div class="block">
@@ -52,7 +59,7 @@ export default {
   },
   computed: {
     ...mapState(['user']),
-    ...mapGetters(['gnyTransfersPretty', 'gnyTransfersPrettyCount']),
+    ...mapGetters(['gnyTransfersPretty', 'gnyTransfersPrettyCount', 'width']),
   },
   data() {
     return {
@@ -96,11 +103,27 @@ export default {
 </script>
 
 <style>
+.top {
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 500px;
+}
+
+@media screen and (min-width: 1040px) {
+  .top {
+    width: 1000px;
+  }
+}
+
 .el-table .warning-row {
   background: oldlace;
 }
 
 .el-table .success-row {
   background: #f0f9eb;
+}
+
+.block {
+  text-align: center;
 }
 </style>

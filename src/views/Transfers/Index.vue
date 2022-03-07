@@ -1,91 +1,87 @@
 <template>
-  <div>
-    <el-row :gutter="20">
-      <el-col :span="18">
-        <el-card v-if="!positiveBalance" shadow="hover">
-          <h3>You have currently no GNY to transfer</h3>
-        </el-card>
+  <div class="top">
+    <el-card v-if="!positiveBalance" shadow="hover">
+      <h3>You have currently no GNY to transfer</h3>
+    </el-card>
 
-        <el-card v-if="positiveBalance">
-          <div slot="header">
-            Transfer GNY
+    <el-card v-if="positiveBalance" shadow="hover">
+      <div slot="header">
+        Transfer GNY
+      </div>
+      <el-form
+        :model="form"
+        ref="form"
+        :rules="rules"
+        label-width="80px"
+        :label-position="width <= 1040 ? 'top' : 'left'"
+      >
+        <el-form-item label="From">
+          <el-tooltip
+            effect="light"
+            content="Own Address"
+            placement="top-start"
+          >
+            <el-input v-model="form.from" :disabled="true"></el-input>
+          </el-tooltip>
+        </el-form-item>
+
+        <el-form-item label="To" prop="to" required>
+          <el-tooltip
+            effect="light"
+            content="Address e.g.: GWrAxgXSiZxieGrLWungJqWe4Xws"
+            placement="top-start"
+          >
+            <el-input v-model="form.to"></el-input>
+          </el-tooltip>
+        </el-form-item>
+
+        <el-form-item label="Amount" prop="amount" required>
+          <el-tooltip
+            effect="light"
+            :content="amountPlaceholder"
+            placement="top-start"
+          >
+            <el-input
+              type="text"
+              v-model="form.amount"
+              :placeholder="amountPlaceholder"
+            ></el-input>
+          </el-tooltip>
+        </el-form-item>
+
+        <el-form-item label="Message" prop="message">
+          <el-tooltip
+            effect="light"
+            content="Optional message (unencrypted) e.g. 'test message'"
+            placement="top-start"
+          >
+            <el-input v-model="form.message"></el-input>
+          </el-tooltip>
+        </el-form-item>
+
+        <el-form-item>
+          <div style="float: left">
+            <el-badge
+              value="0.1 GNY"
+              type="info"
+              @mouseover.native="hideTransferBadge = false"
+              @mouseleave.native="hideTransferBadge = true"
+              :hidden="hideTransferBadge"
+            >
+              <el-button type="primary" @click="sendTransaction"
+                >Send</el-button
+              >
+            </el-badge>
           </div>
-          <el-form :model="form" ref="form" :rules="rules" label-width="80px">
-            <el-form-item label="From">
-              <el-tooltip
-                effect="light"
-                content="Own Address"
-                placement="top-start"
-              >
-                <el-input v-model="form.from" :disabled="true"></el-input>
-              </el-tooltip>
-            </el-form-item>
 
-            <el-form-item label="To" prop="to" required>
-              <el-tooltip
-                effect="light"
-                content="Address e.g.: GWrAxgXSiZxieGrLWungJqWe4Xws"
-                placement="top-start"
-              >
-                <el-input v-model="form.to"></el-input>
-              </el-tooltip>
-            </el-form-item>
+          <el-button @click="resetForm" style="float: left; margin-left: 10px;"
+            >Cancel</el-button
+          >
+        </el-form-item>
+      </el-form>
+    </el-card>
 
-            <el-form-item label="Amount" prop="amount" required>
-              <el-tooltip
-                effect="light"
-                :content="amountPlaceholder"
-                placement="top-start"
-              >
-                <el-input
-                  type="text"
-                  v-model="form.amount"
-                  :placeholder="amountPlaceholder"
-                ></el-input>
-              </el-tooltip>
-            </el-form-item>
-
-            <el-form-item label="Message" prop="message">
-              <el-tooltip
-                effect="light"
-                content="Optional message (unencrypted) e.g. 'test message'"
-                placement="top-start"
-              >
-                <el-input v-model="form.message"></el-input>
-              </el-tooltip>
-            </el-form-item>
-
-            <el-form-item>
-              <div style="float: left">
-                <el-badge
-                  value="0.1 GNY"
-                  type="info"
-                  @mouseover.native="hideTransferBadge = false"
-                  @mouseleave.native="hideTransferBadge = true"
-                  :hidden="hideTransferBadge"
-                >
-                  <el-button type="primary" @click="sendTransaction"
-                    >Send</el-button
-                  >
-                </el-badge>
-              </div>
-
-              <el-button
-                @click="resetForm"
-                style="float: left; margin-left: 10px;"
-                >Cancel</el-button
-              >
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
-    </el-row>
-
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <TransfersPagedComponent></TransfersPagedComponent>
-      </el-col>
-    </el-row>
+    <TransfersPagedComponent></TransfersPagedComponent>
   </div>
 </template>
 
@@ -173,7 +169,7 @@ export default {
   },
   computed: {
     ...mapState(['user', 'passphrase', 'secondPassphrase']),
-    ...mapGetters(['positiveBalance']),
+    ...mapGetters(['positiveBalance', 'width']),
   },
   methods: {
     async sendTransaction() {
@@ -213,11 +209,15 @@ export default {
 </script>
 
 <style scoped>
-.el-row {
-  margin-bottom: 20px;
+.el-card {
+  text-align: left;
+  width: 500px;
+  margin: 0 auto;
 }
 
-.el-row:last-child {
-  margin-bottom: 0;
+@media screen and (min-width: 1040px) {
+  .el-card {
+    width: 1000px;
+  }
 }
 </style>

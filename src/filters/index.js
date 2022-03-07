@@ -30,10 +30,14 @@ export function contractMappingFilter(contractNumber) {
   return 'unknown contract';
 }
 
-export function prettyPrintMyAddressFilter(address, myAddress) {
+export function prettyPrintMyAddressFilter(address, myAddress, slice) {
   if (address === myAddress) {
     return 'Me';
   }
 
-  return address;
+  if (slice === undefined) {
+    return address;
+  } else {
+    return address.slice(0, slice);
+  }
 }
