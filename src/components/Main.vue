@@ -86,7 +86,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .page-container {
   position: relative;
   min-height: 100vh;
