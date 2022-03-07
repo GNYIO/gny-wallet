@@ -1,77 +1,76 @@
 <template>
-  <div>
-    <el-col :span="12" v-if="user.lockHeight == 0">
-      <el-card shadow="hover">
-        <h3>You can't vote, you need to first lock your account</h3>
-        <span>
-          <p>Lock your account here:</p>
-          <router-link to="/home">Home</router-link>
-        </span>
-      </el-card>
-    </el-col>
+  <div class="top">
+    <el-card shadow="hover" v-if="user.lockHeight == 0">
+      <div slot="header">
+        <span>Vote for Delegates</span>
+      </div>
+      <p>You can't vote, you need to first lock your account</p>
+      <span>
+        <p>Lock your account here:</p>
+        <router-link to="/home">Home</router-link>
+      </span>
+    </el-card>
 
     <!-- vote for delegates -->
-    <el-col :span="12" v-if="user.lockHeight > 0">
-      <el-card shadow="hover">
-        <div slot="header">
-          <span>Vote for Delegates</span>
-        </div>
+    <el-card shadow="hover" v-if="user.lockHeight > 0">
+      <div slot="header">
+        <span>Vote for Delegates</span>
+      </div>
 
-        <el-form
-          ref="voteForm"
-          :model="voteForm"
-          :rules="voteFormRules"
-          label-width="80px"
-        >
-          <el-form-item label="Del." prop="delegates">
-            <el-tooltip
-              effect="light"
-              content="Delegates to vote for"
-              placement="top-start"
+      <el-form
+        ref="voteForm"
+        :model="voteForm"
+        :rules="voteFormRules"
+        label-width="80px"
+      >
+        <el-form-item label="Del." prop="delegates">
+          <el-tooltip
+            effect="light"
+            content="Delegates to vote for"
+            placement="top-start"
+          >
+            <el-select
+              placeholder="select multiple delegates"
+              clearable
+              multiple
+              v-model="voteForm.delegates"
+              style="float: left; width:80%"
             >
-              <el-select
-                placeholder="select multiple delegates"
-                clearable
-                multiple
-                v-model="voteForm.delegates"
-                style="float: left; width:80%"
+              <el-option
+                v-for="item in delegatesForWhichIHaveNotVotedYet"
+                :key="item.username"
+                :label="item.username"
+                :value="item.username"
               >
-                <el-option
-                  v-for="item in delegatesForWhichIHaveNotVotedYet"
-                  :key="item.username"
-                  :label="item.username"
-                  :value="item.username"
+                <span style="float: left">{{ item.username }}</span>
+                <span style="float: right; margin-right: 2em"
+                  >rank: {{ item.rate }}</span
                 >
-                  <span style="float: left">{{ item.username }}</span>
-                  <span style="float: right; margin-right: 2em"
-                    >rank: {{ item.rate }}</span
-                  >
-                </el-option>
-              </el-select>
-            </el-tooltip>
-          </el-form-item>
+              </el-option>
+            </el-select>
+          </el-tooltip>
+        </el-form-item>
 
-          <el-form-item>
-            <div style="float: left">
-              <el-badge
-                value="0.1 GNY"
-                type="info"
-                @mouseover.native="hideVoteBadge = false"
-                @mouseleave.native="hideVoteBadge = true"
-                :hidden="hideVoteBadge"
-              >
-                <el-button type="primary" @click="vote">Vote</el-button>
-              </el-badge>
-            </div>
-            <el-button
-              @click="resetVoteForm"
-              style="float: left; margin-left: 10px;"
-              >Reset</el-button
+        <el-form-item>
+          <div style="float: left">
+            <el-badge
+              value="0.1 GNY"
+              type="info"
+              @mouseover.native="hideVoteBadge = false"
+              @mouseleave.native="hideVoteBadge = true"
+              :hidden="hideVoteBadge"
             >
-          </el-form-item>
-        </el-form>
-      </el-card>
-    </el-col>
+              <el-button type="primary" @click="vote">Vote</el-button>
+            </el-badge>
+          </div>
+          <el-button
+            @click="resetVoteForm"
+            style="float: left; margin-left: 10px;"
+            >Reset</el-button
+          >
+        </el-form-item>
+      </el-form>
+    </el-card>
   </div>
 </template>
 
@@ -140,3 +139,16 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.top {
+  text-align: left;
+}
+
+.top {
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 500px;
+}
+
+</style>

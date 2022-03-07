@@ -1,5 +1,5 @@
 <template>
-  <el-col :span="12">
+  <div class="top">
     <el-card v-if="user.isDelegate === 0 && user.username !== null" shadow="hover">
       <div slot="header">
         <span>Register Delegate</span>
@@ -32,7 +32,7 @@
       <p>Lock your account here:</p>
       <router-link to="/home">Home</router-link>
     </el-card>
-  </el-col>
+  </div>
 </template>
 
 <script>
@@ -77,3 +77,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.top {
+  text-align: left;
+  width: 500px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+</style>

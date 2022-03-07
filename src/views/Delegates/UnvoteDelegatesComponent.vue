@@ -1,66 +1,64 @@
 <template>
   <!-- unvote delegates -->
-  <el-col :span="12" v-if="user.lockHeight > 0">
-    <el-card shadow="hover">
-      <div slot="header">
-        <span>Unvote Delegates</span>
-      </div>
+  <el-card shadow="hover" v-if="user.lockHeight > 0">
+    <div slot="header">
+      <span>Unvote Delegates</span>
+    </div>
 
-      <el-form
-        ref="unvoteForm"
-        :model="unvoteForm"
-        :rules="unvoteFormRules"
-        label-width="80px"
-      >
-        <el-form-item label="Del." prop="delegates">
-          <el-tooltip
-            effect="light"
-            content="Delegates to unvote"
-            placement="top-start"
+    <el-form
+      ref="unvoteForm"
+      :model="unvoteForm"
+      :rules="unvoteFormRules"
+      label-width="80px"
+    >
+      <el-form-item label="Del." prop="delegates">
+        <el-tooltip
+          effect="light"
+          content="Delegates to unvote"
+          placement="top-start"
+        >
+          <el-select
+            placeholder="select multiple delegates"
+            clearable
+            multiple
+            v-model="unvoteForm.delegates"
+            style="float: left; width:80%"
           >
-            <el-select
-              placeholder="select multiple delegates"
-              clearable
-              multiple
-              v-model="unvoteForm.delegates"
-              style="float: left; width:80%"
+            <el-option
+              v-for="item in whoIVotedFor"
+              :key="item.username"
+              :label="item.username"
+              :value="item.username"
             >
-              <el-option
-                v-for="item in whoIVotedFor"
-                :key="item.username"
-                :label="item.username"
-                :value="item.username"
+              <span style="float: left">{{ item.username }}</span>
+              <span style="float: right; margin-right: 2em"
+                >rank: {{ item.rate }}</span
               >
-                <span style="float: left">{{ item.username }}</span>
-                <span style="float: right; margin-right: 2em"
-                  >rank: {{ item.rate }}</span
-                >
-              </el-option>
-            </el-select>
-          </el-tooltip>
-        </el-form-item>
+            </el-option>
+          </el-select>
+        </el-tooltip>
+      </el-form-item>
 
-        <el-form-item>
-          <div style="float: left">
-            <el-badge
-              value="0.1 GNY"
-              type="info"
-              @mouseover.native="hideUnvoteBadge = false"
-              @mouseleave.native="hideUnvoteBadge = true"
-              :hidden="hideUnvoteBadge"
-            >
-              <el-button type="primary" @click="unvote">Unvote</el-button>
-            </el-badge>
-          </div>
-          <el-button
-            @click="resetUnvoteForm"
-            style="float: left; margin-left: 10px;"
-            >Unvote</el-button
+      <el-form-item>
+        <div style="float: left">
+          <el-badge
+            value="0.1 GNY"
+            type="info"
+            @mouseover.native="hideUnvoteBadge = false"
+            @mouseleave.native="hideUnvoteBadge = true"
+            :hidden="hideUnvoteBadge"
           >
-        </el-form-item>
-      </el-form>
-    </el-card>
-  </el-col>
+            <el-button type="primary" @click="unvote">Unvote</el-button>
+          </el-badge>
+        </div>
+        <el-button
+          @click="resetUnvoteForm"
+          style="float: left; margin-left: 10px;"
+          >Unvote</el-button
+        >
+      </el-form-item>
+    </el-form>
+  </el-card>
 </template>
 
 <script>

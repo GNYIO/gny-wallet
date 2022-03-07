@@ -1,33 +1,37 @@
 <template>
-  <div>
+  <el-card shadow="hover">
+    <div class="header" slot="header">
+      All Delegates
+    </div>
+
     <el-table :data="currentDelegates" stripe style="width: 100%">
-      <el-table-column prop="rate" label="Rank" width="100"></el-table-column>
+      <el-table-column prop="rate" label="Rank" width="60"></el-table-column>
       <el-table-column
         prop="username"
         label="Username"
-        width="120"
+        width="130"
       ></el-table-column>
-      <el-table-column prop="address" label="Address"></el-table-column>
+      <el-table-column prop="address" label="Address" :formatter="subAddress"></el-table-column>
       <el-table-column
         prop="producedBlocks"
         label="Produced Blocks"
-        width="180"
       ></el-table-column>
       <el-table-column
         prop="missedBlocks"
         label="Missed Blocks"
-        width="*"
+        width="80"
       ></el-table-column>
       <el-table-column
+        v-if="width >= 1040"
         prop="rewards"
         label="Rewards"
-        width="180"
       ></el-table-column>
       <el-table-column
+        v-if="width >= 1040"
         prop="productivity"
         label="Productivity"
       ></el-table-column>
-      <el-table-column prop="approval" label="Approval"> </el-table-column>
+      <el-table-column v-if="width >= 1040" prop="approval" label="Approval"> </el-table-column>
     </el-table>
     <div class="block">
       <el-pagination
@@ -38,15 +42,19 @@
         :total="delegatesCount"
       ></el-pagination>
     </div>
-  </div>
+  </el-card>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import { prettyPrintMyAddressFilter } from '../../filters/index';
 
 export default {
+  filters: {
+    prettyPrintMyAddress: prettyPrintMyAddressFilter,
+  },
   computed: {
-    ...mapGetters(['prettyDelegates', 'delegatesCount']),
+    ...mapGetters(['prettyDelegates', 'delegatesCount', 'width']),
   },
   data() {
     return {
@@ -70,6 +78,9 @@ export default {
         }
       }
     },
+    subAddress: function (row) {
+      return row.address.slice(0,8);
+    },
   },
   async mounted() {
     await this.$store.dispatch('getAllDelegateNames');
@@ -78,3 +89,26 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.header {
+  text-align: left;
+}
+
+.el-card {
+  text-align: center;
+}
+
+.el-card {
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 500px;
+}
+
+@media screen and (min-width: 1040px) {
+  .el-card {
+    width: 1000px;
+  }
+}
+
+</style>
