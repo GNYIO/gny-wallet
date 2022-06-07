@@ -3,7 +3,7 @@
     <p>GNY Address</p>
     <el-input v-model="gnyAddress" :disabled="true"></el-input>
     <br />
-    <p>Binance Smart Chain Address</p>
+    <p>Ethereum Address</p>
     <el-input
       v-model="ethAddress"
       placeholder="ethereum address"
