@@ -81,3 +81,56 @@ VUE_APP_HTTPS=true
 ```bash
 npm run build
 ```
+
+
+
+### Develop locally with mainnet access (fix CORS issue)
+
+Normally if we specify `mainnet.gny.io` as source in our `.env` file we would get CORS issues. Because our locally run `vue.js` app is being served by a http server from `http://127.0.0.1:8080/`. But we also try to access `https://mainnet.gny.io`. This are two domains and the browser does not allow this.
+
+
+But with a neat trick we can bypass this problem by using a `vuejs proxy`
+
+All request to `http://mainnet.gny.io/` are being proxied through `http://127.0.0.1:8080/` (the endpoint where also the development vuejs files are being served from.
+
+Edit `.env`:
+```bash
+VUE_APP_GNY_ENDPOINT=127.0.0.1
+VUE_APP_GNY_PORT=8080
+VUE_APP_GNY_NETWORK=mainnet
+VUE_APP_HTTPS=false
+```
+
+Now add to the `vue.config.js` file a `devServer` key that proxies (almost) all request from `http://127.0.0.1:8080/` to `https://mainnet.gny.io/`.
+
+Edit `vue.config.js`:
+```javascript
+module.exports = {
+  configureWebpack: {
+    devtool: 'source-map',
+  },
+  devServer: {
+    proxy: {
+        '/': {
+            target: 'https://mainnet.gny.io/', // mainnet.gny.io
+            changeOrigin: true,
+            pathRewrite: {
+                '^/': ''
+            }
+        },
+    }
+  }
+};
+
+```
+
+This works because it seems like the requests that the `vue.js` app is making, like requesting the files `/index.html`, `/app.js` and `/chunk-vendors.js` are not forwarded to the proxy. But are immediately returned from the development server on `http://127.0.0.1:8080/`
+
+The `@gny/client` library only requests `https://mainnet.gny.io/api/*`. It seems that these requests don't clash with the files `vue.js` is serving.
+
+All requests that `@gny/client` was making before. Something like `https://mainnet.gny.io/api/blocks/getHeight` are now being done as `/api/blocks/getHeight` (`http://127.0.0.1:8080` can be ommitted because it is using)
+
+Example:
+- Before: `https://mainnet.gny.io/api/blocks/getHeight`
+- Now: `http://127.0.0.1:8080/api/blocks/getHeight` -> `https://mainnet.gny.io/api/blocks/getHeight`
+
