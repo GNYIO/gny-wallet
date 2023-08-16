@@ -28,6 +28,17 @@
 
         </el-card>
       </el-col>
+
+      <el-col :span="12">
+        <el-card>
+          <div slot="header">
+            GNY Token Supply
+          </div>
+          Current Supply: <b>{{ supply }} GNY</b>
+          <br/><br/>
+          Already Burned: <b>{{ burned }} GNY</b>
+        </el-card>
+      </el-col>
     </el-row>
 
     <el-row :gutter="20">
@@ -59,7 +70,7 @@ export default {
   },
   computed: {
     ...mapState(['user', 'passphrase', 'secondPassphrase']),
-    ...mapGetters(['positiveBalance']),
+    ...mapGetters(['positiveBalance', 'supply', 'burned']),
   },
   data() {
     const validateBurnAmount = (rule, value, callback) => {
@@ -136,7 +147,7 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('refreshAccounts');
-    await this.$store.dispatch('getBurn');
+    await this.$store.dispatch('getSupply');
 
     console.log(`this.user: ${this.user.address}`);
     console.log(this.positiveBalance);
@@ -144,3 +155,12 @@ export default {
 };
 </script>
 
+<style scoped>
+.el-row {
+  margin-bottom: 20px;
+}
+
+.el-row:last-child {
+  margin-bottom: 0;
+}
+</style>

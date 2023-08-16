@@ -50,7 +50,7 @@
             </el-menu-item>
 
             <el-menu-item index="5" route="/burn">
-              <i class="el-icon-s-platform"></i>
+              <i class="el-icon-delete-solid"></i>
               <span> Burn GNY</span>
             </el-menu-item>
 

@@ -20,4 +20,7 @@ export const getDefaultState = () => ({
   transfers: [],
   burn: [],
   balances: [],
+
+  burned: String(0),
+  supply: String(0),
 });

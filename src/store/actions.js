@@ -277,6 +277,27 @@ export const actions = {
       });
     }
   },
+
+  async getSupply({ commit }) {
+    try {
+      const raw = await connection.api.Block.getSupply();
+
+      if (raw.success === true) {
+        const result = {
+          burned: raw.burned,
+          supply: raw.supply,
+        };
+
+        commit('setSupply', result);
+      }
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message,
+      });
+    }
+  },
+
   resetState({ commit }) {
     commit('resetState');
   },

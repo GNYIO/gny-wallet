@@ -147,4 +147,11 @@ export const getters = {
       .plus(172800)
       .toFixed();
   },
+
+  supply: state => {
+    return state.supply === String(0) ? String(0) : new BigNumber(state.supply).dividedBy(1e8).toFixed(0)
+  },
+  burned: state => {
+    return state.burned === String(0) ? String(0) : new BigNumber(state.burned).dividedBy(1e8).toFixed(0)
+  },
 };

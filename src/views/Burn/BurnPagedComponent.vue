@@ -37,7 +37,7 @@ import { mapGetters, mapState } from 'vuex';
 export default {
   computed: {
     ...mapState(['user']),
-    ...mapGetters(['burnPretty', 'burnPrettyCount']),
+    ...mapGetters(['burnPretty', 'burnPrettyCount' ]),
   },
   data() {
     return {
@@ -63,7 +63,8 @@ export default {
     },
   },
   async mounted() {
-    // todo? add vuex action?
+    await this.$store.dispatch('getBurn');
+
     this.handleCurrentChange(1);
   },
 };

@@ -49,6 +49,10 @@ export const mutations = {
   setBalances(state, balances) {
     state.balances = balances;
   },
+  setSupply(state, result) {
+    state.supply = result.supply;
+    state.burned = result.burned;
+  },
   resetState(state) {
     const newState = getDefaultState();
     Object.assign(state, newState);
