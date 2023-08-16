@@ -155,7 +155,7 @@ export default {
           },
           { validator: validateAddress, trigger: 'blur' },
         ],
-        amount: [{ validator: validateAmount, trigger: 'blur' }],
+        amount: [{ validator: validateAmount, trigger: 'change' }],
         message: [
           {
             max: 256,
