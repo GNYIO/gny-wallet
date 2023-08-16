@@ -29,6 +29,12 @@
         </el-card>
       </el-col>
     </el-row>
+
+    <el-row :gutter="20">
+      <el-col :span="24">
+        <BurnPagedComponent></BurnPagedComponent>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -37,6 +43,8 @@ import { showErrorPopup } from '../../helpers/errorDisplay';
 import { mapGetters, mapState } from 'vuex';
 import { BigNumber } from 'bignumber.js';
 import * as client from '@gny/client';
+import BurnPagedComponent from './BurnPagedComponent';
+
 
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
@@ -46,6 +54,9 @@ const connection = new client.Connection(
 );
 
 export default {
+  components: {
+    BurnPagedComponent,
+  },
   computed: {
     ...mapState(['user', 'passphrase', 'secondPassphrase']),
     ...mapGetters(['positiveBalance']),
@@ -125,6 +136,7 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('refreshAccounts');
+    await this.$store.dispatch('getBurn');
 
     console.log(`this.user: ${this.user.address}`);
     console.log(this.positiveBalance);

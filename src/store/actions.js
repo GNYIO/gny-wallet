@@ -251,6 +251,32 @@ export const actions = {
       });
     }
   },
+  async getBurn({ commit, state }) {
+    try {
+      const count = await connection.api.Burn.getAll(100, 0, state.user.address);
+
+      if (count.success === true) {
+        const all = [];
+        for (let offset = 0; offset < count.count; offset += 100) {
+          const result = await connection.api.Burn.getAll(
+            100,
+            offset,
+            state.user.address
+          );
+          if (result.success === true) {
+            all.push(...result.burn);
+          }
+        }
+
+        commit('setBurn', all);
+      }
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message,
+      });
+    }
+  },
   resetState({ commit }) {
     commit('resetState');
   },

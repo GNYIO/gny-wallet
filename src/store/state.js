@@ -18,5 +18,6 @@ export const getDefaultState = () => ({
   isLocked: false,
 
   transfers: [],
+  burn: [],
   balances: [],
 });

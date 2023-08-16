@@ -74,6 +74,19 @@ export const getters = {
   gnyTransfersPrettyCount: (state, getters) =>
     getters.gnyTransfersPretty.length,
 
+  burnPretty: state => {
+    const burn = state.burn.map(bu => ({
+      tid: bu.tid,
+      senderId: bu.senderId,
+      amount: new BigNumber(bu.amount).dividedBy(1e8).toFixed(0),
+      timestamp: bu.timestamp,
+      height: bu.height,
+    }));
+    return burn;
+  },
+  burnPrettyCount: state => state.burn.length,
+
+
   assetTransfersPretty: (state, getters) =>
     getters.transfersPretty.filter(x => x.currency !== 'GNY'),
   assetTransfersPrettyCount: (state, getters) =>
