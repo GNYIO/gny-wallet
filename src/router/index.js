@@ -9,6 +9,7 @@ import Transfer from '../views/Transfers/Index.vue';
 import Delegates from '../views/Delegates/Index.vue';
 import Assets from '../views/Assets/Index.vue';
 import MachineLearning from '../views/MachineLearning/Index.vue';
+import Burn from '../views/Burn/Index.vue';
 import Error404 from '../views/Error404.vue';
 import Demo from '../views/MachineLearning/Demo.vue';
 import RetailDemo from '../views/MachineLearning/RetailDemo.vue';
@@ -57,6 +58,10 @@ const Router = new VueRouter({
         {
           path: '/assets',
           component: Assets,
+        },
+        {
+          path: '/burn',
+          component: Burn,
         },
         {
           path: '/machinelearning',
