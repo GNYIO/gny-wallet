@@ -251,18 +251,14 @@ export const actions = {
       });
     }
   },
-  async getBurn({ commit, state }) {
+  async getBurn({ commit }) {
     try {
-      const count = await connection.api.Burn.getAll(100, 0, state.user.address);
+      const count = await connection.api.Burn.getAll(100, 0);
 
       if (count.success === true) {
         const all = [];
         for (let offset = 0; offset < count.count; offset += 100) {
-          const result = await connection.api.Burn.getAll(
-            100,
-            offset,
-            state.user.address
-          );
+          const result = await connection.api.Burn.getAll(100, offset);
           if (result.success === true) {
             all.push(...result.burn);
           }
