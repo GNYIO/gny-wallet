@@ -141,7 +141,7 @@ export default {
         this.$message(result.transactionId);
         this.$refs['burnForm'].resetFields();
       } catch (err) {
-        showErrorPopup.apply(this, [err.response.data]);
+        showErrorPopup.apply(this, [err]);
       }
     },
   },

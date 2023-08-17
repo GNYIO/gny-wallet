@@ -7,6 +7,7 @@
       <el-table
         :data="currentBurn"
         style="width: 100%"
+        :row-class-name="tableRowClassName"
       >
         <el-table-column label="Sender" width="300">
           <template slot-scope="scope">
@@ -60,6 +61,12 @@ export default {
           this.currentBurn.push(list[from]);
         }
       }
+    },
+    tableRowClassName({ row }) {
+      if (row.senderId === this.user.address) {
+        return 'warning-row';
+      }
+      return '';
     },
   },
   async mounted() {
