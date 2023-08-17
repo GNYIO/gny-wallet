@@ -89,7 +89,8 @@
 import { showErrorPopup } from '../../helpers/errorDisplay';
 import { mapState, mapGetters } from 'vuex';
 import * as client from '@gny/client';
-import { isAddress, BigNumber } from '@gny/utils';
+import { isAddress } from '@gny/utils';
+import { BigNumber } from 'bignumber.js';
 
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,

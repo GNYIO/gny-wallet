@@ -251,6 +251,49 @@ export const actions = {
       });
     }
   },
+  async getBurn({ commit }) {
+    try {
+      const count = await connection.api.Burn.getAll(100, 0);
+
+      if (count.success === true) {
+        const all = [];
+        for (let offset = 0; offset < count.count; offset += 100) {
+          const result = await connection.api.Burn.getAll(100, offset);
+          if (result.success === true) {
+            all.push(...result.burn);
+          }
+        }
+
+        commit('setBurn', all);
+      }
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message,
+      });
+    }
+  },
+
+  async getSupply({ commit }) {
+    try {
+      const raw = await connection.api.Block.getSupply();
+
+      if (raw.success === true) {
+        const result = {
+          burned: raw.burned,
+          supply: raw.supply,
+        };
+
+        commit('setSupply', result);
+      }
+    } catch (err) {
+      Notification({
+        title: 'Error',
+        message: err.message,
+      });
+    }
+  },
+
   resetState({ commit }) {
     commit('resetState');
   },

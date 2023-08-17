@@ -18,5 +18,9 @@ export const getDefaultState = () => ({
   isLocked: false,
 
   transfers: [],
+  burn: [],
   balances: [],
+
+  burned: String(0),
+  supply: String(0),
 });
