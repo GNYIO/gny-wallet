@@ -49,18 +49,20 @@
               <span> Assets</span>
             </el-menu-item>
 
-            <el-menu-item index="5" route="/burn">
-              <i class="el-icon-delete-solid"></i>
-              <span> Burn GNY</span>
-            </el-menu-item>
 
-            <el-menu-item index="6" route="/swapgate_eth">
+
+            <el-menu-item index="5" route="/swapgate_eth">
               <i class="el-icon-s-platform"></i>
               <span> Ethereum Swapgate</span>
             </el-menu-item>
-            <el-menu-item index="7" route="/swapgate_bsc">
+            <el-menu-item index="6" route="/swapgate_bsc">
               <i class="el-icon-s-platform"></i>
               <span> BSC Swapgate</span>
+            </el-menu-item>
+
+            <el-menu-item index="7" route="/burn">
+              <i class="el-icon-delete-solid"></i>
+              <span> Burn GNY</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
