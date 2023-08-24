@@ -8,7 +8,7 @@
 
         <el-card v-if="positiveBalance">
           <div slot="header">
-            Burn Tokens
+            Burn GNY
           </div>
 
           <el-form :model="burnForm" ref="burnForm" :rules="burnRules" label-width="80px">
@@ -88,7 +88,7 @@ export default {
         );
       }
 
-      const oneMillion = new BigNumber(String(1000000 * 1e8))
+      const oneMillion = new BigNumber(String(1000000 * 1e8));
       if (currentInput.isGreaterThan(oneMillion)) {
         return callback(
           new Error('you can not burn more than one million at once')
@@ -128,6 +128,30 @@ export default {
       } catch (err) {
         console.log(`err: ${err}`);
         return; // remove TODOO
+      }
+
+      try {
+        // if we press "OK" it returns normally
+        // if we press "Cancel" or "X" (close) a error is thrown
+        const am = this.burnForm.amount;
+        console.log(`amount: ${am}`);
+        await this.$confirm(
+          `Are you sure that you want to burn "${am}" GNY?`,
+          'Warning',
+          {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning',
+          }
+        );
+      } catch (err) {
+        this.$refs['burnForm'].resetFields();
+
+        this.$message({
+          message: 'Burning canceled!',
+          type: 'error',
+        });
+        return;
       }
 
       try {
