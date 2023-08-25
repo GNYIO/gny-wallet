@@ -84,28 +84,42 @@ export default {
     user: Object,
     positiveBalance: Boolean,
     minLockHeight: String,
+    maxLockHeight: String,
     passphrase: String,
     secondPassphrase: String,
   },
   data() {
-    const validateBlockHeight = (rule, value, callback) => {
-      try {
-        const minLockHeight = new BigNumber(this.minLockHeight);
-        if (minLockHeight.isLessThanOrEqualTo(value)) {
-          callback();
-        } else {
-          callback(
-            new Error(
-              `Lock height must be greater or equal to ${this.minLockHeight}`,
-            ),
-          );
-        }
-      } catch (err) {
-        callback(
-          new Error(
-            `Lock height must be greater or equal to ${this.minLockHeight}`,
-          ),
-        );
+    const validateLockHeight = (rule, rawValue, callback) => {
+
+      const value = new BigNumber(rawValue);
+      if (value.isInteger === false) {
+        return callback(new Error('lock height is not valid'));
+      }
+
+      const minLockHeight = new BigNumber(this.minLockHeight);
+      const maxLockHeight = new BigNumber(this.maxLockHeight);
+
+      if (
+        value.isGreaterThanOrEqualTo(minLockHeight) &&
+        value.isLessThanOrEqualTo(maxLockHeight)
+      ) {
+        return callback(); // success
+      } else {
+        return callback(new Error(`lock height must be between "${minLockHeight.toFixed()}" and "${maxLockHeight.toFixed()}"`));
+      }
+    };
+
+    const validateLockAmount = (rule, rawValue, callback) => {
+
+      const value = new BigNumber(rawValue);
+      if (value.isInteger === false) {
+        return callback(new Error('lock amount is not valid'));
+      }
+
+      if (value.isLessThanOrEqualTo(1000000)) {
+        return callback();
+      } else {
+        return callback(new Error('you can only lock 1 million at a time'));
       }
     };
 
@@ -131,7 +145,7 @@ export default {
             trigger: 'change',
           },
           {
-            validator: validateBlockHeight,
+            validator: validateLockHeight,
             trigger: 'change',
           },
         ],
@@ -143,6 +157,10 @@ export default {
           },
           {
             pattern: /^[1-9][0-9]*$/,
+            trigger: 'change',
+          },
+          {
+            validator: validateLockAmount,
             trigger: 'change',
           },
         ],

@@ -147,6 +147,12 @@ export const getters = {
       .plus(172800)
       .toFixed();
   },
+  // this is a safety precaution so users do not "fat finger" a too big of
+  // a height which would lock the tokens more or less "forever"
+  // see also issue #124 on github
+  maxLockHeight: (state, getters) => {
+    return BigNumber(getters.latestBlock.height).plus(1000000).toFixed();
+  },
 
   supply: state => {
     return state.supply === String(0) ? String(0) : new BigNumber(state.supply).dividedBy(1e8).toFixed(0)

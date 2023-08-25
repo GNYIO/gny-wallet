@@ -22,6 +22,7 @@
         v-bind:user="user"
         v-bind:positiveBalance="positiveBalance"
         v-bind:minLockHeight="minLockHeight"
+        v-bind:maxLockHeight="maxLockHeight"
         v-bind:passphrase="passphrase"
         v-bind:secondPassphrase="secondPassphrase"
       ></LockAccountComponent>
@@ -70,6 +71,7 @@ export default {
       'positiveBalance',
       'hasSecondPassphrase',
       'minLockHeight',
+      'maxLockHeight',
     ]),
   },
   async mounted() {
