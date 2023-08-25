@@ -93,7 +93,7 @@ export default {
 
       const value = new BigNumber(rawValue);
       if (value.isInteger === false) {
-        return callback(new Error('lock amount is not valid'));
+        return callback(new Error('lock height is not valid'));
       }
 
       const minLockHeight = new BigNumber(this.minLockHeight);
@@ -107,7 +107,20 @@ export default {
       } else {
         return callback(new Error(`lock height must be between "${minLockHeight.toFixed()}" and "${maxLockHeight.toFixed()}"`));
       }
+    };
 
+    const validateLockAmount = (rule, rawValue, callback) => {
+
+      const value = new BigNumber(rawValue);
+      if (value.isInteger === false) {
+        return callback(new Error('lock amount is not valid'));
+      }
+
+      if (value.isLessThanOrEqualTo(1000000)) {
+        return callback();
+      } else {
+        return callback(new Error('you can only lock 1 million at a time'));
+      }
     };
 
     return {
@@ -144,6 +157,10 @@ export default {
           },
           {
             pattern: /^[1-9][0-9]*$/,
+            trigger: 'change',
+          },
+          {
+            validator: validateLockAmount,
             trigger: 'change',
           },
         ],
