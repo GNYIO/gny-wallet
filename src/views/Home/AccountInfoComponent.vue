@@ -13,18 +13,21 @@
           Address: <b>{{ user.address }}</b>
         </p>
 
-        <p>
-          Is Locked: <b>{{ user.lockHeight === '0' ? 'No' : 'Yes' }}</b>
+        <br v-if="user.lockHeight !== '0'"/>
+
+
+        <p v-if="user.lockHeight !== '0'">
+          Locked Balance: <b>{{ user.lockAmountPretty }} GNY</b>
         </p>
         <p v-if="user.lockHeight !== '0'">
-          Lock Height: <b>{{ user.lockHeight }}</b>
+          Available to unlock at Block Height: <b>{{ user.lockHeight }}</b>
         </p>
         <p v-if="user.lockHeight !== '0'">
           Unlocked Balance: <b>{{ user.balancePretty }} GNY</b>
         </p>
-        <p v-if="user.lockHeight !== '0'">
-          Locked Balance: <b>{{ user.lockAmountPretty }} GNY</b>
-        </p>
+
+        <br v-if="user.lockHeight !== '0'"/>
+
         <p>
           Total Balance: <b> {{ user.totalBalancePretty }} GNY</b>
         </p>
