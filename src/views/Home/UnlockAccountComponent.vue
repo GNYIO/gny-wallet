@@ -69,6 +69,19 @@ export default {
         return;
       }
 
+      // check if any votes left
+      const myAddress = this.user.address;
+      const myVotes = await connection.api.Delegate.getOwnVotes({
+        address: myAddress,
+      });
+      if (myVotes.delegates.length > 0) {
+        this.$message({
+          message: 'Please delete first all of your votes before unlocking!',
+          type: 'error',
+        });
+        return;
+      }
+
       try {
         const result = await connection.contract.Basic.unlockAccount(
           this.passphrase,
