@@ -10,7 +10,8 @@
         </el-card>
 
         <el-card v-if="isConnected">
-          <p>Allowance to GNY Swapgate contract: <strong>{{ allowance }} GNY</strong> </p>
+          <p>Allowance to GNY Swapgate contract: <strong>{{ allowance | prettyPrintBSCValue }} GNY</strong> </p>
+          <p>MetaMask GNY BEP20 balance: <strong>{{ metaMaskBalance | prettyPrintBSCValue }} BEP20 GNY</strong> </p>
           <el-form :model="depositForm" ref="depositForm" label-width="80px">
             <el-form-item label="Amount" prop="amount">
               <el-input prop v-model="depositForm.amount"></el-input>
@@ -34,16 +35,20 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { showErrorPopup } from '../helpers/errorDisplay';
 import { BigNumber } from 'bignumber.js';
 import Swapgate from '../assets/swapgate_abi';
 import IERC20 from '../assets/ierc20_abi';
 import Web3 from 'web3';
+import { prettyPrintBSCValueFilter } from '../filters/index';
 
 const BSC_SWAPGATE_ADDRESS = process.env.VUE_APP_BSC_SWAPGATE_ADDRESS;
 const BSC_ERC20_ADDRESS = process.env.VUE_APP_BSC_ERC20_ADDRESS;
 
+
 export default {
+  filters: {
+    prettyPrintBSCValue: prettyPrintBSCValueFilter,
+  },
   computed: {
     ...mapGetters(['user']),
   },
@@ -52,6 +57,7 @@ export default {
       web3: {},
       isConnected: false,
       allowance: 0,
+      metaMaskBalance: 0,
 
       ethAddress: '',
 
@@ -63,8 +69,11 @@ export default {
   methods: {
     connect: async function() {
       if (!window.ethereum) {
-        const couldNotFindMetaMask = new Error('could not find MetaMask');
-        showErrorPopup.apply(this, [couldNotFindMetaMask]);
+        this.$message({
+          message: 'could not find MetaMask',
+          type: 'error',
+          duration: 7 * 1000,
+        });
         return;
       }
 
@@ -72,34 +81,72 @@ export default {
       console.log(web3);
       this.web3 = web3;
 
+
+      const chainId = await web3.eth.getChainId();
+
+      // either BSC (56) in productio
+      // or hardhat (31337) in development
+      const check =
+      (
+        process.env.NODE_ENV === 'production' &&
+        chainId === 56
+      )
+      ||
+      (
+        process.env.NODE_ENV === 'development' &&
+        chainId === 31337
+      );
+
+      if (!check) {
+        this.$message({
+          message: 'You need to use the BSC Chain in MetaMask!',
+          type: 'error',
+          duration: 10 * 1000,
+        });
+        return;
+      }
+
+
+      console.log(`chainId: ${chainId}`);
+
+      console.log('before');
       //request user to connect accounts (Metamask will prompt)
       await window.ethereum.request({ method: 'eth_requestAccounts' });
 
-      console.log(window.ethereum);
+      console.log('before2');
 
       const accounts = await web3.eth.getAccounts();
       console.log(`first account: ${accounts[0]}`);
       this.ethAddress = accounts[0];
 
 
-      console.log(BSC_SWAPGATE_ADDRESS);
-      console.log(BSC_ERC20_ADDRESS);
-
-
       // new
-      console.log(`BSC_SWAPGATE_ADDRESS: ${BSC_SWAPGATE_ADDRESS}`);
-      const contract = new web3.eth.Contract(IERC20, BSC_ERC20_ADDRESS);
-      const currentAllowance = await contract.methods.allowance(
+      console.log(`BSC_ERC20_ADDRESS: ${BSC_ERC20_ADDRESS}`);
+      const gnyBEP20Contract = new web3.eth.Contract(IERC20, BSC_ERC20_ADDRESS);
+      const currentAllowance = await gnyBEP20Contract.methods.allowance(
         '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
         BSC_SWAPGATE_ADDRESS
       ).call();
+      console.log(`currentAllowance: ${currentAllowance}`);
 
-      console.log(currentAllowance);
+
+      const metaMaskBalance = await gnyBEP20Contract.methods.balanceOf(
+        '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+      ).call();
+      console.log(`metaMaskBalance: ${metaMaskBalance}`);
+
 
       this.allowance = currentAllowance;
       this.isConnected = true;
+
+      this.metaMaskBalance = metaMaskBalance;
     },
+
     deposit: async function() {
+      // todo: validate the form
+      // does this address even have GNY BEP20 ?
+      //
+
       const web3 = this.web3;
       const contract = new web3.eth.Contract(
         Swapgate,
