@@ -8,16 +8,11 @@ import Home from '../views/Home/Index';
 import Transfer from '../views/Transfers/Index.vue';
 import Delegates from '../views/Delegates/Index.vue';
 import Assets from '../views/Assets/Index.vue';
-import MachineLearning from '../views/MachineLearning/Index.vue';
 import Burn from '../views/Burn/Index.vue';
 import Error404 from '../views/Error404.vue';
-import Demo from '../views/MachineLearning/Demo.vue';
-import RetailDemo from '../views/MachineLearning/RetailDemo.vue';
-import LocationDemo from '../views/MachineLearning/LocationDemo.vue';
-import FraudDemo from '../views/MachineLearning/FraudDemo.vue';
-import Jupyter from '../views/MachineLearning/Jupyter.vue';
-import SwapgateETH from '../views/Swapgate-eth.vue';
-import SwapgateBSC from '../views/Swapgate-bsc.vue';
+import SwapMainnetToBSC from '../views/SwapMainnetToBSC.vue';
+import SwapBSCToMainnet from '../views/SwapBSCToMainnet.vue';
+
 
 Vue.use(VueRouter);
 
@@ -40,14 +35,6 @@ const Router = new VueRouter({
           component: Home,
         },
         {
-          path: '/swapgate_eth',
-          component: SwapgateETH,
-        },
-        {
-          path: '/swapgate_bsc',
-          component: SwapgateBSC,
-        },
-        {
           path: '/transfer',
           component: Transfer,
         },
@@ -64,28 +51,12 @@ const Router = new VueRouter({
           component: Burn,
         },
         {
-          path: '/machinelearning',
-          component: MachineLearning,
+          path: '/swap-mainnet-to-bsc',
+          component: SwapMainnetToBSC,
         },
         {
-          path: '/run_demo',
-          component: Demo,
-        },
-        {
-          path: '/run_retail_demo',
-          component: RetailDemo,
-        },
-        {
-          path: '/run_location_demo',
-          component: LocationDemo,
-        },
-        {
-          path: '/run_fraud_demo',
-          component: FraudDemo,
-        },
-        {
-          path: '/run_jupyter',
-          component: Jupyter,
+          path: '/swap-bsc-to-mainnet',
+          component: SwapBSCToMainnet,
         },
       ],
     },
