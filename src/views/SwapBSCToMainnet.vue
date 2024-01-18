@@ -4,25 +4,22 @@
       <el-col :span="18">
         <el-card v-if="!isConnected">
           <h3>You are not connected to MetaMask!</h3>
-          <el-button type="primary" @click="connect"
-            >Connect to metamask
+          <el-button type="primary" @click="connect">Connect to metamask
           </el-button>
         </el-card>
 
         <el-card v-if="isConnected">
+          <p>Connect BSC wallet: <strong>{{ ethAddress }}</strong></p>
           <p>Allowance to GNY Swapgate contract: <strong>{{ allowance | prettyPrintBSCValue }} GNY</strong> </p>
           <p>MetaMask GNY BEP20 balance: <strong>{{ metaMaskBalance | prettyPrintBSCValue }} BEP20 GNY</strong> </p>
+          <br/>
           <el-form :model="depositForm" ref="depositForm" label-width="80px">
             <el-form-item label="Amount" prop="amount">
               <el-input prop v-model="depositForm.amount"></el-input>
             </el-form-item>
 
             <el-form-item>
-              <el-button
-                  type="primary"
-                  @click="deposit"
-                  style="float: left;"
-              >Deposit GNY BEP20 to Mainnet</el-button>
+              <el-button type="primary" @click="deposit" style="float: left;">Deposit GNY BEP20 to Mainnet</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -67,7 +64,7 @@ export default {
     };
   },
   methods: {
-    connect: async function() {
+    connect: async function () {
       if (!window.ethereum) {
         this.$message({
           message: 'could not find MetaMask',
@@ -87,15 +84,15 @@ export default {
       // either BSC (56) in productio
       // or hardhat (31337) in development
       const check =
-      (
-        process.env.NODE_ENV === 'production' &&
-        chainId === 56
-      )
-      ||
-      (
-        process.env.NODE_ENV === 'development' &&
-        chainId === 31337
-      );
+        (
+          process.env.NODE_ENV === 'production' &&
+          chainId === 56
+        )
+        ||
+        (
+          process.env.NODE_ENV === 'development' &&
+          chainId === 31337
+        );
 
       if (!check) {
         this.$message({
@@ -124,14 +121,14 @@ export default {
       console.log(`BSC_ERC20_ADDRESS: ${BSC_ERC20_ADDRESS}`);
       const gnyBEP20Contract = new web3.eth.Contract(IERC20, BSC_ERC20_ADDRESS);
       const currentAllowance = await gnyBEP20Contract.methods.allowance(
-        '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+        this.ethAddress,
         BSC_SWAPGATE_ADDRESS
       ).call();
       console.log(`currentAllowance: ${currentAllowance}`);
 
 
       const metaMaskBalance = await gnyBEP20Contract.methods.balanceOf(
-        '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+        this.ethAddress
       ).call();
       console.log(`metaMaskBalance: ${metaMaskBalance}`);
 
@@ -142,7 +139,7 @@ export default {
       this.metaMaskBalance = metaMaskBalance;
     },
 
-    deposit: async function() {
+    deposit: async function () {
       // todo: validate the form
       // does this address even have GNY BEP20 ?
       //
