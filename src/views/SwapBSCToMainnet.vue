@@ -10,15 +10,68 @@
       </el-button>
     </el-card>
 
+    <el-card v-if="isConnected">
+      <div slot="header">
+        <span>Mainnet Account</span>
+      </div>
+
+      <el-row>
+        <p v-if="user.username">
+          Username: <b>{{ user.username }}</b>
+        </p>
+        <p>
+          Address: <b>{{ user.address }}</b>
+        </p>
+
+        <br v-if="user.lockHeight !== '0'"/>
+
+
+        <p v-if="user.lockHeight !== '0'">
+          Locked Balance: <b>{{ user.lockAmountPretty }} GNY</b>
+        </p>
+        <p v-if="user.lockHeight !== '0'">
+          Available to unlock at Block Height: <b>{{ user.lockHeight }}</b>
+        </p>
+        <p v-if="user.lockHeight !== '0'">
+          Unlocked Balance: <b>{{ user.balancePretty }} GNY</b>
+        </p>
+
+        <br v-if="user.lockHeight !== '0'"/>
+
+        <p>
+          Total Balance: <b> {{ user.totalBalancePretty }} GNY</b>
+        </p>
+        <p v-if="user.secondPublicKey">
+          Has Second Secret:
+          <b>{{ user.secondPublicKey === null ? 'No' : 'Yes' }}</b>
+        </p>
+        <p v-if="user.secondPublicKey">
+          Second PublicKey: <b>{{ user.secondPublicKey }}</b>
+        </p>
+      </el-row>
+    </el-card>
+
+    <br />
+
 
     <el-card v-if="isConnected">
       <div slot="header">
-        <span>Account Info</span>
+        <span>BSC Account</span>
       </div>
-      <p>Connect BSC wallet: <strong>{{ ethAddress }}</strong></p>
-      <p>Allowance to GNY Swapgate contract: <strong>{{ allowance | prettyPrintBSCValue }} GNY</strong> </p>
+
+      <p>Currently connected to BSC wallet: <strong>{{ ethAddress }}</strong></p>
+      <p>Allowance granted: <strong>{{ allowance | prettyPrintBSCValue }} GNY</strong> </p>
       <p>MetaMask GNY BEP20 balance: <strong>{{ metaMaskBalance | prettyPrintBSCValue }} BEP20 GNY</strong> </p>
       <br />
+    </el-card>
+
+    <br />
+
+    <el-card v-if="isConnected">
+      <div slot="header">
+        <span>Swap from BSC to Mainnet</span>
+      </div>
+
 
       <el-form :model="depositForm" ref="depositForm" :rules="rules" label-width="80px">
         <el-form-item label="Amount" prop="amount">
