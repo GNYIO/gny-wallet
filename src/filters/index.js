@@ -44,7 +44,7 @@ export function prettyPrintMyAddressFilter(address, myAddress) {
 // this also cuts of everything behind the decimal point
 export function prettPrintETHValueFilter(value) {
   const big = new BigNumber(value).dividedBy(1e18);
-  return big.toFixed(0);
+  return big.toFormat(0);
 }
 
 export function prettyPrintBSCValueFilter(value) {
@@ -55,5 +55,5 @@ export function prettyPrintBSCValueFilter(value) {
 // this also cuts of everything behind the decimal point
 export function prettyPrintGNYValueFilter(value) {
   const big = new BigNumber(value).dividedBy(1e8);
-  return big.toFixed(0);
+  return big.toFormat(0);
 }
