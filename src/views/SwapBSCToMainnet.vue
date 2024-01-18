@@ -25,8 +25,13 @@
           <el-input prop v-model="depositForm.amount"></el-input>
         </el-form-item>
 
+        <!--show only if -->
         <el-form-item>
-          <el-button type="primary" @click="deposit" style="float: left;">Deposit GNY BEP20 to Mainnet</el-button>
+          <el-button v-if="!allowanceEnough" type="warning" plain @click="submitAllowance" style="float: left;">First set allowance for contract</el-button>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button v-if="allowanceEnough" type="success" @click="deposit" style="float: left;">Deposit GNY BEP20 to Mainnet</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -53,6 +58,10 @@ export default {
   },
   computed: {
     ...mapGetters(['user']),
+    allowanceEnough: function() {
+      const amount = new BigNumber(this.depositForm.amount).multipliedBy(1e18);
+      return new BigNumber(this.allowance).isGreaterThanOrEqualTo(amount);
+    },
   },
   data() {
     const validateMetaMaskAmount = (rule, value, callback) => {
@@ -174,51 +183,81 @@ export default {
       this.metaMaskBalance = metaMaskBalance;
     },
 
-    deposit: async function () {
-      // todo: validate the form
-      // does this address even have GNY BEP20 ?
-      //
+    submitAllowance: async function () {
+      // todo: show modal to explain why this needed
 
-      const web3 = this.web3;
-      const contract = new web3.eth.Contract(
-        Swapgate,
-        BSC_SWAPGATE_ADDRESS
-      );
+      // todo: show if allowance currently really smaller
+      // if already bigger, stop and show success message
 
-      // is the allowance as high as as the
+      // is the allowance as high as as the?
       const amount = this.depositForm.amount;
-      const allowance = this.allowance;
+      console.log(`amount to approve: ${amount}`)
 
-      if (Number(amount) > Number(allowance)) {
-        // todo: show modal
-        const gnyContract = new web3.eth.Contract(IERC20, BSC_ERC20_ADDRESS);
-        const amount18 = new BigNumber(amount).multipliedBy(1e18).toFixed();
+      // todo: show modal
+      const web3 = this.web3;
+      const gnyContract = new web3.eth.Contract(IERC20, BSC_ERC20_ADDRESS);
+      const amount18 = new BigNumber(amount).multipliedBy(1e18).toFixed();
 
+      try {
         // approve amount
         await gnyContract.methods
           .approve(BSC_SWAPGATE_ADDRESS, amount18)
           .send({ from: this.ethAddress });
 
+        this.$message({
+          message: 'Please wait for the transaction to confirm. Then press "refresh" to reload the data!',
+          type: 'success',
+          duration: 15 * 1000,
+        });
+      } catch (err) {
+        this.$message({
+          message: err.message,
+          type: 'error',
+          duration: 10 * 1000,
+        });
+        console.log('error occured when trying to set allowance');
+        console.log(err)
       }
+    },
 
-      // show modal to get confirmation from user
+    deposit: async function () {
+      // todo: first check again if balance is higher than "amount"
+      // todo: then check if allowance is really higher
 
+      // todo: show modal to explain user and user needs to agree
 
+      // todo: has account enough GNY BEP20 to deposit?
 
-      const amountInBSC = new BigNumber(amount)
+      const web3 = this.web3;
+      const swapgateContract = new web3.eth.Contract(
+        Swapgate,
+        BSC_SWAPGATE_ADDRESS
+      );
+
+      const amountInBSC = new BigNumber(this.depositForm.amount)
         .multipliedBy(1e18)
         .toFixed();
       console.log(`amountInBSC: ${amountInBSC}`);
 
-      // todo
+      // todo: use GNY address from form
       const myAddress = this.user.address;
       console.log(`myAddress: ${myAddress}`);
 
-      const res = await contract.methods
-        .deposit(amountInBSC, myAddress)
-        .send({ from: this.ethAddress });
+      try {
+        const res = await swapgateContract.methods
+          .deposit(amountInBSC, myAddress)
+          .send({ from: this.ethAddress });
 
-      console.log(`res: ${res}`);
+        console.log(`res: ${res}`);
+      } catch (err) {
+        this.$message({
+          message: err.message,
+          type: 'error',
+          duration: 10 * 1000,
+        });
+        console.log("error occured when depositing into Swapgate contract");
+        console.error(err);
+      }
     }
   },
   async mounted() {
