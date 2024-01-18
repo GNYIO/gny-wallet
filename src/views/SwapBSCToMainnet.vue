@@ -19,7 +19,8 @@
       <p>Allowance to GNY Swapgate contract: <strong>{{ allowance | prettyPrintBSCValue }} GNY</strong> </p>
       <p>MetaMask GNY BEP20 balance: <strong>{{ metaMaskBalance | prettyPrintBSCValue }} BEP20 GNY</strong> </p>
       <br />
-      <el-form :model="depositForm" ref="depositForm" label-width="80px">
+
+      <el-form :model="depositForm" ref="depositForm" :rules="rules" label-width="80px">
         <el-form-item label="Amount" prop="amount">
           <el-input prop v-model="depositForm.amount"></el-input>
         </el-form-item>
@@ -54,6 +55,26 @@ export default {
     ...mapGetters(['user']),
   },
   data() {
+    const validateMetaMaskAmount = (rule, value, callback) => {
+      if (new BigNumber(value).isNaN()) {
+        callback('is not a number');
+      }
+
+      const currentInput = new BigNumber(value).times(1e18);
+      if (currentInput.isLessThan(this.metaMaskBalance)) {
+        callback();
+      } else {
+        const pretty = new BigNumber(this.metaMaskBalance)
+          .dividedBy(1e18)
+          .toFormat(0);
+        callback(
+          new Error(
+            `amount too big, you only have "${pretty}" available`,
+          ),
+        );
+      }
+    };
+
     return {
       web3: {},
       isConnected: false,
@@ -65,6 +86,16 @@ export default {
       depositForm: {
         amount: 0,
       },
+
+      rules: {
+        amount: [
+          {
+            validator: validateMetaMaskAmount,
+            trigger: 'change'
+          }
+        ],
+      }
+
     };
   },
   methods: {
