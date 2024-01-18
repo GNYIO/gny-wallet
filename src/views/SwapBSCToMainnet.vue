@@ -1,32 +1,36 @@
 <template>
-  <div>
-    <el-row :gutter="20">
-      <el-col :span="18">
-        <el-card v-if="!isConnected">
-          <h3>You are not connected to MetaMask!</h3>
-          <el-button type="primary" @click="connect">Connect to metamask
-          </el-button>
-        </el-card>
+  <el-col :span="12">
+    <el-card v-if="!isConnected">
+      <div slot="header">
+        <span>MetaMask Information</span>
+      </div>
 
-        <el-card v-if="isConnected">
-          <p>Connect BSC wallet: <strong>{{ ethAddress }}</strong></p>
-          <p>Allowance to GNY Swapgate contract: <strong>{{ allowance | prettyPrintBSCValue }} GNY</strong> </p>
-          <p>MetaMask GNY BEP20 balance: <strong>{{ metaMaskBalance | prettyPrintBSCValue }} BEP20 GNY</strong> </p>
-          <br/>
-          <el-form :model="depositForm" ref="depositForm" label-width="80px">
-            <el-form-item label="Amount" prop="amount">
-              <el-input prop v-model="depositForm.amount"></el-input>
-            </el-form-item>
+      <h3>You are not connected to MetaMask!</h3>
+      <el-button type="primary" @click="connect">Connect to metamask
+      </el-button>
+    </el-card>
 
-            <el-form-item>
-              <el-button type="primary" @click="deposit" style="float: left;">Deposit GNY BEP20 to Mainnet</el-button>
-            </el-form-item>
-          </el-form>
-        </el-card>
 
-      </el-col>
-    </el-row>
-  </div>
+    <el-card v-if="isConnected">
+      <div slot="header">
+        <span>Account Info</span>
+      </div>
+      <p>Connect BSC wallet: <strong>{{ ethAddress }}</strong></p>
+      <p>Allowance to GNY Swapgate contract: <strong>{{ allowance | prettyPrintBSCValue }} GNY</strong> </p>
+      <p>MetaMask GNY BEP20 balance: <strong>{{ metaMaskBalance | prettyPrintBSCValue }} BEP20 GNY</strong> </p>
+      <br />
+      <el-form :model="depositForm" ref="depositForm" label-width="80px">
+        <el-form-item label="Amount" prop="amount">
+          <el-input prop v-model="depositForm.amount"></el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" @click="deposit" style="float: left;">Deposit GNY BEP20 to Mainnet</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+  </el-col>
 </template>
 
 
