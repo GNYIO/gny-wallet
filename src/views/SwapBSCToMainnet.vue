@@ -86,6 +86,11 @@
         <el-form-item>
           <el-button v-if="allowanceEnough" type="success" @click="deposit" style="float: left;">Deposit GNY BEP20 to Mainnet</el-button>
         </el-form-item>
+
+        <el-form-item>
+          <el-button @click="getInfo" style="float: left;">Refresh</el-button>
+        </el-form-item>
+
       </el-form>
     </el-card>
 
@@ -123,7 +128,7 @@ export default {
       }
 
       const currentInput = new BigNumber(value).times(1e18);
-      if (currentInput.isLessThan(this.metaMaskBalance)) {
+      if (currentInput.isLessThanOrEqualTo(this.metaMaskBalance)) {
         callback();
       } else {
         const pretty = new BigNumber(this.metaMaskBalance)
@@ -161,77 +166,15 @@ export default {
     };
   },
   methods: {
-    connect: async function () {
-      if (!window.ethereum) {
-        this.$message({
-          message: 'could not find MetaMask',
-          type: 'error',
-          duration: 7 * 1000,
-        });
-        return;
-      }
 
-      const web3 = new Web3(window.ethereum);
-      console.log(web3);
-      this.web3 = web3;
+    getInfo: async function () {
+      console.log(`[getInfo] start`);
+      const web3 = this.web3;
 
-
-      const chainId = await web3.eth.getChainId();
-
-      // either BSC (56) in productio
-      // or hardhat (31337) in development
-      const check =
-        (
-          process.env.NODE_ENV === 'production' &&
-          chainId === 56
-        )
-        ||
-        (
-          process.env.NODE_ENV === 'development' &&
-          chainId === 31337
-        );
-
-      if (!check) {
-        this.$message({
-          message: 'You need to use the BSC Chain in MetaMask!',
-          type: 'error',
-          duration: 10 * 1000,
-        });
-        return;
-      }
-
-      // sometimes users switch their accounts in MetMask
-      // this change does **NOT** get propagated to the VUE app
-      window.ethereum.on('accountsChanged', (accounts) => {
-        // Time to reload your interface with accounts[0]!
-
-        console.log(`MetaMask accounts changed: ${JSON.stringify(accounts, null, 2)}`);
-        this.$message({
-          message: 'Warning: Your MetaMask wallet changed',
-          type: 'error',
-          duration: 10 * 1000,
-        });
+      this.$message({
+        message: 'Queried MetaMask',
+        type: 'success',
       });
-
-      // sometimes users change the networks their are connected to in MetaMask
-      window.ethereum.on('networkChanged', (newNetworke) => {
-        console.log(`MetaMask networks changed: ${JSON.stringify(newNetwork, null, 2)}`);
-        this.$message({
-          message: 'Warning: Your MetaMask network changed',
-          type: 'error',
-          duration: 10 * 1000,
-        });
-      });
-
-
-
-      console.log(`chainId: ${chainId}`);
-
-      console.log('before');
-      //request user to connect accounts (Metamask will prompt)
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-
-      console.log('before2');
 
       const accounts = await web3.eth.getAccounts();
       console.log(`first account: ${accounts[0]}`);
@@ -255,9 +198,94 @@ export default {
 
 
       this.allowance = currentAllowance;
-      this.isConnected = true;
-
       this.metaMaskBalance = metaMaskBalance;
+    },
+
+    connect: async function () {
+      if (!window.ethereum) {
+        this.$message({
+          message: 'could not find MetaMask',
+          type: 'error',
+          duration: 7 * 1000,
+        });
+        return;
+      }
+
+      const web3 = new Web3(window.ethereum);
+      console.log(web3);
+      this.web3 = web3;
+
+
+      const chainId = await web3.eth.getChainId();
+
+      // either BSC (56) in productio
+      // or hardhat (31337) in development
+      // or TESTNET BSC (97) in development
+      const check =
+        (
+          process.env.NODE_ENV === 'production' &&
+          chainId === 56
+        )
+        ||
+        (
+          process.env.NODE_ENV === 'development' &&
+          chainId === 31337
+        )
+        ||
+        (
+          process.env.NODE_ENV === 'development' &&
+          chainId === 97
+        );
+
+      if (!check) {
+        this.$message({
+          message: 'You need to use the BSC Chain in MetaMask!',
+          type: 'error',
+          duration: 10 * 1000,
+        });
+        return;
+      }
+
+      // sometimes users switch their accounts in MetMask
+      // this change does **NOT** get propagated to the VUE app
+      window.ethereum.on('accountsChanged', (accounts) => {
+        // Time to reload your interface with accounts[0]!
+
+        console.log(`MetaMask accounts changed: ${JSON.stringify(accounts, null, 2)}`);
+        this.$message({
+          message: 'Warning: Your MetaMask wallet changed',
+          type: 'error',
+          duration: 10 * 1000,
+        });
+
+        this.isConnected = false;
+      });
+
+      // sometimes users change the networks their are connected to in MetaMask
+      window.ethereum.on('networkChanged', (newNetwork) => {
+        console.log(`MetaMask networks changed: ${JSON.stringify(newNetwork, null, 2)}`);
+        this.$message({
+          message: 'Warning: Your MetaMask network changed',
+          type: 'error',
+          duration: 10 * 1000,
+        });
+
+        this.isConnected = false;
+      });
+
+
+
+      console.log(`chainId: ${chainId}`);
+
+      console.log('before');
+      //request user to connect accounts (Metamask will prompt)
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      console.log('before2');
+
+
+      await this.getInfo();
+
+      this.isConnected = true;
     },
 
     submitAllowance: async function () {
@@ -298,6 +326,7 @@ export default {
     },
 
     deposit: async function () {
+
       // todo: first check again if balance is higher than "amount"
       // todo: then check if allowance is really higher
 
@@ -311,6 +340,8 @@ export default {
         BSC_SWAPGATE_ADDRESS
       );
 
+
+
       const amountInBSC = new BigNumber(this.depositForm.amount)
         .multipliedBy(1e18)
         .toFixed();
@@ -320,12 +351,26 @@ export default {
       const myAddress = this.user.address;
       console.log(`myAddress: ${myAddress}`);
 
+      const pendingTransactions = await web3.eth.getTransactionCount(
+        this.ethAddress,
+        'pending'
+      );
+      console.log(`pendingTransactions: ${pendingTransactions}`);
+
+
       try {
+        const gasPrice = await web3.eth.getGasPrice();
+        console.log(`gasPrice: ${gasPrice}`);
+
         const res = await swapgateContract.methods
           .deposit(amountInBSC, myAddress)
-          .send({ from: this.ethAddress });
+          .send({
+            from: this.ethAddress,
+            gasPrice: gasPrice,
+            gas: 9000000,
+          });
 
-        console.log(`res: ${res}`);
+        console.log(`res: ${JSON.stringify(res, null, 2)}`);
       } catch (err) {
         this.$message({
           message: err.message,
