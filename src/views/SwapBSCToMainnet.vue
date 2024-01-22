@@ -200,6 +200,30 @@ export default {
         return;
       }
 
+      // sometimes users switch their accounts in MetMask
+      // this change does **NOT** get propagated to the VUE app
+      window.ethereum.on('accountsChanged', (accounts) => {
+        // Time to reload your interface with accounts[0]!
+
+        console.log(`MetaMask accounts changed: ${JSON.stringify(accounts, null, 2)}`);
+        this.$message({
+          message: 'Warning: Your MetaMask wallet changed',
+          type: 'error',
+          duration: 10 * 1000,
+        });
+      });
+
+      // sometimes users change the networks their are connected to in MetaMask
+      window.ethereum.on('networkChanged', (newNetworke) => {
+        console.log(`MetaMask networks changed: ${JSON.stringify(newNetwork, null, 2)}`);
+        this.$message({
+          message: 'Warning: Your MetaMask network changed',
+          type: 'error',
+          duration: 10 * 1000,
+        });
+      });
+
+
 
       console.log(`chainId: ${chainId}`);
 
