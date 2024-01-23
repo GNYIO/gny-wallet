@@ -1,3 +1,5 @@
+import { BigNumber } from 'bignumber.js';
+
 const mapping = {
   0: 'basic.transfer',
   1: 'basic.setUserName',
@@ -36,4 +38,22 @@ export function prettyPrintMyAddressFilter(address, myAddress) {
   }
 
   return address;
+}
+
+// 1e18 will be transformed into 1
+// this also cuts of everything behind the decimal point
+export function prettPrintETHValueFilter(value) {
+  const big = new BigNumber(value).dividedBy(1e18);
+  return big.toFormat(0);
+}
+
+export function prettyPrintBSCValueFilter(value) {
+  return prettPrintETHValueFilter(value);
+}
+
+// 1e8 will be transformmed into 1
+// this also cuts of everything behind the decimal point
+export function prettyPrintGNYValueFilter(value) {
+  const big = new BigNumber(value).dividedBy(1e8);
+  return big.toFormat(0);
 }
