@@ -81,15 +81,12 @@
         <!--show only if -->
         <el-form-item>
           <el-button v-if="!allowanceEnough" type="warning" plain @click="submitAllowance" style="float: left;">First set allowance for contract</el-button>
-        </el-form-item>
 
-        <el-form-item>
           <el-button v-if="allowanceEnough" type="success" @click="deposit" style="float: left;">Deposit GNY BEP20 to Mainnet</el-button>
-        </el-form-item>
 
-        <el-form-item>
           <el-button @click="getInfo" style="float: left;">Refresh</el-button>
         </el-form-item>
+
 
       </el-form>
     </el-card>
@@ -342,10 +339,10 @@ export default {
 
 
 
-      const amountInBSC = new BigNumber(this.depositForm.amount)
+      const amount18 = new BigNumber(this.depositForm.amount)
         .multipliedBy(1e18)
         .toFixed();
-      console.log(`amountInBSC: ${amountInBSC}`);
+      console.log(`amountInBSC: ${amount18}`);
 
       // todo: use GNY address from form
       const myAddress = this.user.address;
@@ -359,15 +356,10 @@ export default {
 
 
       try {
-        const gasPrice = await web3.eth.getGasPrice();
-        console.log(`gasPrice: ${gasPrice}`);
-
         const res = await swapgateContract.methods
-          .deposit(amountInBSC, myAddress)
+          .deposit(amount18, myAddress)
           .send({
             from: this.ethAddress,
-            gasPrice: gasPrice,
-            gas: 9000000,
           });
 
         console.log(`res: ${JSON.stringify(res, null, 2)}`);
