@@ -56,12 +56,12 @@
 
     <el-card v-if="isConnected">
       <div slot="header">
-        <span>BSC Account</span>
+        <span>ETH Account</span>
       </div>
 
-      <p>Currently connected to BSC wallet: <strong>{{ ethAddress }}</strong></p>
-      <p>Allowance granted: <strong>{{ allowance | prettyPrintBSCValue }} GNY</strong> </p>
-      <p>MetaMask GNY BEP20 balance: <strong>{{ metaMaskBalance | prettyPrintBSCValue }} BEP20 GNY</strong> </p>
+      <p>Currently connected to ETH wallet: <strong>{{ ethAddress }}</strong></p>
+      <p>Allowance granted: <strong>{{ allowance | prettPrintETHValue }} GNY</strong> </p>
+      <p>MetaMask GNY BEP20 balance: <strong>{{ metaMaskBalance | prettPrintETHValue }} BEP20 GNY</strong> </p>
       <br />
     </el-card>
 
@@ -101,15 +101,15 @@ import { BigNumber } from 'bignumber.js';
 import Swapgate from '../assets/swapgate_abi';
 import IERC20 from '../assets/ierc20_abi';
 import Web3 from 'web3';
-import { prettyPrintBSCValueFilter } from '../filters/index';
+import { prettPrintETHValueFilter } from '../filters/index';
 
-const BSC_SWAPGATE_ADDRESS = process.env.VUE_APP_BSC_SWAPGATE_ADDRESS;
-const BSC_ERC20_ADDRESS = process.env.VUE_APP_BSC_ERC20_ADDRESS;
+const ETH_SWAPGATE_ADDRESS = process.env.VUE_APP_ETH_SWAPGATE_ADDRESS;
+const ETH_ERC20_ADDRESS = process.env.VUE_APP_ETH_ERC20_ADDRESS;
 
 
 export default {
   filters: {
-    prettyPrintBSCValue: prettyPrintBSCValueFilter,
+    prettPrintETHValue: prettPrintETHValueFilter,
   },
   computed: {
     ...mapGetters(['user']),
@@ -179,11 +179,11 @@ export default {
 
 
       // new
-      console.log(`BSC_ERC20_ADDRESS: ${BSC_ERC20_ADDRESS}`);
-      const gnyBEP20Contract = new web3.eth.Contract(IERC20, BSC_ERC20_ADDRESS);
+      console.log(`BSC_ERC20_ADDRESS: ${ETH_ERC20_ADDRESS}`);
+      const gnyBEP20Contract = new web3.eth.Contract(IERC20, ETH_ERC20_ADDRESS);
       const currentAllowance = await gnyBEP20Contract.methods.allowance(
         this.ethAddress,
-        BSC_SWAPGATE_ADDRESS
+        ETH_SWAPGATE_ADDRESS
       ).call();
       console.log(`currentAllowance: ${currentAllowance}`);
 
@@ -215,13 +215,13 @@ export default {
 
       const chainId = await web3.eth.getChainId();
 
-      // either BSC (56) in productio
+      // either ETH (1) in production
       // or hardhat (31337) in development
-      // or TESTNET BSC (97) in development
+      // or ETH SEPOLIA (11155111)
       const check =
         (
           process.env.NODE_ENV === 'production' &&
-          chainId === 56
+          chainId === 1
         )
         ||
         (
@@ -230,13 +230,12 @@ export default {
         )
         ||
         (
-          process.env.NODE_ENV === 'production' &&
-          chainId === 97
+          chainId === 11155111
         );
 
       if (!check) {
         this.$message({
-          message: 'You need to use the BSC Chain in MetaMask!',
+          message: 'You need to use the ETH Chain in MetaMask!',
           type: 'error',
           duration: 10 * 1000,
         });
@@ -297,13 +296,13 @@ export default {
 
       // todo: show modal
       const web3 = this.web3;
-      const gnyContract = new web3.eth.Contract(IERC20, BSC_ERC20_ADDRESS);
+      const gnyContract = new web3.eth.Contract(IERC20, ETH_ERC20_ADDRESS);
       const amount18 = new BigNumber(amount).multipliedBy(1e18).toFixed();
 
       try {
         // approve amount
         await gnyContract.methods
-          .approve(BSC_SWAPGATE_ADDRESS, amount18)
+          .approve(ETH_SWAPGATE_ADDRESS, amount18)
           .send({ from: this.ethAddress });
 
         this.$message({
@@ -334,7 +333,7 @@ export default {
       const web3 = this.web3;
       const swapgateContract = new web3.eth.Contract(
         Swapgate,
-        BSC_SWAPGATE_ADDRESS
+        ETH_SWAPGATE_ADDRESS
       );
 
 

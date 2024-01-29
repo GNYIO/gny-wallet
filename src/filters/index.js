@@ -47,10 +47,6 @@ export function prettPrintETHValueFilter(value) {
   return big.toFormat(0);
 }
 
-export function prettyPrintBSCValueFilter(value) {
-  return prettPrintETHValueFilter(value);
-}
-
 // 1e8 will be transformmed into 1
 // this also cuts of everything behind the decimal point
 export function prettyPrintGNYValueFilter(value) {

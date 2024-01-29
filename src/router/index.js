@@ -10,8 +10,8 @@ import Delegates from '../views/Delegates/Index.vue';
 import Assets from '../views/Assets/Index.vue';
 import Burn from '../views/Burn/Index.vue';
 import Error404 from '../views/Error404.vue';
-import SwapMainnetToBSC from '../views/SwapMainnetToBSC.vue';
-import SwapBSCToMainnet from '../views/SwapBSCToMainnet.vue';
+import SwapMainnetToETH from '../views/SwapMainnetToETH.vue';
+import SwapETHToMainnet from '../views/SwapETHToMainnet.vue';
 
 
 Vue.use(VueRouter);
@@ -51,12 +51,12 @@ const Router = new VueRouter({
           component: Burn,
         },
         {
-          path: '/swap-mainnet-to-bsc',
-          component: SwapMainnetToBSC,
+          path: '/swap-mainnet-to-eth',
+          component: SwapMainnetToETH,
         },
         {
-          path: '/swap-bsc-to-mainnet',
-          component: SwapBSCToMainnet,
+          path: '/swap-eth-to-mainnet',
+          component: SwapETHToMainnet,
         },
       ],
     },
