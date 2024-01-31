@@ -1,5 +1,32 @@
 import * as client from '@gny/client';
 import { Notification } from 'element-ui';
+import Web3 from 'web3';
+import IERC20 from '../assets/ierc20_abi';
+import Swapgate from '../assets/swapgate_abi';
+import { BigNumber } from 'bignumber.js';
+
+
+
+function correctChainId(chainId) {
+  // either ETH (1) in production
+  // or hardhat (31337) in development
+  // or ETH SEPOLIA (11155111)
+  const result =
+      (
+        process.env.NODE_ENV === 'production' &&
+        chainId === 1
+      )
+      ||
+      (
+        process.env.NODE_ENV === 'development' &&
+        chainId === 31337
+      )
+      ||
+      (
+        chainId === 11155111
+      );
+  return result;
+}
 
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
@@ -292,6 +319,272 @@ export const actions = {
         message: err.message,
       });
     }
+  },
+
+  async setWeb3() {
+
+    if (!window.ethereum) {
+      Notification({
+        message: 'could not find MetaMask',
+        type: 'error',
+        duration: 7 * 1000,
+      });
+      return false;
+    }
+
+    const web3 = new Web3(window.ethereum);
+
+    window.web3 = web3;
+    return true;
+
+  },
+
+  async connectToMetaMask({ commit }) {
+    const web3 = window.web3;
+
+    const chainId = await web3.eth.getChainId();
+
+    if (!correctChainId(chainId)) {
+      Notification({
+        message: 'You need to use the ETH Chain in MetaMask!',
+        type: 'error',
+        duration: 10 * 1000,
+      });
+      return false;
+    }
+
+    try {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+    } catch (err) {
+      Notification({
+        message: 'Access to MetaMask not permitted',
+        type: 'error',
+        duration: 7 * 1000,
+      });
+      return false;
+    }
+
+    commit('setConnectedToMetaMask', true);
+    commit('setIsCorrectChainId', true);
+
+    return true;
+  },
+
+  async listenForMetaMaskChanges({ commit }) {
+
+    // this change does **NOT** get propagated to the VUE app
+    window.ethereum.on('accountsChanged', (accounts) => {
+        // Time to reload your interface with accounts[0]!
+
+        console.log(`MetaMask accounts changed: ${JSON.stringify(accounts, null, 2)}`);
+        // Notification({
+        //   message: 'Warning: Your MetaMask wallet changed',
+        //   type: 'error',
+        //   duration: 10 * 1000,
+        // });
+
+        // this.isConnected = false;
+
+    });
+
+    // sometimes users change the networks their are connected to in MetaMask
+    window.ethereum.on('networkChanged', (newNetwork) => {
+      console.log(`MetaMask networks changed: ${JSON.stringify(newNetwork, null, 2)}`);
+      Notification({
+        message: 'Warning: Your MetaMask network changed',
+        type: 'warning',
+        duration: 10 * 1000,
+        position: 'top-left',
+      });
+
+      const correctChain = correctChainId(newNetwork);
+      commit('setConnectedToMetaMask', correctChain);
+    });
+
+  },
+
+  async queryMetaMask({ commit }) {
+    const web3 = window.web3;
+    console.log(`typeof web3: ${typeof web3}`);
+    const ETH_SWAPGATE_ADDRESS = process.env.VUE_APP_ETH_SWAPGATE_ADDRESS;
+    const ETH_ERC20_ADDRESS = process.env.VUE_APP_ETH_ERC20_ADDRESS;
+
+
+    Notification({
+      message: 'Queried MetaMask',
+      type: 'success',
+    });
+
+    const accounts = await web3.eth.getAccounts();
+    console.log(`first account: ${accounts[0]}`);
+    const ethAddress = accounts[0];
+    console.log(`ethAddress: ${ethAddress}`);
+    commit('setEthAddress', ethAddress);
+
+
+    // new
+    console.log(`BSC_ERC20_ADDRESS: ${ETH_ERC20_ADDRESS}`);
+    const gnyBEP20Contract = new web3.eth.Contract(IERC20, ETH_ERC20_ADDRESS);
+    console.log(gnyBEP20Contract.methods.allowance);
+
+
+    // this throws if not pointed to the correct address
+    const currentAllowance = await gnyBEP20Contract.methods.allowance(
+      ethAddress,
+      ETH_SWAPGATE_ADDRESS
+    ).call();
+    console.log(`currentAllowance: ${currentAllowance}`);
+    commit('setAllowance', currentAllowance);
+
+
+    const metaMaskBalance = await gnyBEP20Contract.methods.balanceOf(
+      ethAddress
+    ).call();
+    console.log(`metaMaskBalance: ${metaMaskBalance}`);
+    commit('setMetaMaskBalance', metaMaskBalance);
+
+  },
+
+  async submitAllowance({ state }, amount) {
+
+    const ETH_SWAPGATE_ADDRESS = process.env.VUE_APP_ETH_SWAPGATE_ADDRESS;
+    const ETH_ERC20_ADDRESS = process.env.VUE_APP_ETH_ERC20_ADDRESS;
+    const web3 = window.web3;
+
+    const ethAddress = state.ethAddress;
+
+    // todo: show modal to explain why this needed
+
+    // todo: show if allowance currently really smaller
+    // if already bigger, stop and show success message
+
+    // is the allowance as high as as the?
+    console.log(`amount to approve: ${amount}`)
+
+    // todo: show modal
+    const gnyContract = new web3.eth.Contract(IERC20, ETH_ERC20_ADDRESS);
+    const amount18 = new BigNumber(amount).multipliedBy(1e18).toFixed();
+
+    try {
+      Notification({
+        message: 'Please wait 15-20 seconds the transaction to confirm. Then press "refresh" to reload the data!',
+        type: 'info',
+        duration: 15 * 1000,
+        position:'top-left',
+      });
+
+      // approve amount
+      await gnyContract.methods
+        .approve(ETH_SWAPGATE_ADDRESS, amount18)
+        .send({ from: ethAddress });
+
+
+    } catch (err) {
+      Notification({
+        message: err.message,
+        type: 'error',
+        duration: 10 * 1000,
+        position:'top-left',
+      });
+      console.log('error occured when trying to set allowance');
+      console.log(err)
+    }
+  },
+
+  async deposit({ state }, amount) {
+
+    // todo: first check again if balance is higher than "amount"
+    // todo: then check if allowance is really higher
+
+    // todo: show modal to explain user and user needs to agree
+
+    // todo: has account enough GNY BEP20 to deposit?
+
+    const ETH_SWAPGATE_ADDRESS = process.env.VUE_APP_ETH_SWAPGATE_ADDRESS;
+
+    const ethAddress = state.ethAddress;
+
+    const web3 = window.web3;
+    const swapgateContract = new web3.eth.Contract(
+      Swapgate,
+      ETH_SWAPGATE_ADDRESS
+    );
+
+    const amount18 = new BigNumber(amount)
+      .multipliedBy(1e18)
+      .toFixed();
+    console.log(`amountInBSC: ${amount18}`);
+
+    // todo: use GNY address from form
+    const myAddress = state.user.address;
+    console.log(`my GNY address: ${myAddress}`);
+
+    // const pendingTransactions = await web3.eth.getTransactionCount(
+    //   this.ethAddress,
+    //   'pending'
+    // );
+    // console.log(`pendingTransactions: ${pendingTransactions}`);
+
+
+    try {
+      Notification({
+        message: 'Please wait 15-20 seconds the transaction to confirm. Then press "refresh" to reload the data!',
+        type: 'info',
+        duration: 25 * 1000,
+        position:'top-left',
+      });
+
+      const res = await swapgateContract.methods
+        .deposit(amount18, myAddress)
+        .send({
+          from: ethAddress,
+        });
+
+      console.log(`res: ${JSON.stringify(res, null, 2)}`);
+    } catch (err) {
+      Notification({
+        message: err.message,
+        type: 'error',
+        duration: 10 * 1000,
+      });
+      console.log("error occured when depositing into Swapgate contract");
+      console.error(err);
+    }
+  },
+
+
+  async mainnet2Eth({ state }, amount) {
+
+    const SWAP_MAINNET_TO_ETH = process.env.VUE_APP_SWAP_MAINNET_TO_ETH;
+
+    const passphrase = state.passphrase;
+    const ethAddress = state.ethAddress;
+    const secondPassphrase = state.secondPassphrase;
+
+    try {
+      const result = await connection.contract.Basic.send(
+        SWAP_MAINNET_TO_ETH,
+        new BigNumber(amount).multipliedBy(1e8).toFixed(),
+        passphrase,
+        ethAddress,
+        secondPassphrase,
+      );
+      Notification({
+        message: result.transactionId,
+        type: 'success',
+        position: 'top-left',
+        duration: 15 * 1000,
+      });
+    } catch (err) {
+      Notification({
+        message: err.message,
+        type: 'error',
+        position: 'top-left',
+        duration: 10 * 1000,
+      });
+    }
+
+
   },
 
   resetState({ commit }) {
