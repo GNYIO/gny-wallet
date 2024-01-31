@@ -75,7 +75,7 @@
 
       <el-form :model="form" ref="form" :rules="rules" label-width="130px">
         <el-form-item label="Amount" prop="amount" required>
-          <el-input type="text" v-model="form.amount" :placeholder="amountPlaceholder"></el-input>
+          <el-input type="text" v-model="form.amount"></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -94,21 +94,10 @@
 </template>
 
 <script>
-import { showErrorPopup } from '../helpers/errorDisplay';
 import { mapState, mapGetters } from 'vuex';
-import * as client from '@gny/client';
 import { BigNumber } from 'bignumber.js';
 import { prettPrintETHValueFilter } from '../filters/index';
 
-
-const mainnetToBSCReceiver = process.env.VUE_APP_SWAP_MAINNET_TO_BSC;
-
-const connection = new client.Connection(
-  process.env.VUE_APP_GNY_ENDPOINT,
-  Number(process.env.VUE_APP_GNY_PORT),
-  process.env.VUE_APP_GNY_NETWORK,
-  JSON.parse(process.env.VUE_APP_HTTPS || false),
-);
 
 export default {
   filters: {
@@ -139,8 +128,7 @@ export default {
     };
 
     return {
-      balance: 0,
-      amountPlaceholder: '',
+
       form: {
         amount: '',
       },
@@ -176,6 +164,7 @@ export default {
     ]),
   },
   methods: {
+
     async connect() {
 
       const setResult = await this.$store.dispatch('setWeb3');
@@ -192,6 +181,7 @@ export default {
       await this.$store.dispatch('queryMetaMask');
 
     },
+
     async sendSwap() {
       try {
         await this.$refs['form'].validate();
@@ -200,35 +190,13 @@ export default {
         return; // remove TODOO
       }
 
-      console.log(`swap to: ${this.form}`);
-
-      // try {
-      //   const result = await connection.contract.Basic.send(
-      //     mainnetToBSCReceiver,
-      //     new BigNumber(this.form.amount).multipliedBy(1e8).toFixed(),
-      //     this.passphrase,
-      //     this.form.ethAddress,
-      //     this.secondPassphrase,
-      //   );
-      //   this.$message(result.transactionId);
-      //   this.$refs['form'].resetFields();
-      // } catch (err) {
-      //   showErrorPopup.apply(this, [err]);
-      // }
-
-      console.log(connection);
-      console.log(BigNumber);
-      console.log(mainnetToBSCReceiver);
-      console.log(showErrorPopup);
-
-
+      const amount = this.form.amount;
       try {
         // if we press "OK" it returns normally
         // if we press "Cancel" or "X" (close) a error is thrown
-        const am = this.form.amount;
-        console.log(`amount: ${am}`);
+        console.log(`amount: ${amount}`);
         await this.$confirm(
-          `Are you sure that you want to swap "${am}" GNY from mainnet to ETH?`,
+          `Are you sure that you want to swap "${amount}" GNY from mainnet to ETH?`,
           'Warning',
           {
             confirmButtonText: 'Swap',
@@ -246,14 +214,17 @@ export default {
         return;
       }
 
+
+      await this.$store.dispatch('mainnet2Eth', amount);
+
+      this.$refs['form'].resetFields();
+
     },
+
     async resetForm() {
-
+      this.$refs['form'].resetFields();
     },
 
-    async connectToMetaMask() {
-
-    },
   },
 
 };

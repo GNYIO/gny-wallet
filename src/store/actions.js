@@ -550,6 +550,40 @@ export const actions = {
       console.log("error occured when depositing into Swapgate contract");
       console.error(err);
     }
+  },
+
+
+  async mainnet2Eth({ state }, amount) {
+
+    const SWAP_MAINNET_TO_ETH = process.env.VUE_APP_SWAP_MAINNET_TO_ETH;
+
+    const passphrase = state.passphrase;
+    const ethAddress = state.ethAddress;
+    const secondPassphrase = state.secondPassphrase;
+
+    try {
+      const result = await connection.contract.Basic.send(
+        SWAP_MAINNET_TO_ETH,
+        new BigNumber(amount).multipliedBy(1e8).toFixed(),
+        passphrase,
+        ethAddress,
+        secondPassphrase,
+      );
+      Notification({
+        message: result.transactionId,
+        type: 'success',
+        position: 'top-left',
+        duration: 15 * 1000,
+      });
+    } catch (err) {
+      Notification({
+        message: err.message,
+        type: 'error',
+        position: 'top-left',
+        duration: 10 * 1000,
+      });
+    }
+
 
   },
 
