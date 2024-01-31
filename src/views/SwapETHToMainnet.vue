@@ -160,20 +160,13 @@ export default {
   methods: {
 
     getInfo: async function () {
-      console.log(`[getInfo] start`);
-      // const web3 = this.web3;
-
+      console.log(`[SwapETHToMainnet] queryMetaMask`);
       await this.$store.dispatch('queryMetaMask');
-
-
-      // this.allowance = currentAllowance;
-      // this.metaMaskBalance = metaMaskBalance;
     },
 
     connect: async function () {
-      // // sometimes users switch their accounts in MetMask
-      // // this change does **NOT** get propagated to the VUE app
-
+      // sometimes users switch their accounts in MetaMask
+      // this change does **NOT** get propagated to the VUE app
 
       const setResult = await this.$store.dispatch('setWeb3');
       console.log(`set3Result: ${setResult}`);
@@ -184,11 +177,9 @@ export default {
         return;
       }
 
-
       await this.$store.dispatch('listenForMetaMaskChanges');
 
       await this.$store.dispatch('queryMetaMask');
-
     },
 
     submitAllowance: async function () {

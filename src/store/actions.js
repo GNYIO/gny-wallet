@@ -394,9 +394,11 @@ export const actions = {
         message: 'Warning: Your MetaMask network changed',
         type: 'warning',
         duration: 10 * 1000,
+        position: 'top-left',
       });
 
-      commit('setIsCorrectChainId', false);
+      const correctChain = correctChainId(newNetwork);
+      commit('setConnectedToMetaMask', correctChain);
     });
 
   },
@@ -525,6 +527,13 @@ export const actions = {
 
 
     try {
+      Notification({
+        message: 'Please wait 15-20 seconds the transaction to confirm. Then press "refresh" to reload the data!',
+        type: 'info',
+        duration: 25 * 1000,
+        position:'top-left',
+      });
+
       const res = await swapgateContract.methods
         .deposit(amount18, myAddress)
         .send({
