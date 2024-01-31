@@ -1,7 +1,7 @@
 <template>
   <el-col :span="12">
 
-    <el-card v-if="!isConnected">
+    <el-card v-if="!connectedToMetaMask">
       <div slot="header">
         <span>MetaMask Information</span>
       </div>
@@ -11,7 +11,7 @@
       </el-button>
     </el-card>
 
-    <el-card v-if="isConnected">
+    <el-card v-if="connectedToMetaMask">
       <div slot="header">
         <span>Mainnet Account</span>
       </div>
@@ -55,7 +55,7 @@
     <br />
 
 
-    <el-card v-if="isConnected">
+    <el-card v-if="connectedToMetaMask">
       <div slot="header">
         <span>ETH Account</span>
       </div>
@@ -68,7 +68,7 @@
     <br />
 
 
-    <el-card v-if="isConnected">
+    <el-card v-if="connectedToMetaMask">
       <div slot="header">
         <span>Swap from Mainnet to ETH</span>
       </div>
@@ -139,8 +139,6 @@ export default {
     };
 
     return {
-      isConnected: false,
-
       balance: 0,
       amountPlaceholder: '',
       form: {
@@ -169,14 +167,29 @@ export default {
   },
   computed: {
     ...mapState(['passphrase', 'secondPassphrase']),
-    ...mapGetters(['user', 'positiveBalance']),
+    ...mapGetters([
+      'user',
+      'positiveBalance',
+      'connectedToMetaMask',
+      'metaMaskBalance',
+      'ethAddress',
+    ]),
   },
   methods: {
     async connect() {
-      this.isConnected = !this.isConnected;
 
-      this.ethAddress = '0xhello';
-      this.metaMaskBalance = 1000;
+      const setResult = await this.$store.dispatch('setWeb3');
+      console.log(`set3Result: ${setResult}`);
+
+      const actionResult = await this.$store.dispatch('connectToMetaMask');
+      console.log(`actionResult: ${actionResult}`);
+      if (!actionResult) {
+        return;
+      }
+
+      await this.$store.dispatch('listenForMetaMaskChanges');
+
+      await this.$store.dispatch('queryMetaMask');
 
     },
     async sendSwap() {
