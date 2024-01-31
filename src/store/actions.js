@@ -2,6 +2,7 @@ import * as client from '@gny/client';
 import { Notification } from 'element-ui';
 import Web3 from 'web3';
 import IERC20 from '../assets/ierc20_abi';
+import Swapgate from '../assets/swapgate_abi';
 import { BigNumber } from 'bignumber.js';
 
 
@@ -486,6 +487,61 @@ export const actions = {
       console.log('error occured when trying to set allowance');
       console.log(err)
     }
+  },
+
+  async deposit({ state }, amount) {
+
+    // todo: first check again if balance is higher than "amount"
+    // todo: then check if allowance is really higher
+
+    // todo: show modal to explain user and user needs to agree
+
+    // todo: has account enough GNY BEP20 to deposit?
+
+    const ETH_SWAPGATE_ADDRESS = process.env.VUE_APP_ETH_SWAPGATE_ADDRESS;
+
+    const ethAddress = state.ethAddress;
+
+    const web3 = window.web3;
+    const swapgateContract = new web3.eth.Contract(
+      Swapgate,
+      ETH_SWAPGATE_ADDRESS
+    );
+
+    const amount18 = new BigNumber(amount)
+      .multipliedBy(1e18)
+      .toFixed();
+    console.log(`amountInBSC: ${amount18}`);
+
+    // todo: use GNY address from form
+    const myAddress = state.user.address;
+    console.log(`my GNY address: ${myAddress}`);
+
+    // const pendingTransactions = await web3.eth.getTransactionCount(
+    //   this.ethAddress,
+    //   'pending'
+    // );
+    // console.log(`pendingTransactions: ${pendingTransactions}`);
+
+
+    try {
+      const res = await swapgateContract.methods
+        .deposit(amount18, myAddress)
+        .send({
+          from: ethAddress,
+        });
+
+      console.log(`res: ${JSON.stringify(res, null, 2)}`);
+    } catch (err) {
+      Notification({
+        message: err.message,
+        type: 'error',
+        duration: 10 * 1000,
+      });
+      console.log("error occured when depositing into Swapgate contract");
+      console.error(err);
+    }
+
   },
 
   resetState({ commit }) {

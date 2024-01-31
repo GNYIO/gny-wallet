@@ -192,16 +192,14 @@ export default {
     },
 
     submitAllowance: async function () {
-
       const amount = this.depositForm.amount;
       await this.$store.dispatch('submitAllowance', amount);
-
     },
 
     deposit: async function () {
-
-
-    }
+      const amount = this.depositForm.amount;
+      await this.$store.dispatch('deposit', amount);
+    },
   },
   async mounted() {
     await this.$store.dispatch('refreshAccounts');
