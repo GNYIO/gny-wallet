@@ -1,6 +1,6 @@
 <template>
   <el-col :span="12">
-    <el-card v-if="!isConnected">
+    <el-card v-if="!connectedToMetaMask">
       <div slot="header">
         <span>MetaMask Information</span>
       </div>
@@ -10,7 +10,7 @@
       </el-button>
     </el-card>
 
-    <el-card v-if="isConnected">
+    <el-card v-if="connectedToMetaMask">
       <div slot="header">
         <span>Mainnet Account</span>
       </div>
@@ -54,7 +54,7 @@
     <br />
 
 
-    <el-card v-if="isConnected">
+    <el-card v-if="connectedToMetaMask">
       <div slot="header">
         <span>ETH Account</span>
       </div>
@@ -67,7 +67,7 @@
 
     <br />
 
-    <el-card v-if="isConnected">
+    <el-card v-if="connectedToMetaMask">
       <div slot="header">
         <span>Swap from BSC to Mainnet</span>
       </div>
@@ -111,7 +111,12 @@ export default {
     prettPrintETHValue: prettPrintETHValueFilter,
   },
   computed: {
-    ...mapGetters(['user', 'allowance', 'metaMaskBalance']),
+    ...mapGetters([
+      'user',
+      'allowance',
+      'metaMaskBalance',
+      'connectedToMetaMask',
+    ]),
     allowanceEnough: function() {
       const amount = new BigNumber(this.depositForm.amount).multipliedBy(1e18);
       return new BigNumber(this.allowance).isGreaterThanOrEqualTo(amount);
@@ -140,7 +145,6 @@ export default {
 
     return {
       web3: {},
-      isConnected: false,
 
       ethAddress: '',
 
@@ -182,12 +186,15 @@ export default {
 
       const actionResult = await this.$store.dispatch('connectToMetaMask');
       console.log(`actionResult: ${actionResult}`);
+      if (!actionResult) {
+        return;
+      }
+
 
       await this.$store.dispatch('listenForMetaMaskChanges');
 
       await this.$store.dispatch('queryMetaMask');
 
-      this.isConnected = true;
     },
 
     submitAllowance: async function () {

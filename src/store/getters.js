@@ -164,6 +164,11 @@ export const getters = {
   burned: state => {
     return state.burned === String(0) ? String(0) : new BigNumber(state.burned).dividedBy(1e8).toFixed(0)
   },
+
+  // web3
+  connectedToMetaMask: state => {
+    return state.connectedToMetaMask;
+  },
   allowance: state => {
     return state.allowance;
   },
