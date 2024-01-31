@@ -24,7 +24,9 @@ export const getDefaultState = () => ({
   burned: String(0),
   supply: String(0),
 
+
   connectedToMetaMask: false,
+  ethAddress: '',
   allowance: 0,
   metaMaskBalance: 0,
 

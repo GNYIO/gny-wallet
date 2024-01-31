@@ -169,6 +169,9 @@ export const getters = {
   connectedToMetaMask: state => {
     return state.connectedToMetaMask;
   },
+  ethAddress: state => {
+    return state.ethAddress;
+  },
   allowance: state => {
     return state.allowance;
   },

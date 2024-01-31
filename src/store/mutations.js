@@ -53,11 +53,16 @@ export const mutations = {
     state.supply = result.supply;
     state.burned = result.burned;
   },
+
+  // web3
   setConnectedToMetaMask(state, connectedToMetaMask) {
     state.connectedToMetaMask = connectedToMetaMask;
   },
   setIsCorrectChainId(state, isCorrectChainId) {
     state.isCorrectChainId = isCorrectChainId;
+  },
+  setEthAddress(state, ethAddress) {
+    state.ethAddress = ethAddress;
   },
   setAllowance(state, allowance) {
     state.allowance = allowance;

@@ -2,6 +2,7 @@ import * as client from '@gny/client';
 import { Notification } from 'element-ui';
 import Web3 from 'web3';
 import IERC20 from '../assets/ierc20_abi';
+import { BigNumber } from 'bignumber.js';
 
 
 
@@ -415,6 +416,7 @@ export const actions = {
     console.log(`first account: ${accounts[0]}`);
     const ethAddress = accounts[0];
     console.log(`ethAddress: ${ethAddress}`);
+    commit('setEthAddress', ethAddress);
 
 
     // new
@@ -440,6 +442,51 @@ export const actions = {
 
   },
 
+  async submitAllowance({ state }, amount) {
+
+    const ETH_SWAPGATE_ADDRESS = process.env.VUE_APP_ETH_SWAPGATE_ADDRESS;
+    const ETH_ERC20_ADDRESS = process.env.VUE_APP_ETH_ERC20_ADDRESS;
+    const web3 = window.web3;
+
+    const ethAddress = state.ethAddress;
+
+    // todo: show modal to explain why this needed
+
+    // todo: show if allowance currently really smaller
+    // if already bigger, stop and show success message
+
+    // is the allowance as high as as the?
+    console.log(`amount to approve: ${amount}`)
+
+    // todo: show modal
+    const gnyContract = new web3.eth.Contract(IERC20, ETH_ERC20_ADDRESS);
+    const amount18 = new BigNumber(amount).multipliedBy(1e18).toFixed();
+
+    try {
+      Notification({
+        message: 'Please wait 15-20 seconds the transaction to confirm. Then press "refresh" to reload the data!',
+        type: 'info',
+        duration: 15 * 1000,
+        position:'top-left',
+      });
+
+      // approve amount
+      await gnyContract.methods
+        .approve(ETH_SWAPGATE_ADDRESS, amount18)
+        .send({ from: ethAddress });
+
+
+    } catch (err) {
+      Notification({
+        message: err.message,
+        type: 'error',
+        duration: 10 * 1000,
+        position:'top-left',
+      });
+      console.log('error occured when trying to set allowance');
+      console.log(err)
+    }
+  },
 
   resetState({ commit }) {
     commit('resetState');

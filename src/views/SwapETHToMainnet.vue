@@ -98,12 +98,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { BigNumber } from 'bignumber.js';
-import Swapgate from '../assets/swapgate_abi';
-import IERC20 from '../assets/ierc20_abi';
 import { prettPrintETHValueFilter } from '../filters/index';
-
-const ETH_SWAPGATE_ADDRESS = process.env.VUE_APP_ETH_SWAPGATE_ADDRESS;
-const ETH_ERC20_ADDRESS = process.env.VUE_APP_ETH_ERC20_ADDRESS;
 
 
 export default {
@@ -113,6 +108,7 @@ export default {
   computed: {
     ...mapGetters([
       'user',
+      'ethAddress',
       'allowance',
       'metaMaskBalance',
       'connectedToMetaMask',
@@ -145,8 +141,6 @@ export default {
 
     return {
       web3: {},
-
-      ethAddress: '',
 
       depositForm: {
         amount: 0,
@@ -198,92 +192,15 @@ export default {
     },
 
     submitAllowance: async function () {
-      // todo: show modal to explain why this needed
 
-      // todo: show if allowance currently really smaller
-      // if already bigger, stop and show success message
-
-      // is the allowance as high as as the?
       const amount = this.depositForm.amount;
-      console.log(`amount to approve: ${amount}`)
+      await this.$store.dispatch('submitAllowance', amount);
 
-      // todo: show modal
-      const web3 = this.web3;
-      const gnyContract = new web3.eth.Contract(IERC20, ETH_ERC20_ADDRESS);
-      const amount18 = new BigNumber(amount).multipliedBy(1e18).toFixed();
-
-      try {
-        // approve amount
-        await gnyContract.methods
-          .approve(ETH_SWAPGATE_ADDRESS, amount18)
-          .send({ from: this.ethAddress });
-
-        this.$message({
-          message: 'Please wait for the transaction to confirm. Then press "refresh" to reload the data!',
-          type: 'success',
-          duration: 15 * 1000,
-        });
-      } catch (err) {
-        this.$message({
-          message: err.message,
-          type: 'error',
-          duration: 10 * 1000,
-        });
-        console.log('error occured when trying to set allowance');
-        console.log(err)
-      }
     },
 
     deposit: async function () {
 
-      // todo: first check again if balance is higher than "amount"
-      // todo: then check if allowance is really higher
 
-      // todo: show modal to explain user and user needs to agree
-
-      // todo: has account enough GNY BEP20 to deposit?
-
-      const web3 = this.web3;
-      const swapgateContract = new web3.eth.Contract(
-        Swapgate,
-        ETH_SWAPGATE_ADDRESS
-      );
-
-
-
-      const amount18 = new BigNumber(this.depositForm.amount)
-        .multipliedBy(1e18)
-        .toFixed();
-      console.log(`amountInBSC: ${amount18}`);
-
-      // todo: use GNY address from form
-      const myAddress = this.user.address;
-      console.log(`myAddress: ${myAddress}`);
-
-      const pendingTransactions = await web3.eth.getTransactionCount(
-        this.ethAddress,
-        'pending'
-      );
-      console.log(`pendingTransactions: ${pendingTransactions}`);
-
-
-      try {
-        const res = await swapgateContract.methods
-          .deposit(amount18, myAddress)
-          .send({
-            from: this.ethAddress,
-          });
-
-        console.log(`res: ${JSON.stringify(res, null, 2)}`);
-      } catch (err) {
-        this.$message({
-          message: err.message,
-          type: 'error',
-          duration: 10 * 1000,
-        });
-        console.log("error occured when depositing into Swapgate contract");
-        console.error(err);
-      }
     }
   },
   async mounted() {
