@@ -85,7 +85,7 @@
             </el-badge>
           </div>
 
-          <el-button @click="resetForm" style="float: left; margin-left: 10px;">Cancel</el-button>
+          <el-button @click="refresh" style="float: left; margin-left: 10px;">Refresh</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -221,10 +221,17 @@ export default {
 
     },
 
-    async resetForm() {
-      this.$refs['form'].resetFields();
+    async refresh() {
+      console.log(`[SwapMainnetToETH] queryMetaMask`);
+      await this.$store.dispatch('queryMetaMask');
+
+      console.log(`[SwapMainnetToETH] refreshAccounts`);
+      await this.$store.dispatch('refreshAccounts');
     },
 
+  },
+  async mounted() {
+    await this.$store.dispatch('refreshAccounts');
   },
 
 };

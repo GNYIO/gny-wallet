@@ -84,7 +84,7 @@
 
           <el-button v-if="allowanceEnough" type="success" @click="deposit" style="float: left;">Deposit GNY BEP20 to Mainnet</el-button>
 
-          <el-button @click="getInfo" style="float: left;">Refresh</el-button>
+          <el-button @click="refresh" style="float: left;">Refresh</el-button>
         </el-form-item>
 
 
@@ -159,9 +159,12 @@ export default {
   },
   methods: {
 
-    getInfo: async function () {
+    refresh: async function () {
       console.log(`[SwapETHToMainnet] queryMetaMask`);
       await this.$store.dispatch('queryMetaMask');
+
+      console.log(`[SwapETHToMainnet] refreshAccounts`);
+      await this.$store.dispatch('refreshAccounts');
     },
 
     connect: async function () {
