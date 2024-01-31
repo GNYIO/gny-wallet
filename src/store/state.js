@@ -23,4 +23,9 @@ export const getDefaultState = () => ({
 
   burned: String(0),
   supply: String(0),
+
+  connectedToMetaMask: false,
+  allowance: 0,
+  metaMaskBalance: 0,
+
 });

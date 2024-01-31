@@ -100,7 +100,6 @@ import { mapGetters } from 'vuex';
 import { BigNumber } from 'bignumber.js';
 import Swapgate from '../assets/swapgate_abi';
 import IERC20 from '../assets/ierc20_abi';
-import Web3 from 'web3';
 import { prettPrintETHValueFilter } from '../filters/index';
 
 const ETH_SWAPGATE_ADDRESS = process.env.VUE_APP_ETH_SWAPGATE_ADDRESS;
@@ -112,7 +111,7 @@ export default {
     prettPrintETHValue: prettPrintETHValueFilter,
   },
   computed: {
-    ...mapGetters(['user']),
+    ...mapGetters(['user', 'allowance', 'metaMaskBalance']),
     allowanceEnough: function() {
       const amount = new BigNumber(this.depositForm.amount).multipliedBy(1e18);
       return new BigNumber(this.allowance).isGreaterThanOrEqualTo(amount);
@@ -142,8 +141,6 @@ export default {
     return {
       web3: {},
       isConnected: false,
-      allowance: 0,
-      metaMaskBalance: 0,
 
       ethAddress: '',
 
@@ -166,120 +163,29 @@ export default {
 
     getInfo: async function () {
       console.log(`[getInfo] start`);
-      const web3 = this.web3;
+      // const web3 = this.web3;
 
-      this.$message({
-        message: 'Queried MetaMask',
-        type: 'success',
-      });
-
-      const accounts = await web3.eth.getAccounts();
-      console.log(`first account: ${accounts[0]}`);
-      this.ethAddress = accounts[0];
+      await this.$store.dispatch('queryMetaMask');
 
 
-      // new
-      console.log(`BSC_ERC20_ADDRESS: ${ETH_ERC20_ADDRESS}`);
-      const gnyBEP20Contract = new web3.eth.Contract(IERC20, ETH_ERC20_ADDRESS);
-      const currentAllowance = await gnyBEP20Contract.methods.allowance(
-        this.ethAddress,
-        ETH_SWAPGATE_ADDRESS
-      ).call();
-      console.log(`currentAllowance: ${currentAllowance}`);
-
-
-      const metaMaskBalance = await gnyBEP20Contract.methods.balanceOf(
-        this.ethAddress
-      ).call();
-      console.log(`metaMaskBalance: ${metaMaskBalance}`);
-
-
-      this.allowance = currentAllowance;
-      this.metaMaskBalance = metaMaskBalance;
+      // this.allowance = currentAllowance;
+      // this.metaMaskBalance = metaMaskBalance;
     },
 
     connect: async function () {
-      if (!window.ethereum) {
-        this.$message({
-          message: 'could not find MetaMask',
-          type: 'error',
-          duration: 7 * 1000,
-        });
-        return;
-      }
-
-      const web3 = new Web3(window.ethereum);
-      console.log(web3);
-      this.web3 = web3;
+      // // sometimes users switch their accounts in MetMask
+      // // this change does **NOT** get propagated to the VUE app
 
 
-      const chainId = await web3.eth.getChainId();
+      const setResult = await this.$store.dispatch('setWeb3');
+      console.log(`set3Result: ${setResult}`);
 
-      // either ETH (1) in production
-      // or hardhat (31337) in development
-      // or ETH SEPOLIA (11155111)
-      const check =
-        (
-          process.env.NODE_ENV === 'production' &&
-          chainId === 1
-        )
-        ||
-        (
-          process.env.NODE_ENV === 'development' &&
-          chainId === 31337
-        )
-        ||
-        (
-          chainId === 11155111
-        );
+      const actionResult = await this.$store.dispatch('connectToMetaMask');
+      console.log(`actionResult: ${actionResult}`);
 
-      if (!check) {
-        this.$message({
-          message: 'You need to use the ETH Chain in MetaMask!',
-          type: 'error',
-          duration: 10 * 1000,
-        });
-        return;
-      }
+      await this.$store.dispatch('listenForMetaMaskChanges');
 
-      // sometimes users switch their accounts in MetMask
-      // this change does **NOT** get propagated to the VUE app
-      window.ethereum.on('accountsChanged', (accounts) => {
-        // Time to reload your interface with accounts[0]!
-
-        console.log(`MetaMask accounts changed: ${JSON.stringify(accounts, null, 2)}`);
-        this.$message({
-          message: 'Warning: Your MetaMask wallet changed',
-          type: 'error',
-          duration: 10 * 1000,
-        });
-
-        this.isConnected = false;
-      });
-
-      // sometimes users change the networks their are connected to in MetaMask
-      window.ethereum.on('networkChanged', (newNetwork) => {
-        console.log(`MetaMask networks changed: ${JSON.stringify(newNetwork, null, 2)}`);
-        this.$message({
-          message: 'Warning: Your MetaMask network changed',
-          type: 'error',
-          duration: 10 * 1000,
-        });
-
-        this.isConnected = false;
-      });
-
-
-
-      console.log(`chainId: ${chainId}`);
-
-      console.log('before');
-      //request user to connect accounts (Metamask will prompt)
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      console.log('before2');
-
-
-      await this.getInfo();
+      await this.$store.dispatch('queryMetaMask');
 
       this.isConnected = true;
     },

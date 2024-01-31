@@ -1,5 +1,30 @@
 import * as client from '@gny/client';
 import { Notification } from 'element-ui';
+import Web3 from 'web3';
+import IERC20 from '../assets/ierc20_abi';
+
+
+
+function correctChainId(chainId) {
+  // either ETH (1) in production
+  // or hardhat (31337) in development
+  // or ETH SEPOLIA (11155111)
+  const result =
+      (
+        process.env.NODE_ENV === 'production' &&
+        chainId === 1
+      )
+      ||
+      (
+        process.env.NODE_ENV === 'development' &&
+        chainId === 31337
+      )
+      ||
+      (
+        chainId === 11155111
+      );
+  return result;
+}
 
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
@@ -293,6 +318,128 @@ export const actions = {
       });
     }
   },
+
+  async setWeb3() {
+
+    if (!window.ethereum) {
+      Notification({
+        message: 'could not find MetaMask',
+        type: 'error',
+        duration: 7 * 1000,
+      });
+      return false;
+    }
+
+    const web3 = new Web3(window.ethereum);
+
+    window.web3 = web3;
+    return true;
+
+  },
+
+  async connectToMetaMask({ commit }) {
+    const web3 = window.web3;
+
+    const chainId = await web3.eth.getChainId();
+
+    if (!correctChainId(chainId)) {
+      Notification({
+        message: 'You need to use the ETH Chain in MetaMask!',
+        type: 'error',
+        duration: 10 * 1000,
+      });
+      return false;
+    }
+
+    try {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+    } catch (err) {
+      Notification({
+        message: 'Access to MetaMask not permitted',
+        type: 'error',
+        duration: 7 * 1000,
+      });
+      return false;
+    }
+
+    commit('setConnectedToMetaMask', true);
+    commit('setIsCorrectChainId', true);
+
+    return true;
+  },
+
+  async listenForMetaMaskChanges({ commit }) {
+
+    // this change does **NOT** get propagated to the VUE app
+    window.ethereum.on('accountsChanged', (accounts) => {
+        // Time to reload your interface with accounts[0]!
+
+        console.log(`MetaMask accounts changed: ${JSON.stringify(accounts, null, 2)}`);
+        // Notification({
+        //   message: 'Warning: Your MetaMask wallet changed',
+        //   type: 'error',
+        //   duration: 10 * 1000,
+        // });
+
+        // this.isConnected = false;
+
+    });
+
+    // sometimes users change the networks their are connected to in MetaMask
+    window.ethereum.on('networkChanged', (newNetwork) => {
+      console.log(`MetaMask networks changed: ${JSON.stringify(newNetwork, null, 2)}`);
+      Notification({
+        message: 'Warning: Your MetaMask network changed',
+        type: 'warning',
+        duration: 10 * 1000,
+      });
+
+      commit('setIsCorrectChainId', false);
+    });
+
+  },
+
+  async queryMetaMask({ commit }) {
+    const web3 = window.web3;
+    console.log(`typeof web3: ${typeof web3}`);
+    const ETH_SWAPGATE_ADDRESS = process.env.VUE_APP_ETH_SWAPGATE_ADDRESS;
+    const ETH_ERC20_ADDRESS = process.env.VUE_APP_ETH_ERC20_ADDRESS;
+
+
+    Notification({
+      message: 'Queried MetaMask',
+      type: 'success',
+    });
+
+    const accounts = await web3.eth.getAccounts();
+    console.log(`first account: ${accounts[0]}`);
+    const ethAddress = accounts[0];
+    console.log(`ethAddress: ${ethAddress}`);
+
+
+    // new
+    console.log(`BSC_ERC20_ADDRESS: ${ETH_ERC20_ADDRESS}`);
+    const gnyBEP20Contract = new web3.eth.Contract(IERC20, ETH_ERC20_ADDRESS);
+    console.log(gnyBEP20Contract.methods.allowance);
+
+
+    // this throws if not pointed to the correct address
+    const currentAllowance = await gnyBEP20Contract.methods.allowance(
+      ethAddress,
+      ETH_SWAPGATE_ADDRESS
+    ).call();
+    console.log(`currentAllowance: ${currentAllowance}`);
+    commit('setAllowance', currentAllowance);
+
+
+    const metaMaskBalance = await gnyBEP20Contract.methods.balanceOf(
+      ethAddress
+    ).call();
+    console.log(`metaMaskBalance: ${metaMaskBalance}`);
+    commit('setMetaMaskBalance', metaMaskBalance);
+
+  },
+
 
   resetState({ commit }) {
     commit('resetState');
