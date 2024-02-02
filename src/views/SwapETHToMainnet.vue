@@ -80,7 +80,7 @@
 
         <!--show only if -->
         <el-form-item>
-          <el-button v-if="!allowanceEnough" type="warning" plain @click="submitAllowance" style="float: left;">First set allowance for contract</el-button>
+          <el-button v-if="!allowanceEnough" type="warning" plain @click="submitAllowance" style="float: left;">Click to set allowance for contract</el-button>
 
           <el-button v-if="allowanceEnough" type="success" @click="deposit" style="float: left;">Deposit GNY ERC20 to Mainnet</el-button>
 
