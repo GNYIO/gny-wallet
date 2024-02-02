@@ -20,4 +20,8 @@ export default {
 .el-main {
   background-color: #f9fafb;
 }
+
+.custom-notification-style {
+  width: auto;
+}
 </style>

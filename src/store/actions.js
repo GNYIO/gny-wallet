@@ -370,21 +370,21 @@ export const actions = {
     return true;
   },
 
-  async listenForMetaMaskChanges({ commit }) {
+  async listenForMetaMaskChanges({ commit, dispatch }) {
 
-    // this change does **NOT** get propagated to the VUE app
-    window.ethereum.on('accountsChanged', (accounts) => {
-        // Time to reload your interface with accounts[0]!
-
+    window.ethereum.on('accountsChanged', async (accounts) => {
         console.log(`MetaMask accounts changed: ${JSON.stringify(accounts, null, 2)}`);
-        // Notification({
-        //   message: 'Warning: Your MetaMask wallet changed',
-        //   type: 'error',
-        //   duration: 10 * 1000,
-        // });
 
-        // this.isConnected = false;
+        const newAccount = accounts[0];
+        Notification({
+          message: `Warning: Your connected wallet is now: "${newAccount}"`,
+          type: 'warning',
+          position: 'top-left',
+          customClass: 'custom-notification-style', // class can be found in App.vue
+          offset: 100,
+        });
 
+        await dispatch('queryMetaMask');
     });
 
     // sometimes users change the networks their are connected to in MetaMask
@@ -405,14 +405,14 @@ export const actions = {
 
   async queryMetaMask({ commit }) {
     const web3 = window.web3;
-    console.log(`typeof web3: ${typeof web3}`);
+
     const ETH_SWAPGATE_ADDRESS = process.env.VUE_APP_ETH_SWAPGATE_ADDRESS;
     const ETH_ERC20_ADDRESS = process.env.VUE_APP_ETH_ERC20_ADDRESS;
-
 
     Notification({
       message: 'Queried MetaMask',
       type: 'success',
+      position:'top-left',
     });
 
     const accounts = await web3.eth.getAccounts();
