@@ -1,5 +1,5 @@
 import * as client from '@gny/client';
-import { Notification } from 'element-ui';
+import { Notification, Loading } from 'element-ui';
 import Web3 from 'web3';
 import IERC20 from '../assets/ierc20_abi';
 import Swapgate from '../assets/swapgate_abi';
@@ -597,6 +597,13 @@ export const actions = {
     const ethAddress = state.ethAddress;
     const secondPassphrase = state.secondPassphrase;
 
+    const loading = Loading.service({
+      lock: true,
+      text: 'Loading',
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    });
+
     try {
       const trs = client.basic.transfer(
         SWAP_MAINNET_TO_ETH,
@@ -608,6 +615,8 @@ export const actions = {
 
       await trySending(trs, connection);
 
+      loading.close();
+
       Notification({
         message: trs.id,
         type: 'success',
@@ -616,6 +625,8 @@ export const actions = {
         customClass: 'custom-notification-style', // class can be found in App.vue
       });
     } catch (err) {
+      loading.close();
+
       Notification({
         message: err.message,
         type: 'error',
