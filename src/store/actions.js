@@ -28,6 +28,42 @@ function correctChainId(chainId) {
   return result;
 }
 
+
+
+export const sleep = (sec) => new Promise(resolve => setTimeout(resolve, sec * 1000));
+
+
+// retries sending when not found in block
+export async function trySending(trs, connection) {
+
+    const isIncluded = async (tid) => {
+        // console.log(`checking tid: ${tid} if included in block`);
+        const result = await connection.api.Transaction.getTransactions({
+            id: tid
+        });
+        if (result.transactions.length === 0) {
+            // console.log(`tid: ${tid} has not been included in block`);
+            return false;
+        } else {
+            console.log(`tid: ${tid} has been included in GNY block`);
+            return true;
+        }
+    }
+
+    const send = async (trs) => {
+        // console.log(`trying sending trs ${trs.id}`);
+        await connection.api.Transport.sendTransaction(trs);
+    }
+
+
+    while (await isIncluded(trs.id) === false) {
+        await send(trs);
+
+        const seconds = 22;
+        // console.log(`waiting ${seconds} seconds for ${trs.id}`);
+        await sleep(seconds);
+    }
+}
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
   Number(process.env.VUE_APP_GNY_PORT),
@@ -562,18 +598,22 @@ export const actions = {
     const secondPassphrase = state.secondPassphrase;
 
     try {
-      const result = await connection.contract.Basic.send(
+      const trs = client.basic.transfer(
         SWAP_MAINNET_TO_ETH,
         new BigNumber(amount).multipliedBy(1e8).toFixed(),
-        passphrase,
         ethAddress,
-        secondPassphrase,
+        passphrase,
+        secondPassphrase
       );
+
+      await trySending(trs, connection);
+
       Notification({
-        message: result.transactionId,
+        message: trs.id,
         type: 'success',
         position: 'top-left',
         duration: 15 * 1000,
+        customClass: 'custom-notification-style', // class can be found in App.vue
       });
     } catch (err) {
       Notification({
@@ -581,6 +621,7 @@ export const actions = {
         type: 'error',
         position: 'top-left',
         duration: 10 * 1000,
+        customClass: 'custom-notification-style', // class can be found in App.vue
       });
     }
 
