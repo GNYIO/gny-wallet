@@ -481,7 +481,7 @@ export const actions = {
 
   },
 
-  async submitAllowance({ state }, amount) {
+  async submitAllowance({ state, dispatch }, amount) {
 
     const ETH_SWAPGATE_ADDRESS = process.env.VUE_APP_ETH_SWAPGATE_ADDRESS;
     const ETH_ERC20_ADDRESS = process.env.VUE_APP_ETH_ERC20_ADDRESS;
@@ -501,6 +501,8 @@ export const actions = {
     const gnyContract = new web3.eth.Contract(IERC20, ETH_ERC20_ADDRESS);
     const amount18 = new BigNumber(amount).multipliedBy(1e18).toFixed();
 
+
+    let login = null;
     try {
       Notification({
         message: 'Please wait 15-20 seconds the transaction to confirm. Then press "refresh" to reload the data!',
@@ -509,11 +511,19 @@ export const actions = {
         position:'top-left',
       });
 
+      login = Loading.service({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+
       // approve amount
       await gnyContract.methods
         .approve(ETH_SWAPGATE_ADDRESS, amount18)
         .send({ from: ethAddress });
 
+      await dispatch('queryMetaMask');
 
     } catch (err) {
       Notification({
@@ -525,9 +535,11 @@ export const actions = {
       console.log('error occured when trying to set allowance');
       console.log(err)
     }
+
+    login.close();
   },
 
-  async deposit({ state }, amount) {
+  async deposit({ state, dispatch }, amount) {
 
     // todo: first check again if balance is higher than "amount"
     // todo: then check if allowance is really higher
@@ -562,6 +574,7 @@ export const actions = {
     // console.log(`pendingTransactions: ${pendingTransactions}`);
 
 
+    let loading = null;
     try {
       Notification({
         message: 'Please wait 15-20 seconds the transaction to confirm. Then press "refresh" to reload the data!',
@@ -570,6 +583,14 @@ export const actions = {
         position:'top-left',
       });
 
+      loading = Loading.service({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+
+      // deposit
       const res = await swapgateContract.methods
         .deposit(amount18, myAddress)
         .send({
@@ -577,6 +598,9 @@ export const actions = {
         });
 
       console.log(`res: ${JSON.stringify(res, null, 2)}`);
+
+      await dispatch('queryMetaMask');
+
     } catch (err) {
       Notification({
         message: err.message,
@@ -586,6 +610,8 @@ export const actions = {
       console.log("error occured when depositing into Swapgate contract");
       console.error(err);
     }
+
+    loading.close();
   },
 
 
