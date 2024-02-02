@@ -196,12 +196,13 @@ export default {
         // if we press "Cancel" or "X" (close) a error is thrown
         console.log(`amount: ${amount}`);
         await this.$confirm(
-          `Are you sure that you want to swap "${amount}" GNY from mainnet to ETH?`,
+          `Are you sure that you want to swap "${amount}" GNY from mainnet to ETH account "${this.ethAddress}"?`,
           'Warning',
           {
             confirmButtonText: 'Swap',
             cancelButtonText: 'Cancel',
             type: 'warning',
+            customClass: 'custom-message-box',
           }
         );
       } catch (err) {

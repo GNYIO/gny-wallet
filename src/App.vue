@@ -24,4 +24,9 @@ export default {
 .custom-notification-style {
   width: auto;
 }
+
+.custom-message-box {
+  width: auto;
+}
+
 </style>
