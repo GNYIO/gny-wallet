@@ -61,7 +61,7 @@
 
       <p>Currently connected to ETH wallet: <strong>{{ ethAddress }}</strong></p>
       <p>Allowance granted: <strong>{{ allowance | prettPrintETHValue }} GNY</strong> </p>
-      <p>MetaMask GNY BEP20 balance: <strong>{{ metaMaskBalance | prettPrintETHValue }} BEP20 GNY</strong> </p>
+      <p>MetaMask GNY ERC20 balance: <strong>{{ metaMaskBalance | prettPrintETHValue }} ERC20 GNY</strong> </p>
       <br />
     </el-card>
 
@@ -82,7 +82,7 @@
         <el-form-item>
           <el-button v-if="!allowanceEnough" type="warning" plain @click="submitAllowance" style="float: left;">First set allowance for contract</el-button>
 
-          <el-button v-if="allowanceEnough" type="success" @click="deposit" style="float: left;">Deposit GNY BEP20 to Mainnet</el-button>
+          <el-button v-if="allowanceEnough" type="success" @click="deposit" style="float: left;">Deposit GNY ERC20 to Mainnet</el-button>
 
           <el-button @click="refresh" style="float: left;">Refresh</el-button>
         </el-form-item>

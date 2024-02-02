@@ -460,12 +460,12 @@ export const actions = {
 
     // new
     console.log(`BSC_ERC20_ADDRESS: ${ETH_ERC20_ADDRESS}`);
-    const gnyBEP20Contract = new web3.eth.Contract(IERC20, ETH_ERC20_ADDRESS);
-    console.log(gnyBEP20Contract.methods.allowance);
+    const gnyERC20Contract = new web3.eth.Contract(IERC20, ETH_ERC20_ADDRESS);
+    console.log(gnyERC20Contract.methods.allowance);
 
 
     // this throws if not pointed to the correct address
-    const currentAllowance = await gnyBEP20Contract.methods.allowance(
+    const currentAllowance = await gnyERC20Contract.methods.allowance(
       ethAddress,
       ETH_SWAPGATE_ADDRESS
     ).call();
@@ -473,7 +473,7 @@ export const actions = {
     commit('setAllowance', currentAllowance);
 
 
-    const metaMaskBalance = await gnyBEP20Contract.methods.balanceOf(
+    const metaMaskBalance = await gnyERC20Contract.methods.balanceOf(
       ethAddress
     ).call();
     console.log(`metaMaskBalance: ${metaMaskBalance}`);
@@ -534,7 +534,7 @@ export const actions = {
 
     // todo: show modal to explain user and user needs to agree
 
-    // todo: has account enough GNY BEP20 to deposit?
+    // todo: has account enough GNY ERC20 to deposit?
 
     const ETH_SWAPGATE_ADDRESS = process.env.VUE_APP_ETH_SWAPGATE_ADDRESS;
 
