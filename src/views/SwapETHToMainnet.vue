@@ -69,7 +69,7 @@
 
     <el-card v-if="connectedToMetaMask">
       <div slot="header">
-        <span>Swap from BSC to Mainnet</span>
+        <span>Swap from ETH to Mainnet</span>
       </div>
 
 

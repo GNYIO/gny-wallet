@@ -459,7 +459,7 @@ export const actions = {
 
 
     // new
-    console.log(`BSC_ERC20_ADDRESS: ${ETH_ERC20_ADDRESS}`);
+    console.log(`ETH_ERC20_ADDRESS: ${ETH_ERC20_ADDRESS}`);
     const gnyERC20Contract = new web3.eth.Contract(IERC20, ETH_ERC20_ADDRESS);
     console.log(gnyERC20Contract.methods.allowance);
 
@@ -561,7 +561,7 @@ export const actions = {
     const amount18 = new BigNumber(amount)
       .multipliedBy(1e18)
       .toFixed();
-    console.log(`amountInBSC: ${amount18}`);
+    console.log(`amountInETH: ${amount18}`);
 
     // todo: use GNY address from form
     const myAddress = state.user.address;
