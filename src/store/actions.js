@@ -634,7 +634,7 @@ export const actions = {
       // create a "basic.transfer" transaction with custom fee
       const trs = client.transaction.createTransactionEx({
         type: 0,
-        fee: String(process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE * 1e8),
+        fee: String(Number(process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE) * 1e8),
         args: [new BigNumber(amount).multipliedBy(1e8).toFixed(), SWAP_MAINNET_TO_ETH],
         secret: passphrase,
         secondSecret: secondPassphrase,

@@ -98,7 +98,7 @@ import { mapState, mapGetters } from 'vuex';
 import { BigNumber } from 'bignumber.js';
 import { prettPrintETHValueFilter } from '../filters/index';
 
-const fee = process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE;
+const fee = Number(process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE);
 
 
 export default {
