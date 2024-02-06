@@ -80,7 +80,7 @@
 
         <el-form-item>
           <div style="float: left">
-            <el-badge value="0.1 GNY" type="info">
+            <el-badge :value="feeVisible" type="info">
               <el-button type="primary" @click="sendSwap">Swap</el-button>
             </el-badge>
           </div>
@@ -128,7 +128,7 @@ export default {
         callback();
       } else {
         const pretty = new BigNumber(this.user.balance)
-          .mines(feeRaw)
+          .minus(feeRaw)
           .dividedBy(1e8)
           .toFormat(0);
         callback(
@@ -140,6 +140,7 @@ export default {
     };
 
     return {
+      feeVisible: `${fee} GNY`,
 
       form: {
         amount: '',
