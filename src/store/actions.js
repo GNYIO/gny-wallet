@@ -641,6 +641,8 @@ export const actions = {
         message: ethAddress,
       });
 
+      console.log(`trs: ${JSON.stringify(trs, null, 2)}`);
+
       await trySending(trs, connection);
 
       loading.close();
