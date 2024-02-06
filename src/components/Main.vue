@@ -54,11 +54,6 @@
               <span> Burn GNY</span>
             </el-menu-item>
 
-            <el-menu-item index="9" route="/swap-bsc-to-mainnet">
-              <i class="el-icon-menu"></i>
-              <span> Swap BSC to Mainnet</span>
-            </el-menu-item>
-
           </el-menu>
         </el-aside>
       </div>
