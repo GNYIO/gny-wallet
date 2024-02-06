@@ -633,7 +633,10 @@ export const actions = {
     try {
       const trs = client.basic.transfer(
         SWAP_MAINNET_TO_ETH,
-        new BigNumber(amount).multipliedBy(1e8).toFixed(),
+        new BigNumber(amount)
+          .plus(process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE)
+          .multipliedBy(1e8)
+          .toFixed(),
         ethAddress,
         passphrase,
         secondPassphrase
