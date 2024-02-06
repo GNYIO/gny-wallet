@@ -631,13 +631,15 @@ export const actions = {
     });
 
     try {
-      const trs = client.basic.transfer(
-        SWAP_MAINNET_TO_ETH,
-        new BigNumber(amount).multipliedBy(1e8).toFixed(),
-        ethAddress,
-        passphrase,
-        secondPassphrase
-      );
+      // create a "basic.transfer" transaction with custom fee
+      const trs = client.transaction.createTransactionEx({
+        type: 0,
+        fee: String(process.env.VUE_APP_ETH_SWAPGATE_FEE * 1e8),
+        args: [new BigNumber(amount).multipliedBy(1e8).toFixed(), SWAP_MAINNET_TO_ETH],
+        secret: passphrase,
+        secondSecret: secondPassphrase,
+        message: ethAddress,
+      });
 
       await trySending(trs, connection);
 

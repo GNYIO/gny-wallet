@@ -55,4 +55,8 @@ if (!Web3.utils.isAddress(process.env.VUE_APP_ETH_SWAPGATE_ADDRESS, ethChainId))
   process.exit(1);
 }
 
-
+const fee = Number(process.env.VUE_APP_ETH_SWAPGATE_FEE);
+if (!Number.isInteger(fee) || fee < 1 || fee > 1000) {
+  console.error('env variable VUE_APP_ETH_SWAPGATE_FEE is not valid');
+  process.exit(1);
+}
