@@ -116,6 +116,14 @@ export default {
 
       console.log(`userBalance: ${this.user.balance}`);
 
+      if (new BigNumber(this.user.balance).isLessThan(feeRaw)) {
+        return callback(
+          new Error(
+            `you don't have enough GNY to cover the swap fee of ${fee} GNY.
+          )
+        );
+      }
+
       if (currentInput.plus(feeRaw).isLessThanOrEqualTo(this.user.balance)) {
         callback();
       } else {
@@ -125,7 +133,7 @@ export default {
           .toFormat(0);
         callback(
           new Error(
-            `amount too big, you only have "${pretty}" available (fee: ${fee} GNY)`,
+            `amount too big, you only have "${pretty}" available to swap (fee: ${fee} GNY)`,
           ),
         );
       }
