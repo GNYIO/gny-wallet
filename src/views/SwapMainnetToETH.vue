@@ -98,6 +98,8 @@ import { mapState, mapGetters } from 'vuex';
 import { BigNumber } from 'bignumber.js';
 import { prettPrintETHValueFilter } from '../filters/index';
 
+const fee = Number(process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE);
+
 
 export default {
   filters: {
@@ -109,20 +111,30 @@ export default {
         callback('is not a number');
       }
 
+      const feeRaw = new BigNumber(fee).times(1e8);
       const currentInput = new BigNumber(value).times(1e8);
 
       console.log(`userBalance: ${this.user.balance}`);
 
-      if (currentInput.isLessThanOrEqualTo(this.user.balance)) {
+      if (new BigNumber(this.user.balance).isLessThan(feeRaw)) {
+        return callback(
+          new Error(
+            `you don't have enough GNY to cover the swap fee of ${fee} GNY`
+          )
+        );
+      }
+
+      if (currentInput.plus(feeRaw).isLessThanOrEqualTo(this.user.balance)) {
         callback();
       } else {
         const pretty = new BigNumber(this.user.balance)
+          .mines(feeRaw)
           .dividedBy(1e8)
           .toFormat(0);
         callback(
           new Error(
-            `amount too big, you only have "${pretty}" available`,
-          ),
+            `amount too big, you only have "${pretty}" available to swap (fee: ${fee} GNY)`
+          )
         );
       }
     };
@@ -196,7 +208,7 @@ export default {
         // if we press "Cancel" or "X" (close) a error is thrown
         console.log(`amount: ${amount}`);
         await this.$confirm(
-          `Are you sure that you want to swap "${amount}" GNY from mainnet to ETH account "${this.ethAddress}"?`,
+          `Are you sure that you want to swap "${amount}" GNY from mainnet to ETH account "${this.ethAddress}"?\nYou will pay a fee of ${process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE} GNY.`,
           'Warning',
           {
             confirmButtonText: 'Swap',
