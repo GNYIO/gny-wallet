@@ -98,7 +98,7 @@ import { mapState, mapGetters } from 'vuex';
 import { BigNumber } from 'bignumber.js';
 import { prettPrintETHValueFilter } from '../filters/index';
 
-const fee = process.env.VUE_APP_ETH_SWAPGATE_FEE;
+const fee = process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE;
 
 
 export default {
@@ -200,7 +200,7 @@ export default {
         // if we press "Cancel" or "X" (close) a error is thrown
         console.log(`amount: ${amount}`);
         await this.$confirm(
-          `Are you sure that you want to swap "${amount}" GNY from mainnet to ETH account "${this.ethAddress}"?\nYou will pay a fee of ${process.env.VUE_APP_ETH_SWAPGATE_FEE} GNY.`,
+          `Are you sure that you want to swap "${amount}" GNY from mainnet to ETH account "${this.ethAddress}"?\nYou will pay a fee of ${process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE} GNY.`,
           'Warning',
           {
             confirmButtonText: 'Swap',
