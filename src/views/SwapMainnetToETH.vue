@@ -119,7 +119,7 @@ export default {
       if (new BigNumber(this.user.balance).isLessThan(feeRaw)) {
         return callback(
           new Error(
-            `you don't have enough GNY to cover the swap fee of ${fee} GNY.
+            `you don't have enough GNY to cover the swap fee of ${fee} GNY`
           )
         );
       }
@@ -133,8 +133,8 @@ export default {
           .toFormat(0);
         callback(
           new Error(
-            `amount too big, you only have "${pretty}" available to swap (fee: ${fee} GNY)`,
-          ),
+            `amount too big, you only have "${pretty}" available to swap (fee: ${fee} GNY)`
+          )
         );
       }
     };
