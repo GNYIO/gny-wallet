@@ -59,12 +59,13 @@
               <i class="el-icon-menu"></i>
               <span> Swap ETH to Mainnet</span>
             </el-menu-item>
+            -->
 
             <el-menu-item index="10" route="/swap-mainnet-to-eth">
               <i class="el-icon-s-finance"></i>
               <span> Swap Mainnet to ETH</span>
             </el-menu-item>
-            -->
+
 
           </el-menu>
         </el-aside>
