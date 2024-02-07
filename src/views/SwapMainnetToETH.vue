@@ -111,7 +111,8 @@ export default {
         callback('is not a number');
       }
 
-      const feeRaw = new BigNumber(fee).times(1e8);
+      // add 1 GNY fee so the GUI can calculate with the 0.1 GNY transaction fee
+      const feeRaw = new BigNumber(fee).plus(1).times(1e8);
       const currentInput = new BigNumber(value).times(1e8);
 
       console.log(`userBalance: ${this.user.balance}`);
