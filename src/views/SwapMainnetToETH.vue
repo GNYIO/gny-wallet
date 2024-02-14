@@ -208,11 +208,27 @@ export default {
       try {
         // if we press "OK" it returns normally
         // if we press "Cancel" or "X" (close) a error is thrown
+
+        const customAmount = this.amount;
+        const custumEthAddress = this.ethAddress;
+        const customFee = process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE;
+
+        const amountRegex = new RegExp(/^[1-9][0-9]*$/);
+        const ethAddressRegex = new RegExp(/^0x[0-9a-zA-Z]{40}$/);
+        const feeRegex = new RegExp(/^[1-9][0-9]*$/);
+
+        if (!amountRegex.test(customAmount)) return;
+        if (!ethAddressRegex.test(custumEthAddress)) return;
+        if (!feeRegex.test(customFee)) return;
+
         console.log(`amount: ${amount}`);
         await this.$confirm(
-          `Are you sure that you want to swap "${amount}" GNY from mainnet to ETH account "${this.ethAddress}"? You will pay a fee of ${process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE} GNY. If ETH gas fees are high you may wait up to 20 hours for your ERC20 tokens to arrive in your ETH wallet.`,
+          `Are you certain you wish to swap "${customAmount}" from the Mainnet to your ERC20 compatible wallet "${custumEthAddress}"? There will be a fee of ${customFee} GNY for the swap.<br>
+           If the current ETH gas fees are comparable to the ${customFee} GNY fee, your GNY ERC20 tokens should arrive in your wallet within 10 minutes.<br>
+           However, if ETH gas fees are high at the time you initiate the swap, you may need to wait for up to 20 hours for your GNY ERC20 tokens to arrive in your wallet.`,
           'Warning',
           {
+            dangerouslyUseHTMLString: true,
             confirmButtonText: 'Swap',
             cancelButtonText: 'Cancel',
             type: 'warning',
