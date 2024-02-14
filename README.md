@@ -34,24 +34,20 @@ Install one of the following:
 
 ### Point to local GNY Blockchain
 
-Create a `.env.development` file with:
+Create a `.env` (`.env.development` for development):
 
-```bash
-echo $'VUE_APP_GNY_ENDPOINT=127.0.0.1\nVUE_APP_GNY_PORT=4096\nVUE_APP_GNY_NETWORK=localnet\nVUE_APP_HTTPS=false' > .env.development
-```
-
-Which will create the following `.env.development` file:
+For `mainnet` use the following configuration:
 
 ```env
-VUE_APP_GNY_ENDPOINT=127.0.0.1
-VUE_APP_GNY_PORT=4096
-VUE_APP_GNY_NETWORK=localnet
-VUE_APP_HTTPS=false
+VUE_APP_GNY_ENDPOINT=mainnet.gny.io
+VUE_APP_GNY_NETWORK=mainnet
+VUE_APP_GNY_PORT=80
+VUE_APP_HTTPS=true
 
-VUE_APP_SWAP_MAINNET_TO_ETH=
-VUE_APP_ETH_ERC20_ADDRESS=
-VUE_APP_ETH_SWAPGATE_ADDRESS=
-VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE=
+VUE_APP_ETH_ERC20_ADDRESS=0xb1f871ae9462f1b2c6826e88a7827e76f86751d4
+VUE_APP_ETH_SWAPGATE_ADDRESS=0x1b28aac6dba93eaf53e0d86cd1295154f187ec54
+VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE=500
+VUE_APP_SWAP_MAINNET_TO_ETH=G32Qvr7ckjXbnk1bkvwRA8JbawJgA
 
 ```
 
