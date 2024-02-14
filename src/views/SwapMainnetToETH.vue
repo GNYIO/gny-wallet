@@ -231,19 +231,17 @@ export default {
         }
 
         console.log(`amount: ${customAmount}`);
-        await this.$confirm(
-          `Are you certain you wish to swap "${customAmount}" GNY from the Mainnet to your ERC20 compatible wallet "${custumEthAddress}"? There will be a fee of ${customFee} GNY for the swap.</p>
+        await this.$msgbox({
+          title: 'Warning',
+          message: `<p>Are you certain you wish to swap "${customAmount}" GNY from the Mainnet to your ERC20 compatible wallet "${custumEthAddress}"? There will be a fee of ${customFee} GNY for the swap.</p>
            <p>If the current ETH gas fees are comparable to the ${customFee} GNY fee, your GNY ERC20 tokens should arrive in your wallet within 10 minutes.</p>
-           <p>However, if ETH gas fees are high at the time you initiate the swap, you may need to wait for up to 20 hours for your GNY ERC20 tokens to arrive in your wallet.`,
-          'Warning',
-          {
-            dangerouslyUseHTMLString: true,
-            confirmButtonText: 'Swap',
-            cancelButtonText: 'Cancel',
-            type: 'warning',
-            customClass: 'custom-message-box',
-          }
-        );
+           <p>However, if ETH gas fees are high at the time you initiate the swap, you may need to wait for up to 20 hours for your GNY ERC20 tokens to arrive in your wallet.</p>`,
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: 'Swap',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+          customClass: 'custom-message-box',
+        });
       } catch (err) {
         this.$refs['form'].resetFields();
 
