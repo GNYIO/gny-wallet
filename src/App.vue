@@ -26,7 +26,7 @@ export default {
 }
 
 .custom-message-box {
-  width: auto;
+  width: 800px;
 }
 
 </style>

@@ -210,7 +210,7 @@ export default {
         // if we press "Cancel" or "X" (close) a error is thrown
         console.log(`amount: ${amount}`);
         await this.$confirm(
-          `Are you sure that you want to swap "${amount}" GNY from mainnet to ETH account "${this.ethAddress}"?\nYou will pay a fee of ${process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE} GNY.`,
+          `Are you sure that you want to swap "${amount}" GNY from mainnet to ETH account "${this.ethAddress}"? You will pay a fee of ${process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE} GNY. If ETH gas fees are high you may wait up to 20 hours for your ERC20 tokens to arrive in your ETH wallet.`,
           'Warning',
           {
             confirmButtonText: 'Swap',
