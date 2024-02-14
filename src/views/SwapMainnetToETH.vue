@@ -209,7 +209,7 @@ export default {
         // if we press "OK" it returns normally
         // if we press "Cancel" or "X" (close) a error is thrown
 
-        const customAmount = this.amount;
+        const customAmount = amount;
         const custumEthAddress = this.ethAddress;
         const customFee = process.env.VUE_APP_MAINNET_TO_ETH_SWAPGATE_FEE;
 
@@ -230,7 +230,7 @@ export default {
           return;
         }
 
-        console.log(`amount: ${amount}`);
+        console.log(`amount: ${customAmount}`);
         await this.$confirm(
           `Are you certain you wish to swap "${customAmount}" from the Mainnet to your ERC20 compatible wallet "${custumEthAddress}"? There will be a fee of ${customFee} GNY for the swap.<br>
            If the current ETH gas fees are comparable to the ${customFee} GNY fee, your GNY ERC20 tokens should arrive in your wallet within 10 minutes.<br>
