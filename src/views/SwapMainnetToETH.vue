@@ -217,9 +217,18 @@ export default {
         const ethAddressRegex = new RegExp(/^0x[0-9a-zA-Z]{40}$/);
         const feeRegex = new RegExp(/^[1-9][0-9]*$/);
 
-        if (!amountRegex.test(customAmount)) return;
-        if (!ethAddressRegex.test(custumEthAddress)) return;
-        if (!feeRegex.test(customFee)) return;
+        if (!amountRegex.test(customAmount)) {
+          console.log(`"${customAmount}" is not amount`);
+          return;
+        }
+        if (!ethAddressRegex.test(custumEthAddress)) {
+          console.log(`"${custumEthAddress}" is not eth address`);
+          return;
+        }
+        if (!feeRegex.test(customFee)) {
+          console.log(`"${customFee}" is not a fee`);
+          return;
+        }
 
         console.log(`amount: ${amount}`);
         await this.$confirm(
