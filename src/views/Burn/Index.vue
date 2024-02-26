@@ -53,7 +53,7 @@
 import { showErrorPopup } from '../../helpers/errorDisplay';
 import { mapGetters, mapState } from 'vuex';
 import { BigNumber } from 'bignumber.js';
-import * as client from '@gny/client';
+import * as client from '@gnyio/client';
 import BurnPagedComponent from './BurnPagedComponent';
 
 

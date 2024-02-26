@@ -92,8 +92,8 @@
 <script>
 import { showErrorPopup } from '../../helpers/errorDisplay';
 import { mapState, mapGetters } from 'vuex';
-import * as client from '@gny/client';
-import { isAddress } from '@gny/utils';
+import * as client from '@gnyio/client';
+import { isAddress } from '@gnyio/utils';
 import { BigNumber } from 'bignumber.js';
 import TransfersPagedComponent from './TransfersPagedComponent';
 
