@@ -86,7 +86,7 @@
 <script>
 import * as Mnemonic from 'bitcore-mnemonic';
 import { mapGetters } from 'vuex';
-import * as client from '@gny/client';
+import * as client from '@gnyio/client';
 
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,

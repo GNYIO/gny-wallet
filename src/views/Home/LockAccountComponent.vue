@@ -71,7 +71,7 @@
 import { showErrorPopup } from '../../helpers/errorDisplay';
 import { BigNumber } from 'bignumber.js';
 
-import * as client from '@gny/client';
+import * as client from '@gnyio/client';
 const connection = new client.Connection(
   process.env.VUE_APP_GNY_ENDPOINT,
   Number(process.env.VUE_APP_GNY_PORT),

@@ -1,4 +1,4 @@
-import * as client from '@gny/client';
+import * as client from '@gnyio/client';
 import { Notification, Loading } from 'element-ui';
 import Web3 from 'web3';
 import IERC20 from '../assets/ierc20_abi';
