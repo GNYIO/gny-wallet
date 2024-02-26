@@ -10,7 +10,7 @@
   "dependencies": {
     "@gnyio/client": "^2.0.0",
     "@gnyio/utils": "^2.0.0",
-    "axios": "^0.21.1",
+    "axios": "^0.28.0",
     "bignumber.js": "^8.1.1",
     "bitcore-mnemonic": "^8.13.2",
     "core-js": "^3.4.3",
